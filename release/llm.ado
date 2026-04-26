@@ -18,12 +18,14 @@ program llm
     }
 
     local 0 `"`pre'"'
-    syntax [anything] [, R E KEEP]
+    syntax [anything] [, R E KEEP CLEAR]
 
     if strtrim("`anything'") != "push" {
-        di as error "Usage: llm push [, r e keep] [> command]"
+        di as error "Usage: llm push [, r e keep clear] [> command]"
         exit 198
     }
+
+    local _clear_flag = cond("`clear'" != "", "1", "0")
 
     if `has_cmd' {
         // 1. 순수 명령어(base_cmd) 및 전체 명령어(cmd_str) 파싱
@@ -33,9 +35,9 @@ program llm
         }
         // base_cmd에서 첫 단어만 추출
         local base_cmd = word("`base_cmd'", 1)
-        
-        // 2. 자바에게 두 인자를 넘기며 실행 위임
-        javacall com.stata_mcp.drone.StataMcpUtils executeAndPush, args("`base_cmd'" "`cmd_str'") jars(stata-drone.jar)
+
+        // 2. 자바에게 인자(base_cmd, cmd_str, clear_flag)를 넘기며 실행 위임
+        javacall com.stata_mcp.drone.StataMcpUtils executeAndPush, args("`base_cmd'" "`cmd_str'" "`_clear_flag'") jars(stata-drone.jar)
     }
     else {
         local _mcp_mode "both"
@@ -43,7 +45,7 @@ program llm
         if "`e'" != "" local _mcp_mode "e"
 
         local _mcp_cmd ""
-        javacall com.stata_mcp.drone.StataMcpUtils pushReturnValues, jars(stata-drone.jar)
+        javacall com.stata_mcp.drone.StataMcpUtils pushReturnValues, args("`_clear_flag'") jars(stata-drone.jar)
     }
 
     if "`keep'" == "" {

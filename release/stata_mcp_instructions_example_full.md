@@ -6,6 +6,7 @@
 
 ## 세션 시작
 - `getStataPwd()` 로 현재 작업 디렉토리 확인
+- 시스템 프롬프트에 마운트 폴더가 있고 Stata pwd 와 다르면, 사용자에게 질문하고 `executeStata("cd \"<마운트경로>\"")` 실행
 - `getVariables()` 로 변수정보 파악
 
 ## 명령어 출력
@@ -22,11 +23,18 @@
 
 ## 도구 사용 방침
 - Stata 명령 실행은 `executeStata()` 사용
-- 그래프는 `executeStata` 응답의 `graphUrl` 로 서버 경로 자동 전달
+- 그래프는 Stata 작업폴더(`pwd`)에 `g_yyyyMMddHHmm_xxxx.png` 형식 (분 timestamp + 4자리 hex random)으로 저장됨. 응답의 `graphPath`(절대경로) / `graphFilename` 으로 위치 확인. cowork 패널이 자동 표시하므로 채팅 본문에 별도로 띄울 필요 없음
 - 관측치 수는 `getObsCount()` 로 확인
 - 값 라벨이 꼭 필요할 때만 `getLabels(name)` 호출 (lazy fetch, empty name은 전체 label 이름 리스트)
 - 데이터 변경 감지는 `getDataSignature()` 비교
 - Stata GUI 에서 push된 결과는 `getPushResults()` 로 조회 (자동 clear)
+
+## 작업 도중 pwd 변경
+- executeStata 응답에 `pwdChange` 가 있으면 사용자가 Stata 에서 cd 로 작업폴더를 변경한 것 (`pwdChange.from` → `pwdChange.to`)
+- `pwdChange.to` 가 마운트 폴더와 일치하면 그대로 진행
+- `pwdChange.to` 가 마운트 폴더와 다르면 AskUserQuestion 으로 선택지 제공:
+  - "마운트로 되돌리기" → `executeStata("cd \"<마운트경로>\"")` 실행
+  - "현재 폴더 유지" → 이후 그래프는 새 폴더(`pwdChange.to`)에 저장됨을 사용자에게 안내 (cowork 패널 마운트도 같이 변경 필요)
 
 ## 리턴값 조회
 - 사용자가 "리턴값", "r() 값", "e() 값", "저장된 결과" 등 요청 시 `getRReturns` 또는 `getEReturns` 호출
@@ -60,5 +68,4 @@
 ## 답변 스타일
 - output 해석은 통계 초중급 수준으로 — 전문 용어 풀이, 맥락 제공
 - raw output은 전체 노출하되, **추가로** 해석·요약을 덧붙여 설명
-- 대시보드는 고급 사용자용 (Flow 카드에 raw + JSON 전체 표시) — Claude 응답은 이해 돕는 역할
 - 통계적 의미 (유의성, 효과 크기, 해석 주의점) 적극적으로 제공
