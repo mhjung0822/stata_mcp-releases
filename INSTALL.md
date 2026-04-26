@@ -26,7 +26,7 @@
 | `stata_channel_server.js` | **Claude Code 전용 채널 서버** (Node.js, stdio, push 이벤트 세션 주입) |
 | `stata-drone.jar` | Stata 내부 실행 드론 (포트 8001) |
 | `mcp_connect.ado` | Stata 드론 연결 명령어 |
-| `llm.ado` | Stata push 명령어 (`llm push > cmd`) |
+| `llm.ado` | Stata push 명령어 (`llm push [, r e keep clear] [> cmd]`) |
 | `stata_mcp_instructions_example_compact.md` | Claude 지침 예시 (간결) |
 | `stata_mcp_instructions_example_full.md` | Claude 지침 예시 (상세) |
 
@@ -67,29 +67,35 @@ C:\Users\YOUR_NAME\Documents\StataMCP\
 
 ```properties
 # Stata MCP 환경 설정 (자동 생성)
-stata.mcp.base-dir="<jar가 있는 폴더 절대경로>"
 BRIDGE_PORT="8080"
 DRONE_PORT="8001"
 ```
 
-- `base-dir` 하위에 `server-logs/`는 서버 기동 시, `logs/`/`graphs/`/`flow_log/`는 첫 명령 실행 시 자동 생성됩니다.
+- 포트 두 개만 관리. 폴더 경로 설정은 v0.7.6 부터 폐기 (server-logs 는 jar 옆 고정, 그래프는 사용자 작업폴더 `c(pwd)` 직접 export).
 
-#### base-dir / 포트를 미리 정하고 싶다면 (선택)
+#### 포트 변경 (선택)
 
 서버 기동 전에 jar 옆에 `stata_mcp.properties` 파일을 직접 만들어 원하는 값을 넣어두면 자동 생성 대신 그 값이 사용됩니다.
 
 ```properties
-# macOS 예시:
-stata.mcp.base-dir="/Users/YOUR_NAME/Documents/StataMCP"
-
-# Windows 예시:
-stata.mcp.base-dir="C:/Users/YOUR_NAME/Documents/StataMCP"
-
-BRIDGE_PORT="8080"
-DRONE_PORT="8001"
+BRIDGE_PORT="8090"
+DRONE_PORT="9001"
 ```
 
-- 빈 값으로 둔 키만 자동 fallback 됩니다 (예: `stata.mcp.base-dir=""` 두면 jarDir 자동 채움).
+- 빈 값으로 둔 키만 자동 fallback 됩니다 (예: `BRIDGE_PORT=""` 두면 8080 자동 채움).
+
+### Claude 지침 파일 (선택)
+
+분석 룰을 Claude 에게 적용하고 싶으면 jar 옆에 `stata_mcp_instructions.md` 작성:
+
+```
+~/Documents/StataMCP/
+├── stata-mcp-server.jar
+├── stata_mcp_instructions.md         ← (선택) 사용자가 작성
+└── ...
+```
+
+`stata_mcp_instructions_example_compact.md` 또는 `stata_mcp_instructions_example_full.md` 내용을 복사해 시작점으로 사용.
 
 ---
 
@@ -234,35 +240,30 @@ claude mcp list
 설치 후:
 
 ```
-<서버 설치 폴더>/                          ← 사용자 선택
+<서버 설치 폴더>/                          ← 사용자 선택 (예: ~/Documents/StataMCP/)
 ├── stata-mcp-server.jar
 ├── mcp-bridge-v18.js
 ├── stata_channel_server.js               ← Claude Code 채널 (선택)
-└── stata_mcp.properties                  ← 첫 기동 시 자동 생성
+├── stata_mcp.properties                  ← 첫 기동 시 자동 생성 (포트만)
+├── stata_mcp_instructions.md             ← (선택) Claude 지침 파일
+├── stata_mcp_instructions_example_compact.md
+├── stata_mcp_instructions_example_full.md
+└── server-logs/stata-mcp-server_<ts>.log ← Spring Boot 시스템 로그 (자동 생성)
 
 <Stata PERSONAL ado>/                     ← Stata adopath 자동 인식
 ├── stata-drone.jar
 ├── mcp_connect.ado
 └── llm.ado
 
-<base-dir>/                                ← properties에서 지정
-├── logs/                                 ← 분석 명령 이력 (서버가 append)
-│   └── <sessionTs>.log
-├── graphs/                               ← 그래프 PNG + sidecar JSON
-│   ├── <sessionTs>_g<N>.png
-│   └── <sessionTs>_g<N>.json
-├── flow_log/                             ← Command Flow JSONL (대시보드 복원용)
-│   └── <sessionTs>.jsonl
-├── server-logs/                          ← Spring Boot 시스템 로그
-│   └── stata-mcp-server_<ts>.log
-└── stata_mcp_instructions.md             ← (선택) Claude 지침 파일
+<사용자 작업폴더 c(pwd)>/                  ← Stata에서 cd 한 위치
+└── g_yyyyMMddHHmm_xxxx.png               ← 그래프 (드론이 직접 export)
 ```
 
-> `sessionTs = YYYYMMDD_HHMM` — 서버 기동 시점. 서버 재기동 시 새 세션 파일 시작.
-> 저장 파일(`save`/`export` 등)은 사용자가 Stata에서 지정한 경로 그대로 저장 — 서버/드론이 이동하지 않음.
+> 저장 파일(`save`/`export` 등)은 사용자가 Stata에서 지정한 경로 그대로 — 서버/드론이 이동하지 않음.
+> v0.7.6 부터 baseDir 개념 폐기. server-logs 는 jar 옆 고정, 그래프는 작업폴더 직속, 분석 명령 이력 별도 저장 안 함 (사용자 환경 단순화).
 
 ---
 
 ## 8. 다음 단계
 
-설치가 끝났으면 [USAGE.md](USAGE.md)에서 시작 순서·대시보드·문제 해결을 확인하세요.
+설치가 끝났으면 [USAGE.md](USAGE.md)에서 시작 순서·문제 해결을 확인하세요.
