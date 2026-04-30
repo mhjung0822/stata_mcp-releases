@@ -6,28 +6,32 @@
 
 ## 1. 공통 시작 순서
 
+### Claude Desktop 사용자
 ```
-1. Claude Desktop 또는 Claude Code 실행
-   → 브릿지가 stata-mcp-server.jar 자동 기동 (포트 8080)
-2. Stata 실행
-3. Stata에서:
-```
-
-```stata
-mcp_connect
+1. Claude Desktop 실행
+   → bridge 가 stdio child 로 spawn → Java jar 자동 시작 (detached)
+2. Stata 실행 → mcp_connect
 ```
 
-출력 예:
+### Claude Code / Cursor 사용자 (Desktop 미사용 시)
+```
+1. MCP 서버 기동 (한 번)
+   java -jar ~/Documents/StataMCP/stata-mcp-server.jar
+2. Stata 실행 → mcp_connect
+3. Claude Code / Cursor 실행 — 등록된 Streamable HTTP URL 로 자동 연결
+```
+
+`mcp_connect` 출력 예:
 ```
 [Drone] Stata-MCP-Drone launching on port 8001...
 [Drone] Ready for commands on port 8001 (bridge=8080)
 ```
 
-이후 클라이언트(Desktop 또는 Code)에서 Stata 명령을 요청하거나, Stata에서 `llm push`로 결과를 클라이언트로 전송.
+이후 클라이언트에서 Stata 명령을 요청하거나, Stata 에서 `llm push` 로 결과를 클라이언트로 전송.
 
 ---
 
-## 2. Claude Desktop 사용
+## 2. 명령 / Push 사용
 
 ### 2-1. 명령 요청
 
@@ -55,11 +59,23 @@ llm push > predict yhat         // > 뒤의 명령 실행 + push
 llm push, clear                 // 큐 비우고 새로 push (잔재 정리)
 ```
 
-- 매 `llm push` 마다 서버 큐에 add + 알림 발송
+- 매 `llm push` 마다 서버 큐에 add + Streamable HTTP standby SSE stream 으로 클라이언트에 즉시 알림 (`notifications/claude/channel`)
 - Claude 가 알림 받을 때마다 `getPushResults()` 호출 → 큐에서 한 개씩 가져감
 - 빠른 연속 push 도 race 없이 큐에 누적 (Claude 처리 중 새 push 도착해도 안전)
+- 서버는 `experimental.claude/channel` capability 를 advertise — 별도 채널 서버 불필요
 
-> Claude Desktop 은 MCP `notification` 미지원이라 push 알림 자동 주입 불가. 자동 주입 원하면 [Claude Code 채널 사용](#5-claude-code-채널-사용) 참고. Desktop 사용자는 "push 결과 봐줘"로 명시 호출.
+**Claude Code 자동 알림 표시**:
+```bash
+claude --dangerously-load-development-channels server:StataMCP
+```
+- 이 플래그가 있어야 Claude Code 가 `notifications/claude/channel` 을 채널 UI 로 라우팅
+- 플래그 없이도 transport 는 정상 — `getPushResults` tool 명시 호출하면 큐 본문 가져옴
+- 매 세션 지정 부담스러우면 alias:
+  ```bash
+  alias statamcp="claude --dangerously-load-development-channels server:StataMCP"
+  ```
+
+> 클라이언트가 MCP `notification` 처리 안 하는 경우(구버전 Claude Desktop 등) 에는 자동 주입이 안 보임. "push 결과 봐줘" 로 명시 호출하면 `getPushResults` 가 실행되어 큐 결과를 가져옴.
 
 ### 2-3. 그래프/저장 파일
 
@@ -107,11 +123,13 @@ mcp_connect, shutdown
 #### MCP 서버 정지
 
 - 트레이 메뉴 (Exit Server), 또는
-- Claude Desktop 종료 (브릿지가 서버 자동 정리)
+- `curl -X POST http://127.0.0.1:8080/api/shutdown`
+
+> bridge 는 Java 서버를 detached 로 spawn 하므로, Claude Desktop 종료 ≠ 서버 종료. 명시적 트레이/curl 종료 필요.
 
 #### 완전 정리
 
-- Claude Desktop 종료 → 서버 자동 종료
+- 트레이에서 서버 종료
 - Stata 종료 → 드론 자동 종료 (JVM이 Stata 프로세스 내)
 
 ---
@@ -143,78 +161,46 @@ mcp_connect, bridgeport(8090)                    // bridge만 변경
 mcp_connect, bridgeport(8090) droneport(9001)   // 둘 다 변경
 ```
 
-Claude Desktop config의 `http://127.0.0.1:8080/mcp/sse`도 같은 포트로 갱신 필요.
+Claude Code 등록 명령도 같이 갱신 (포트 변경 시):
+```bash
+claude mcp remove StataMCP -s user
+claude mcp add -s user --transport http StataMCP http://127.0.0.1:8090/mcp
+```
 
 ---
 
-## 5. Claude Code 채널 사용
+## 5. 푸시 알림 흐름 (Streamable HTTP)
 
-Claude Desktop 대신 / 외에 Claude Code도 사용하면, **Stata GUI의 `llm push` 결과를 세션에 실시간 주입**받을 수 있음. 등록은 [INSTALL.md → 6. Claude Code 설정](INSTALL.md#6-claude-code-설정-선택) 참고.
-
-### 5-1. Claude Code 실행
-
-채널 이벤트를 받으려면 반드시 `--dangerously-load-development-channels` 플래그 사용:
-
-```bash
-claude --dangerously-load-development-channels server:stata_channel
-```
-
-- `server:` 뒤는 채널 서버 등록 이름 (`stata_channel`)
-- Research preview 기능이라 "dangerously" 접두사 필수
-- 매 세션마다 지정 — alias로 간소화 가능:
-  ```bash
-  # ~/.zshrc 또는 ~/.bashrc
-  alias statamcp="claude --dangerously-load-development-channels server:stata_channel"
-  ```
-
-### 5-2. 사용 플로우
-
-1. Claude Desktop이 MCP 서버 기동한 상태(port 8080) — 또는 수동 `java -jar stata-mcp-server.jar`
-2. Stata에서 `mcp_connect` — 드론 기동
-3. Claude Code 실행 (위 플래그)
-4. Stata GUI에서 분석 후 push:
-   ```stata
-   sysuse auto, clear
-   regress price mpg weight
-   llm push
-   ```
-5. Claude Code 세션에 **즉시** 다음과 같은 채널 블록 주입:
-   ```
-   <channel source="stata_mcp_java_channel" source="stata">
-   [Stata push] cmd=regress price mpg weight | at=2026-04-26T05:30:00
-   </channel>
-   ```
-6. Claude가 이벤트 인식 — 사용자 타이핑 없이 자동 반응
-7. 상세 결과: Claude가 `getPushResults` tool 호출 → 큐에서 한 개씩 fetch
-
-### 5-3. 구조 요약
+Stata `llm push` 결과가 클라이언트에 자동 도달하는 경로:
 
 ```
 Stata GUI (llm push)
-    ↓ HTTP POST
+    ↓ drone javacall
+StataDrone :8001
+    ↓ HTTP POST /push
 Spring Boot :8080 /push
     ├─→ pushQueue 에 add (FIFO)
-    └─→ SSE /api/events  +  notifications/claude/channel
+    └─→ mcpTransportProvider.notifyClients("notifications/claude/channel", ...)
               ↓
-     stata_channel_server.js (stdio)
-              ↓ notifications/claude/channel
-         Claude Code 세션 ← <channel> 블록 주입
-
-Claude Code → stata_mcp_java (브릿지/SSE) → Spring Boot /mcp
-        ↓
-     Tool 호출 (getPushResults: 큐에서 한 개씩 poll)
+        Streamable HTTP standby SSE stream (GET /mcp)
+              ↓
+        Claude Code / Desktop / Cursor 세션
+              ↓ (capability experimental.claude/channel 매칭 시 채널 UI 표시)
+        클라이언트가 getPushResults tool 호출 → 큐에서 본문 fetch
 ```
 
-### 5-4. 첫 실행 시 MCP 서버 승인
+별도 채널 서버 / Node bridge 불필요 — 단일 Streamable HTTP transport 가 양방향 모두 처리.
 
-Claude Code가 새 MCP 서버를 처음 spawn하면 **승인 프롬프트** 표시:
+### 첫 실행 시 MCP 서버 승인
+
+Claude Code 가 새 MCP 서버를 처음 사용할 때 **승인 프롬프트** 표시:
 - `Trust this MCP server?` / `Approve` 계열 다이얼로그
-- **Approve / Y 선택** 필수 — dismiss하면 tool 호출 불가
-- 한 번 승인 후 `~/.claude.json`에 저장되어 재등록/초기화 전까지 자동
+- **Approve / Y 선택** 필수 — dismiss 하면 tool 호출 불가
+- 한 번 승인 후 `~/.claude.json` 에 저장되어 재등록/초기화 전까지 자동
 
-### 5-5. 지침 파일 조작 (Read/Write tool)
+### 지침 파일 조작 (Read/Write tool)
 
-Claude Code는 `Read`/`Write` tool로 [2-4. Claude 지침 파일](#2-4-claude-지침-파일-선택) 경로(`<jar 옆>/stata_mcp_instructions.md`)를 직접 조작 가능:
+Claude Code 는 `Read`/`Write` tool 로 `<jar 옆>/stata_mcp_instructions.md` 를 직접 조작 가능:
 
 ```
 "지침 파일 만들어줘" → Claude가 Write tool로 자동 작성
@@ -234,7 +220,17 @@ curl http://localhost:8080/api/drone-status    # 서버 기준 드론 상태
 ```
 
 - 드론은 서버 없이도 기동 가능 (포트 충돌만 없으면). 응답 없으면 Stata에서 `mcp_connect` 호출 확인.
-- 서버 미동작 시: Claude Desktop 실행(브릿지가 자동 기동) 또는 `java -jar stata-mcp-server.jar` 수동 기동.
+- 서버 미동작 시: Claude Desktop 실행 (bridge 가 자동 spawn) 또는 `java -jar ~/Documents/StataMCP/stata-mcp-server.jar` 수동.
+
+### MCP 핸드셰이크 직접 확인
+
+```bash
+curl -X POST http://127.0.0.1:8080/mcp \
+  -H 'Content-Type: application/json' \
+  -H 'Accept: application/json, text/event-stream' \
+  -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-03-26","capabilities":{},"clientInfo":{"name":"curl","version":"0"}}}'
+```
+응답에 `protocolVersion`, `Mcp-Session-Id` 헤더, `experimental.claude/channel` capability 가 포함되면 정상.
 
 ### 포트 충돌
 
@@ -248,16 +244,6 @@ netstat -ano | findstr :8080
 ```
 
 다른 프로세스가 포트를 쓰면 `stata_mcp.properties`에서 포트 변경 + `mcp_connect, bridgeport(...)`로 맞춰주기.
-
-### 브릿지 로그
-
-```bash
-# macOS/Linux
-tail -f /tmp/stata-mcp-bridge.log
-
-# Windows (PowerShell)
-Get-Content $env:TEMP\stata-mcp-bridge.log -Wait
-```
 
 ### 서버 시스템 로그
 
@@ -279,14 +265,27 @@ ls "`c(sysdir_personal)'stata-drone.jar"
 java -jar /path/to/stata-mcp-server.jar
 ```
 
-### Claude Code 채널 관련
+### Bridge 로그 (Claude Desktop)
 
-**`stata_channel` 연결 실패**:
-- `node <경로>/stata_channel_server.js` 수동 실행해 에러 확인
-- 경로 오타 / Node.js v18 미만 / 파일 권한 문제 대부분
+```bash
+# macOS / Linux
+tail -f /tmp/stata-mcp-bridge.log
 
-**채널 메시지가 안 뜸**:
-- Claude Code 버전 2.1.80+ 확인
-- `--dangerously-load-development-channels` 플래그 포함 확인
-- `claude.ai 로그인` 인증 (API key 불가)
-- 서버 기동 (port 8080) 확인
+# Windows (PowerShell)
+Get-Content $env:TEMP\stata-mcp-bridge.log -Wait
+```
+
+### Claude Code 등록 / 채널 알림 관련
+
+**서버 등록 갱신**:
+```bash
+claude mcp remove StataMCP -s user
+claude mcp add -s user --transport http StataMCP http://127.0.0.1:8080/mcp
+claude mcp list
+```
+
+**push 알림이 안 뜸**:
+- 서버 기동 확인 (`curl http://127.0.0.1:8080/status`)
+- 핸드셰이크 응답에 `experimental.claude/channel` capability 가 있는지 확인 (위 "MCP 핸드셰이크 직접 확인" 참고)
+- Claude Code / Desktop 이 Streamable HTTP MCP transport 지원 버전인지 확인
+- `getPushResults` tool 명시 호출로 큐 본문은 항상 가져올 수 있음 (알림이 안 와도 폴링 가능)

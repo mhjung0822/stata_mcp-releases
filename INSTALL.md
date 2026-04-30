@@ -9,21 +9,22 @@
 | 항목 | 버전 |
 |------|------|
 | Java | 17 이상 |
-| Node.js | 18 이상 |
 | Stata | 17 이상 (19 권장) |
-| Claude Desktop | 최신 버전 |
+| Claude Desktop / Claude Code / Cursor | 최신 (Claude Code/Cursor 는 Streamable HTTP MCP transport native 지원) |
+| Node.js | v18+ (Claude Desktop 사용 시에만 필요 — bridge 가 stdio↔HTTP 변환) |
+
+> Claude Code / Cursor 는 Streamable HTTP 직접 지원이므로 Node 불필요. Claude Desktop 은 stdio MCP transport 만 지원하므로 zero-dep bridge (`mcp-bridge-v18.js`) 경유.
 
 ---
 
 ## 2. 배포 파일 목록
 
-다운로드: <https://github.com/mhjung0822/stata_mcp-releases/releases> 의 최신 버전에서 8개 파일을 받습니다.
+다운로드: <https://github.com/mhjung0822/stata_mcp-releases/releases> 의 최신 버전.
 
 | 파일 | 설명 |
 |------|------|
-| `stata-mcp-server.jar` | MCP 서버 (Spring Boot, 포트 8080) |
-| `mcp-bridge-v18.js` | Claude Desktop 연동 브릿지 (Node.js, stdio↔SSE) |
-| `stata_channel_server.js` | **Claude Code 전용 채널 서버** (Node.js, stdio, push 이벤트 세션 주입) |
+| `stata-mcp-server.jar` | MCP 서버 (Spring Boot, Streamable HTTP transport, 포트 8080) |
+| `mcp-bridge-v18.js` | **Claude Desktop 전용** stdio↔Streamable HTTP bridge (Node 18+ 빌트인만, npm install 불필요). Java 서버 lazy auto-spawn 도 담당. Claude Code/Cursor 는 불필요 |
 | `stata-drone.jar` | Stata 내부 실행 드론 (포트 8001) |
 | `mcp_connect.ado` | Stata 드론 연결 명령어 |
 | `llm.ado` | Stata push 명령어 (`llm push [, r e keep clear] [> cmd]`) |
@@ -36,10 +37,9 @@
 
 ## 3. 서버 설치 폴더
 
-**세 파일**을 같은 폴더에 배치:
+**두 파일**을 같은 폴더에 배치:
 - `stata-mcp-server.jar`
-- `mcp-bridge-v18.js`
-- `stata_channel_server.js` (Claude Code 안 쓰면 생략 가능, 같이 둬도 무해)
+- `mcp-bridge-v18.js` (Claude Desktop 사용 시 필수, 아니면 생략 가능)
 
 ### 권장 위치
 
@@ -47,19 +47,17 @@
 ```
 ~/Documents/StataMCP/
 ├── stata-mcp-server.jar
-├── mcp-bridge-v18.js
-└── stata_channel_server.js
+└── mcp-bridge-v18.js
 ```
 
 **Windows**:
 ```
 C:\Users\YOUR_NAME\Documents\StataMCP\
 ├── stata-mcp-server.jar
-├── mcp-bridge-v18.js
-└── stata_channel_server.js
+└── mcp-bridge-v18.js
 ```
 
-> jar와 브릿지는 **반드시 같은 폴더** — 브릿지(`mcp-bridge-v18.js`)가 옆 폴더의 jar를 찾음.
+> bridge 와 jar 는 **반드시 같은 폴더** — bridge 가 옆 폴더의 jar 를 자동 spawn.
 
 ### stata_mcp.properties (자동 생성)
 
@@ -71,8 +69,6 @@ BRIDGE_PORT="8080"
 DRONE_PORT="8001"
 ```
 
-- 포트 두 개만 관리. 폴더 경로 설정은 v0.7.6 부터 폐기 (server-logs 는 jar 옆 고정, 그래프는 사용자 작업폴더 `c(pwd)` 직접 export).
-
 #### 포트 변경 (선택)
 
 서버 기동 전에 jar 옆에 `stata_mcp.properties` 파일을 직접 만들어 원하는 값을 넣어두면 자동 생성 대신 그 값이 사용됩니다.
@@ -82,8 +78,6 @@ BRIDGE_PORT="8090"
 DRONE_PORT="9001"
 ```
 
-- 빈 값으로 둔 키만 자동 fallback 됩니다 (예: `BRIDGE_PORT=""` 두면 8080 자동 채움).
-
 ### Claude 지침 파일 (선택)
 
 분석 룰을 Claude 에게 적용하고 싶으면 jar 옆에 `stata_mcp_instructions.md` 작성:
@@ -91,8 +85,7 @@ DRONE_PORT="9001"
 ```
 ~/Documents/StataMCP/
 ├── stata-mcp-server.jar
-├── stata_mcp_instructions.md         ← (선택) 사용자가 작성
-└── ...
+└── stata_mcp_instructions.md         ← (선택) 사용자가 작성
 ```
 
 `stata_mcp_instructions_example_compact.md` 또는 `stata_mcp_instructions_example_full.md` 내용을 복사해 시작점으로 사용.
@@ -121,117 +114,100 @@ adopath
 
 ---
 
-## 5. Claude Desktop 설정
+## 5. 서버 기동
 
-### macOS
+### Claude Desktop 사용자
+서버를 별도로 띄울 필요 없음 — Claude Desktop 시작 시 bridge 가 자동으로 jar spawn (detached, Claude 종료해도 서버 생존).
 
-`~/Library/Application Support/Claude/claude_desktop_config.json` 파일을 열고:
-
-```json
-{
-  "mcpServers": {
-    "stata_mcp": {
-      "command": "/usr/local/bin/node",
-      "args": [
-        "/Users/YOUR_NAME/Documents/StataMCP/mcp-bridge-v18.js",
-        "http://127.0.0.1:8080/mcp/sse"
-      ]
-    }
-  }
-}
-```
-
-### Windows
-
-`%APPDATA%\Claude\claude_desktop_config.json`:
-
-```json
-{
-  "mcpServers": {
-    "stata_mcp": {
-      "command": "C:\\Program Files\\nodejs\\node.exe",
-      "args": [
-        "C:\\Users\\YOUR_NAME\\Documents\\StataMCP\\mcp-bridge-v18.js",
-        "http://127.0.0.1:8080/mcp/sse"
-      ]
-    }
-  }
-}
-```
-
-### Node.js 경로 확인
-
+### Claude Code / Cursor 사용자
+한 번 수동 기동:
 ```bash
-# macOS / Linux
-which node
-
-# Windows (PowerShell)
-Get-Command node
+java -jar ~/Documents/StataMCP/stata-mcp-server.jar
 ```
+트레이 아이콘으로 떠서 종료 전까지 백그라운드 유지.
 
-### 설정 파일 없을 때 생성
+또는 Claude Desktop 도 같이 쓰면 Desktop 의 bridge 가 띄워둔 서버를 그냥 공유.
 
+기동 확인:
 ```bash
-# macOS
-mkdir -p ~/Library/Application\ Support/Claude
-
-# Windows (PowerShell)
-mkdir $env:APPDATA\Claude
+curl http://127.0.0.1:8080/status
+# {"bridge":"running"}
 ```
-
-> 설정 후 Claude Desktop **재시작** 필수.
 
 ---
 
-## 6. Claude Code 설정 (선택)
+## 6. 클라이언트 등록
 
-터미널에서 Claude Code로 Stata MCP를 쓰고, **Stata GUI의 `llm push` 결과를 세션에 실시간 주입**받고 싶다면 추가 설정.
+서버는 **단일 Streamable HTTP 엔드포인트** `http://127.0.0.1:8080/mcp` 를 제공합니다.
 
-Claude Desktop 대신 / 외에 Claude Code도 사용하는 경우만 필요.
+### Claude Code (CLI) — 직접 연결
 
-### 요구 사항
-
-| 항목 | 조건 |
-|---|---|
-| Claude Code 버전 | v2.1.80 이상 |
-| 인증 | claude.ai 로그인 (API key 인증 불가) |
-| Node.js | v18+ (`fetch` 내장 필요) |
-
-### 두 MCP 서버 등록
-
-역할이 다른 **두 서버**를 user scope로 등록:
-
-**① Tool 서버** (`executeStata`, `getPushResults` 등 조회·실행):
 ```bash
-claude mcp add -s user stata_mcp_java -- node \
-  <서버 설치 폴더>/mcp-bridge-v18.js \
-  http://127.0.0.1:8080/mcp/sse
+claude mcp add -s user --transport http StataMCP http://127.0.0.1:8080/mcp
 ```
 
-**② 채널 서버** (Stata push 이벤트를 세션에 자동 주입):
-```bash
-claude mcp add -s user stata_channel -- node \
-  <서버 설치 폴더>/stata_channel_server.js
-```
-
-경로 예시 (macOS):
-```bash
-claude mcp add -s user stata_mcp_java -- node \
-  ~/Documents/StataMCP/mcp-bridge-v18.js \
-  http://127.0.0.1:8080/mcp/sse
-
-claude mcp add -s user stata_channel -- node \
-  ~/Documents/StataMCP/stata_channel_server.js
-```
-
-등록 확인:
+확인:
 ```bash
 claude mcp list
+# StataMCP   ✓ Connected
 ```
-→ `stata_mcp_java`, `stata_channel` 둘 다 `✓ Connected` 로 나와야 OK.
-(서버가 기동 중이어야 Connected 확인됨)
 
-> Claude Code 실행 방법, 채널 사용 플로우 등은 [USAGE.md → 5. Claude Code 채널 사용](USAGE.md#5-claude-code-채널-사용) 참고.
+### Claude Desktop — bridge 경유
+
+Claude Desktop 의 Custom Connectors UI 는 HTTPS 만 허용하므로, stdio MCP server 로 등록 (bridge 가 stdio↔Streamable HTTP 변환).
+
+`~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) 또는
+`%APPDATA%\Claude\claude_desktop_config.json` (Windows):
+
+```json
+{
+  "mcpServers": {
+    "StataMCP": {
+      "command": "/usr/local/bin/node",
+      "args": [
+        "/Users/YOUR_NAME/Documents/StataMCP/mcp-bridge-v18.js",
+        "http://127.0.0.1:8080/mcp"
+      ]
+    }
+  }
+}
+```
+
+- `command` 는 Node 절대경로 (Claude Desktop 이 PATH 를 못 찾으니 절대경로 권장)
+  - macOS/Linux: `which node` 결과 사용
+  - Windows: `(Get-Command node).Source` 결과 사용
+- bridge 가 jar 를 detached 로 spawn — 사용자가 서버 별도 띄울 필요 없음
+- 설정 후 Claude Desktop **재시작** 필수
+
+### Cursor
+
+`~/.cursor/mcp.json` (또는 워크스페이스 `.cursor/mcp.json`):
+```json
+{
+  "mcpServers": {
+    "StataMCP": {
+      "url": "http://127.0.0.1:8080/mcp"
+    }
+  }
+}
+```
+
+### Push 알람
+
+서버는 `experimental.claude/channel` capability 를 advertise — Stata 에서 `llm push` 실행 시 모든 활성 MCP 세션의 Streamable HTTP standby SSE stream 으로 즉시 알림 (`notifications/claude/channel`) 이 전달됩니다. 별도 채널 서버 등록 불필요.
+
+**Claude Code 에서 채널 알림을 사용자 화면에 자동 표시받으려면** 다음 플래그로 실행:
+```bash
+claude --dangerously-load-development-channels server:StataMCP
+```
+- `server:` 뒤는 `claude mcp add` 로 등록한 이름 (`StataMCP`)
+- Research preview 기능이라 `dangerously` 접두사 필수
+- alias 로 간소화 가능:
+  ```bash
+  # ~/.zshrc 또는 ~/.bashrc
+  alias statamcp="claude --dangerously-load-development-channels server:StataMCP"
+  ```
+- 플래그 없이 실행하면 자동 알림 UI 표시는 안 되지만 `getPushResults` tool 호출로 큐 본문 fetch 는 정상 동작.
 
 ---
 
@@ -242,8 +218,7 @@ claude mcp list
 ```
 <서버 설치 폴더>/                          ← 사용자 선택 (예: ~/Documents/StataMCP/)
 ├── stata-mcp-server.jar
-├── mcp-bridge-v18.js
-├── stata_channel_server.js               ← Claude Code 채널 (선택)
+├── mcp-bridge-v18.js                     ← Claude Desktop 사용 시 필수
 ├── stata_mcp.properties                  ← 첫 기동 시 자동 생성 (포트만)
 ├── stata_mcp_instructions.md             ← (선택) Claude 지침 파일
 ├── stata_mcp_instructions_example_compact.md
@@ -260,7 +235,6 @@ claude mcp list
 ```
 
 > 저장 파일(`save`/`export` 등)은 사용자가 Stata에서 지정한 경로 그대로 — 서버/드론이 이동하지 않음.
-> v0.7.6 부터 baseDir 개념 폐기. server-logs 는 jar 옆 고정, 그래프는 작업폴더 직속, 분석 명령 이력 별도 저장 안 함 (사용자 환경 단순화).
 
 ---
 
