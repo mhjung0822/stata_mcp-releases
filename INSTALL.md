@@ -27,8 +27,8 @@
 | `stata-drone.jar` | Stata 내부 실행 드론 (포트 8001) |
 | `mcp_connect.ado` | Stata 드론 연결 명령어 |
 | `llm.ado` | Stata push 명령어 (`llm push [, r e keep clear] [> cmd]`) |
-| `stata_mcp_instructions_example_compact.md` | Claude 지침 예시 (간결) |
-| `stata_mcp_instructions_example_full.md` | Claude 지침 예시 (상세) |
+| `stata_mcp_instructions.md` | Claude 기본 지침 (간결) — `.dxt` 에 동일 사본 번들 |
+| `stata_mcp_instructions_example_full.md` | Claude 지침 예시 (상세) — 대안 |
 
 > **Cursor / Claude Code 사용자**: `stata-mcp.dxt` 는 zip 컨테이너입니다. 압축 해제하면 `server/stata-mcp-server.jar` (서버) + `server/mcp-bridge-v18.js` (브릿지, Desktop 전용이라 Cursor/Code 에는 불필요) 가 들어 있습니다. 추출한 jar 를 수동 설치 절차(아래 3-B)에 사용하세요.
 
@@ -58,7 +58,7 @@
 - `claude_desktop_config.json` 의 MCP 서버 항목 자동 등록
 - bridge 가 첫 호출 시 jar 를 detached 로 spawn
 
-> **지침 커스터마이즈가 필요한 사용자**: `.dxt` 에 포함된 기본 지침은 [`stata_mcp_instructions_example_compact.md`](release/stata_mcp_instructions_example_compact.md) 의 사본입니다. extension 디렉토리가 격리되어 있어 안에서 직접 수정하면 .dxt 재설치/업데이트 시 덮어쓰입니다. 본인 룰을 적용하려면 (1) 3-B 수동 설치로 전환하거나, (2) Claude Desktop 의 프로젝트 지식 / Custom Instructions 기능을 추가로 사용하세요.
+> **지침 커스터마이즈가 필요한 사용자**: `.dxt` 에 포함된 기본 지침은 [`stata_mcp_instructions.md`](release/stata_mcp_instructions.md) 의 사본입니다. extension 디렉토리가 격리되어 있어 안에서 직접 수정하면 .dxt 재설치/업데이트 시 덮어쓰입니다. 본인 룰을 적용하려면 (1) 3-B 수동 설치로 전환하거나, (2) Claude Desktop 의 프로젝트 지식 / Custom Instructions 기능을 추가로 사용하세요.
 
 이후 [4. Stata ado 폴더](#4-stata-ado-폴더-드론) 로 진행하세요.
 
@@ -123,7 +123,7 @@ DRONE_PORT="9001"
 └── stata_mcp_instructions.md         ← (선택) 사용자가 작성
 ```
 
-`stata_mcp_instructions_example_compact.md` 또는 `stata_mcp_instructions_example_full.md` 내용을 복사해 시작점으로 사용.
+`stata_mcp_instructions.md` (기본, 간결) 또는 `stata_mcp_instructions_example_full.md` (상세) 내용을 복사해 시작점으로 사용.
 
 ---
 
@@ -280,9 +280,8 @@ claude --dangerously-load-development-channels server:StataMCP
 ├── stata-mcp-server.jar
 ├── mcp-bridge-v18.js                     ← Claude Desktop 도 같이 쓸 때만 필요
 ├── stata_mcp.properties                  ← 첫 기동 시 자동 생성 (포트만)
-├── stata_mcp_instructions.md             ← (선택) Claude 지침 파일
-├── stata_mcp_instructions_example_compact.md
-├── stata_mcp_instructions_example_full.md
+├── stata_mcp_instructions.md             ← Claude 지침 파일 (release/ 에서 복사하거나 직접 작성)
+├── stata_mcp_instructions_example_full.md ← (참고) 상세 버전 대안
 └── server-logs/stata-mcp-server_<ts>.log ← Spring Boot 시스템 로그 (자동 생성)
 
 <Stata PERSONAL ado>/                     ← Stata adopath 자동 인식

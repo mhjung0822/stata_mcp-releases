@@ -99,10 +99,10 @@ Claude에게 분석 맥락/룰을 지시하고 싶을 때. **설정 안 해도 M
 
 #### 작성 방법
 
-한국어 Markdown으로 자유롭게 작성. 양식이 막막하면 release 폴더의 두 예시 파일을 참고하세요:
+한국어 Markdown으로 자유롭게 작성. 양식이 막막하면 release 폴더의 파일을 참고하세요:
 
-- `stata_mcp_instructions_example_compact.md` — 간결
-- `stata_mcp_instructions_example_full.md` — 상세
+- `stata_mcp_instructions.md` — 간결 (기본, `.dxt` 에 동일 사본 번들)
+- `stata_mcp_instructions_example_full.md` — 상세 (대안)
 
 내용을 그대로 옮기거나 본인 환경/룰에 맞게 편집해서 `<jar 옆>/stata_mcp_instructions.md` 로 저장하면 됩니다.
 
