@@ -54,10 +54,11 @@
 
 설치 완료 시 자동 처리되는 항목:
 - `stata-mcp-server.jar` + `mcp-bridge-v18.js` 가 Claude Extensions 내부 디렉토리에 배치
+- **기본 `stata_mcp_instructions.md` (compact 예시) 가 jar 옆에 같이 배치** → jar 가 첫 기동 시 자동 인식
 - `claude_desktop_config.json` 의 MCP 서버 항목 자동 등록
 - bridge 가 첫 호출 시 jar 를 detached 로 spawn
 
-> **Claude 지침 파일 사용자**: `.dxt` 는 extension 디렉토리가 격리되어 있어 jar 옆에 `stata_mcp_instructions.md` 를 직접 배치하기 어렵습니다. 지침이 필요하면 (1) 3-B 수동 설치로 전환하거나, (2) Claude Desktop 의 프로젝트 지식 / Custom Instructions 기능으로 동일 효과 달성.
+> **지침 커스터마이즈가 필요한 사용자**: `.dxt` 에 포함된 기본 지침은 [`stata_mcp_instructions_example_compact.md`](release/stata_mcp_instructions_example_compact.md) 의 사본입니다. extension 디렉토리가 격리되어 있어 안에서 직접 수정하면 .dxt 재설치/업데이트 시 덮어쓰입니다. 본인 룰을 적용하려면 (1) 3-B 수동 설치로 전환하거나, (2) Claude Desktop 의 프로젝트 지식 / Custom Instructions 기능을 추가로 사용하세요.
 
 이후 [4. Stata ado 폴더](#4-stata-ado-폴더-드론) 로 진행하세요.
 
@@ -260,7 +261,8 @@ claude --dangerously-load-development-channels server:StataMCP
 ├── manifest.json
 └── server/
     ├── stata-mcp-server.jar
-    └── mcp-bridge-v18.js
+    ├── mcp-bridge-v18.js
+    └── stata_mcp_instructions.md         ← 기본 지침 (compact 예시 사본)
 
 <Stata PERSONAL ado>/                     ← Stata adopath 자동 인식
 ├── stata-drone.jar
