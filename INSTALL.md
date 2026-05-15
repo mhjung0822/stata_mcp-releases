@@ -23,31 +23,65 @@
 
 | 파일 | 설명 |
 |------|------|
-| `stata-mcp-server.jar` | MCP 서버 (Spring Boot, Streamable HTTP transport, 포트 8080) |
-| `mcp-bridge-v18.js` | **Claude Desktop 전용** stdio↔Streamable HTTP bridge (Node 18+ 빌트인만, npm install 불필요). Java 서버 lazy auto-spawn 도 담당. Claude Code/Cursor 는 불필요 |
+| `stata-mcp.dxt` | **Claude Desktop 원클릭 설치 번들** — MCP 서버 jar + stdio 브릿지 내장 |
 | `stata-drone.jar` | Stata 내부 실행 드론 (포트 8001) |
 | `mcp_connect.ado` | Stata 드론 연결 명령어 |
 | `llm.ado` | Stata push 명령어 (`llm push [, r e keep clear] [> cmd]`) |
 | `stata_mcp_instructions_example_compact.md` | Claude 지침 예시 (간결) |
 | `stata_mcp_instructions_example_full.md` | Claude 지침 예시 (상세) |
 
+> **Cursor / Claude Code 사용자**: `stata-mcp.dxt` 는 zip 컨테이너입니다. 압축 해제하면 `server/stata-mcp-server.jar` (서버) + `server/mcp-bridge-v18.js` (브릿지, Desktop 전용이라 Cursor/Code 에는 불필요) 가 들어 있습니다. 추출한 jar 를 수동 설치 절차(아래 3-B)에 사용하세요.
+
 > `stata_mcp.properties`는 동봉되지 않습니다 — 첫 서버 기동 시 jar 옆에 자동 생성됩니다 (아래 3. 참고).
 
 ---
 
-## 3. 서버 설치 폴더
+## 3. 서버 설치
 
-**두 파일**을 같은 폴더에 배치:
-- `stata-mcp-server.jar`
-- `mcp-bridge-v18.js` (Claude Desktop 사용 시 필수, 아니면 생략 가능)
+사용 환경에 따라 두 경로 중 택일:
 
-### 권장 위치
+- **3-A. Claude Desktop 사용자** → `.dxt` 원클릭 설치 (권장)
+- **3-B. Cursor / Claude Code 사용자 또는 고급 사용자** → 수동 설치 (jar 직접 배치)
+
+---
+
+### 3-A. Claude Desktop — `.dxt` 원클릭 설치 (권장)
+
+1. Releases 페이지에서 `stata-mcp.dxt` 다운로드
+2. 파일 더블클릭 → Claude Desktop 이 설치 다이얼로그 표시 → 승인
+   - 또는: Claude Desktop → Settings → Extensions → **Install from file** → `stata-mcp.dxt` 선택
+3. Claude Desktop **재시작** (MCP 서버 등록 반영)
+
+설치 완료 시 자동 처리되는 항목:
+- `stata-mcp-server.jar` + `mcp-bridge-v18.js` 가 Claude Extensions 내부 디렉토리에 배치
+- `claude_desktop_config.json` 의 MCP 서버 항목 자동 등록
+- bridge 가 첫 호출 시 jar 를 detached 로 spawn
+
+> **Claude 지침 파일 사용자**: `.dxt` 는 extension 디렉토리가 격리되어 있어 jar 옆에 `stata_mcp_instructions.md` 를 직접 배치하기 어렵습니다. 지침이 필요하면 (1) 3-B 수동 설치로 전환하거나, (2) Claude Desktop 의 프로젝트 지식 / Custom Instructions 기능으로 동일 효과 달성.
+
+이후 [4. Stata ado 폴더](#4-stata-ado-폴더-드론) 로 진행하세요.
+
+---
+
+### 3-B. 수동 설치 (Cursor / Claude Code / 고급 사용자)
+
+#### 3-B-1. jar 확보
+
+`stata-mcp.dxt` 는 zip 컨테이너입니다. 확장자를 `.zip` 으로 바꾸거나 `unzip` 으로 풀면 `server/` 안에 두 파일이 나옵니다:
+
+```bash
+unzip stata-mcp.dxt -d stata-mcp-extracted
+# stata-mcp-extracted/server/stata-mcp-server.jar
+# stata-mcp-extracted/server/mcp-bridge-v18.js  (Claude Desktop 전용 — Cursor/Code 는 미사용)
+```
+
+#### 3-B-2. 권장 위치에 배치
 
 **macOS**:
 ```
 ~/Documents/StataMCP/
 ├── stata-mcp-server.jar
-└── mcp-bridge-v18.js
+└── mcp-bridge-v18.js          ← Claude Desktop 도 같이 쓰려면 함께 둠
 ```
 
 **Windows**:
@@ -57,9 +91,9 @@ C:\Users\YOUR_NAME\Documents\StataMCP\
 └── mcp-bridge-v18.js
 ```
 
-> bridge 와 jar 는 **반드시 같은 폴더** — bridge 가 옆 폴더의 jar 를 자동 spawn.
+> bridge 사용 시 jar 와 **반드시 같은 폴더** — bridge 가 옆 폴더의 jar 를 자동 spawn. Cursor/Claude Code 만 쓰면 bridge 생략 가능.
 
-### stata_mcp.properties (자동 생성)
+#### 3-B-3. stata_mcp.properties (자동 생성)
 
 서버 첫 기동 시 jar 옆에 다음 내용으로 **자동 생성**됩니다:
 
@@ -69,7 +103,7 @@ BRIDGE_PORT="8080"
 DRONE_PORT="8001"
 ```
 
-#### 포트 변경 (선택)
+##### 포트 변경 (선택)
 
 서버 기동 전에 jar 옆에 `stata_mcp.properties` 파일을 직접 만들어 원하는 값을 넣어두면 자동 생성 대신 그 값이 사용됩니다.
 
@@ -78,7 +112,7 @@ BRIDGE_PORT="8090"
 DRONE_PORT="9001"
 ```
 
-### Claude 지침 파일 (선택)
+#### 3-B-4. Claude 지침 파일 (선택)
 
 분석 룰을 Claude 에게 적용하고 싶으면 jar 옆에 `stata_mcp_instructions.md` 작성:
 
@@ -116,10 +150,10 @@ adopath
 
 ## 5. 서버 기동
 
-### Claude Desktop 사용자
-서버를 별도로 띄울 필요 없음 — Claude Desktop 시작 시 bridge 가 자동으로 jar spawn (detached, Claude 종료해도 서버 생존).
+### Claude Desktop 사용자 (3-A `.dxt` 설치 경로)
+서버를 별도로 띄울 필요 없음 — `.dxt` 에 포함된 bridge 가 Claude Desktop 시작 시 jar 를 자동 spawn (detached, Claude 종료해도 서버 생존).
 
-### Claude Code / Cursor 사용자
+### Claude Code / Cursor 사용자 (3-B 수동 설치 경로)
 한 번 수동 기동:
 ```bash
 java -jar ~/Documents/StataMCP/stata-mcp-server.jar
@@ -152,7 +186,13 @@ claude mcp list
 # StataMCP   ✓ Connected
 ```
 
-### Claude Desktop — bridge 경유
+### Claude Desktop
+
+#### 권장: `.dxt` 사용 (3-A 경로)
+
+`stata-mcp.dxt` 를 설치하면 Claude Desktop 이 `claude_desktop_config.json` 의 MCP 항목을 **자동으로 등록**합니다. 별도 JSON 편집 불필요.
+
+#### 수동 등록 (3-B 경로 — jar/bridge 직접 배치한 경우)
 
 Claude Desktop 의 Custom Connectors UI 는 HTTPS 만 허용하므로, stdio MCP server 로 등록 (bridge 가 stdio↔Streamable HTTP 변환).
 
@@ -213,12 +253,30 @@ claude --dangerously-load-development-channels server:StataMCP
 
 ## 7. 경로 구조 요약
 
-설치 후:
+### 3-A. `.dxt` 설치 경로 (Claude Desktop)
+
+```
+<Claude Extensions dir>/stata-mcp/        ← Claude Desktop 이 자동 관리 (사용자 직접 접근 비추천)
+├── manifest.json
+└── server/
+    ├── stata-mcp-server.jar
+    └── mcp-bridge-v18.js
+
+<Stata PERSONAL ado>/                     ← Stata adopath 자동 인식
+├── stata-drone.jar
+├── mcp_connect.ado
+└── llm.ado
+
+<사용자 작업폴더 c(pwd)>/                  ← Stata에서 cd 한 위치
+└── g_yyyyMMddHHmm_xxxx.png               ← 그래프 (드론이 직접 export)
+```
+
+### 3-B. 수동 설치 경로 (Cursor / Claude Code / 고급 사용자)
 
 ```
 <서버 설치 폴더>/                          ← 사용자 선택 (예: ~/Documents/StataMCP/)
 ├── stata-mcp-server.jar
-├── mcp-bridge-v18.js                     ← Claude Desktop 사용 시 필수
+├── mcp-bridge-v18.js                     ← Claude Desktop 도 같이 쓸 때만 필요
 ├── stata_mcp.properties                  ← 첫 기동 시 자동 생성 (포트만)
 ├── stata_mcp_instructions.md             ← (선택) Claude 지침 파일
 ├── stata_mcp_instructions_example_compact.md
