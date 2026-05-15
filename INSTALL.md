@@ -296,6 +296,39 @@ claude --dangerously-load-development-channels server:StataMCP
 
 ---
 
-## 8. 다음 단계
+## 8. (선택) 코워크 슬래시 명령 스킬 등록
+
+`skill-bundles/` 의 5개 zip 을 등록하면 다음 슬래시 명령이 활성화됩니다:
+
+| 명령 | 동작 |
+|---|---|
+| `/stata-setup` | 현재 Stata 작업폴더 + 데이터셋 상태 점검 |
+| `/stata-exec <cmd>` | Stata 명령 직접 실행 |
+| `/stata-pull` | Stata GUI 에서 push 한 결과 가져오기 |
+| `/stata-data-fullcontext` | 현재 데이터셋 전체 컨텍스트 요약 |
+| `/stata-graph-get` | 현재 그래프 spec 조회 |
+
+### 8-A. Claude Desktop / claude.ai 웹
+
+claude.ai → **Settings → Customize → Skills** 에서 [skill-bundles/](skill-bundles) 의 5개 zip 을 하나씩 업로드. 로그인 같으면 Claude Desktop 에도 자동 반영.
+
+### 8-B. Claude Code
+
+5개 zip 을 받아 각각 `~/.claude/skills/` 에 압축 해제:
+
+```bash
+mkdir -p ~/.claude/skills
+for z in skill-bundles/*.zip; do
+  unzip -o "$z" -d ~/.claude/skills/
+done
+```
+
+압축 해제 후 `~/.claude/skills/<skill-name>/SKILL.md` 구조가 자동 인식됨.
+
+> **주의**: `/stata-setup`, `/stata-exec` 등은 자연어가 아닌 **명시적 슬래시 호출에만 응답**. 즉 "Stata 명령 실행해줘" 가 아니라 `/stata-exec sysuse auto` 처럼 호출해야 함.
+
+---
+
+## 9. 다음 단계
 
 설치가 끝났으면 [USAGE.md](USAGE.md)에서 시작 순서·문제 해결을 확인하세요.
