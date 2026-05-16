@@ -69,7 +69,8 @@ program mcp_connect
     * ─── 지침 파일 존재 여부 → 분기 안내 ──────────────────────────────────
     capture findfile stata-mcp-server.jar
     if !_rc {
-        local jardir : subinstr local r(fn) "stata-mcp-server.jar" ""
+        local jarpath `"`r(fn)'"'
+        local jardir : subinstr local jarpath "stata-mcp-server.jar" ""
         local instructions_file `"`jardir'stata_mcp_instructions.md"'
         capture confirm file `"`instructions_file'"'
         if !_rc {
