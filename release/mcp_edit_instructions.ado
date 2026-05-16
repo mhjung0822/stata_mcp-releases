@@ -56,8 +56,8 @@ program mcp_edit_instructions
         di
         di as txt "stata_mcp_instructions.md 가 아직 없음 (jar 옆: `jardir')"
         di as txt "예시를 받아서 시작하려면:"
-        di as result "    mcp_edit_instructions, init       " as txt "// 간결한 기본"
-        di as result "    mcp_edit_instructions, init full  " as txt "// 상세 버전"
+        di as txt `"    {stata "mcp_edit_instructions, init":mcp_edit_instructions, init}       // 간결한 기본"'
+        di as txt `"    {stata "mcp_edit_instructions, init full":mcp_edit_instructions, init full}  // 상세 버전"'
         di
         exit
     }

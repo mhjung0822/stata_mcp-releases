@@ -58,10 +58,10 @@ program mcp_connect
         local instructions_file `"`jardir'stata_mcp_instructions.md"'
         capture confirm file `"`instructions_file'"'
         if !_rc {
-            di as text "[Setup] 지침 있음 — 편집: " as result "mcp_edit_instructions"
+            di as text `"[Setup] 지침 있음 — 편집: {stata mcp_edit_instructions:mcp_edit_instructions}"'
         }
         else {
-            di as text "[Setup] 지침 없음 — 설정: " as result "mcp_edit_instructions, init"
+            di as text `"[Setup] 지침 없음 — 설정: {stata "mcp_edit_instructions, init":mcp_edit_instructions, init}"'
         }
     }
 end
