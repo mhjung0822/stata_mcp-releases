@@ -51,6 +51,17 @@ program mcp_connect
     javacall com.stata_mcp.drone.StataDrone start, ///
         args("`bridgeport'" "`droneport'") jars(stata-drone.jar)
 
-    di as text "[Setup] 지침 설정: " as result "mcp_edit_instructions" ///
-        as text "  (없으면 " as result "mcp_edit_instructions, init" as text ")"
+    * 지침 파일 존재 여부 → 분기 안내
+    capture findfile stata-mcp-server.jar
+    if !_rc {
+        local jardir : subinstr local r(fn) "stata-mcp-server.jar" ""
+        local instructions_file `"`jardir'stata_mcp_instructions.md"'
+        capture confirm file `"`instructions_file'"'
+        if !_rc {
+            di as text "[Setup] 지침 있음 — 편집: " as result "mcp_edit_instructions"
+        }
+        else {
+            di as text "[Setup] 지침 없음 — 설정: " as result "mcp_edit_instructions, init"
+        }
+    }
 end
