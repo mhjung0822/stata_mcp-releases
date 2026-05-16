@@ -46,7 +46,7 @@ Stata 에서 한 줄 실행:
 
 ```stata
 net install stata-mcp, ///
-    from("https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/release/") ///
+    from("https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/release") ///
     replace
 ```
 
