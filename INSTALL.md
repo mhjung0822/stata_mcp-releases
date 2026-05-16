@@ -274,7 +274,7 @@ claude --dangerously-load-development-channels server:StataMCP
 
 > ⚠️ **사전 조건**: 스킬은 MCP 도구를 호출하므로 **Claude Desktop 코워크 모드가 켜져 있어야** 동작합니다.
 
-`skill-bundles/` 의 6개 zip 을 등록하면 다음 슬래시 명령이 활성화됩니다:
+`release/claude/cowork-skills/` 의 6개 zip 을 등록하면 다음 슬래시 명령이 활성화됩니다:
 
 | 명령 | 동작 |
 |---|---|
@@ -287,7 +287,7 @@ claude --dangerously-load-development-channels server:StataMCP
 
 ### 8-A. Claude Desktop / claude.ai 웹
 
-claude.ai → **Settings → Customize → Skills** 에서 [skill-bundles/](skill-bundles) 의 6개 zip 을 하나씩 업로드. 로그인 같으면 Claude Desktop 에도 자동 반영.
+claude.ai → **Settings → Customize → Skills** 에서 [release/claude/cowork-skills/](release/claude/cowork-skills) 의 6개 zip 을 하나씩 업로드. 로그인 같으면 Claude Desktop 에도 자동 반영.
 
 ### 8-B. Claude Code
 
@@ -295,7 +295,7 @@ claude.ai → **Settings → Customize → Skills** 에서 [skill-bundles/](skil
 
 ```bash
 mkdir -p ~/.claude/skills
-for z in skill-bundles/*.zip; do
+for z in release/claude/cowork-skills/*.zip; do
   unzip -o "$z" -d ~/.claude/skills/
 done
 ```
