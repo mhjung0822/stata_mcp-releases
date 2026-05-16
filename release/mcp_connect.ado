@@ -1,4 +1,4 @@
-*! mcp_connect  v0.2.0  17may2026
+*! mcp_connect  v0.3.0  17may2026
 *!
 *! Start / stop / reset the full Stata-MCP stack (server jar + drone).
 *! Internally invokes mcp_server for the JVM-detached server spawn and
@@ -14,8 +14,7 @@
 *! - `mcp_server` (separate ado) handles the bash-disown spawn so the
 *!   server jar runs independently of Stata's JVM hierarchy.
 *! - Drone uses Stata's `javacall` and shares the Stata JVM.
-*! - If the server is already up, the second spawn fails silently on
-*!   port-bind (8080) and leaves the existing server intact.
+*! - Both server and drone are idempotent — if already running, skip spawn.
 
 cap program drop mcp_connect
 program mcp_connect
@@ -39,29 +38,45 @@ program mcp_connect
         sleep 1500
     }
 
-    * ─── 서버 먼저 띄움 ───────────────────────────────────────────────────
+    * ─── 서버 먼저 띄움 (mcp_server 가 idempotency 처리) ──────────────────
     di as text "[Server] starting..."
     mcp_server
 
     * 서버 준비 대기 (Spring Boot 부팅 시간)
     sleep 2000
 
-    * ─── 드론 시작 ────────────────────────────────────────────────────────
-    di as text "[Drone] Java Stata-MCP-Drone 시작..."
-    javacall com.stata_mcp.drone.StataDrone start, ///
-        args("`bridgeport'" "`droneport'") jars(stata-drone.jar)
+    * ─── 드론 시작 (이미 떠있으면 skip) ───────────────────────────────────
+    tempfile dchk
+    capture shell curl -s --max-time 1 http://127.0.0.1:`droneport'/status > "`dchk'" 2>/dev/null
+    local drone_up = 0
+    tempname dfh
+    capture file open `dfh' using "`dchk'", read text
+    if !_rc {
+        file read `dfh' dline
+        capture file close `dfh'
+        if `"`dline'"' != "" local drone_up = 1
+    }
 
-    * 지침 파일 존재 여부 → 분기 안내
+    if `drone_up' {
+        di as text "[Drone] already running on port `droneport' — skip spawn"
+    }
+    else {
+        di as text "[Drone] Java Stata-MCP-Drone 시작..."
+        javacall com.stata_mcp.drone.StataDrone start, ///
+            args("`bridgeport'" "`droneport'") jars(stata-drone.jar)
+    }
+
+    * ─── 지침 파일 존재 여부 → 분기 안내 ──────────────────────────────────
     capture findfile stata-mcp-server.jar
     if !_rc {
         local jardir : subinstr local r(fn) "stata-mcp-server.jar" ""
         local instructions_file `"`jardir'stata_mcp_instructions.md"'
         capture confirm file `"`instructions_file'"'
         if !_rc {
-            di as text `"[Setup] 지침 있음 — 편집: {stata mcp_edit_instructions:mcp_edit_instructions}"'
+            di as text "[Setup] 지침 있음 — 편집: {stata mcp_edit_instructions:mcp_edit_instructions}"
         }
         else {
-            di as text `"[Setup] 지침 없음 — 설정: {stata "mcp_edit_instructions, init":mcp_edit_instructions, init}"'
+            di as text "[Setup] 지침 없음 — 설정: {stata mcp_edit_instructions, init:mcp_edit_instructions, init}"
         }
     }
 end
