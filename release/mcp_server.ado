@@ -84,6 +84,4 @@ program mcp_server
     }
     di as text "[Server] spawned (detached). 확인: " ///
         as result "mcp_server, status"
-    di as text "[Server] 지침 편집: " as result "mcp_edit_instructions" ///
-        as text "  (없으면 " as result "mcp_edit_instructions, init" as text ")"
 end
