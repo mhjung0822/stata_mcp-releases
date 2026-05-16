@@ -70,8 +70,8 @@ adopath
 
 ```properties
 # Stata MCP 환경 설정 (자동 생성)
-BRIDGE_PORT="8080"
-DRONE_PORT="8001"
+BRIDGE_PORT=8080
+DRONE_PORT=8001
 ```
 
 #### 포트 변경 (선택)
@@ -79,8 +79,8 @@ DRONE_PORT="8001"
 서버 기동 전에 jar 옆에 `stata_mcp.properties` 파일을 직접 만들어 원하는 값을 넣어두면 자동 생성 대신 그 값이 사용됩니다.
 
 ```properties
-BRIDGE_PORT="8090"
-DRONE_PORT="9001"
+BRIDGE_PORT=8090
+DRONE_PORT=9001
 ```
 
 ### Claude 지침 파일 (선택)
