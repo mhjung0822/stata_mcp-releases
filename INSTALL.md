@@ -276,6 +276,8 @@ claude --dangerously-load-development-channels server:StataMCP
 
 `release/claude/cowork-skills/` 의 6개 zip 을 등록하면 다음 슬래시 명령이 활성화됩니다:
 
+> 📦 **한 번에 받기**: [`claude.zip` (latest)](../../releases/tag/claude-latest) — `release/claude/` 전체 (`.dxt` + 스킬 6종) 를 자동 빌드된 zip 으로.
+
 | 명령 | 동작 |
 |---|---|
 | `/stata-setup` | 현재 Stata 작업폴더 + 데이터셋 상태 점검 |

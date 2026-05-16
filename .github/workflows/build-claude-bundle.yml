@@ -1,0 +1,49 @@
+name: Build claude bundle
+
+# release/claude/ 의 모든 자산을 한 zip 으로 묶어 GitHub Release 에 attach.
+# 사용자는 https://github.com/mhjung0822/stata_mcp-releases/releases/tag/claude-latest
+# 에서 claude.zip 한 번 다운로드.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'release/claude/**'
+      - '.github/workflows/build-claude-bundle.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write  # release upload 위해 필요
+
+jobs:
+  bundle:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Create claude.zip
+        run: |
+          cd release
+          zip -r ../claude.zip claude
+          ls -la ../claude.zip
+
+      - name: Upload to claude-latest release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: claude-latest
+          name: Claude bundle (latest from main)
+          body: |
+            Latest contents of `release/claude/` zipped for one-click download.
+            Rebuilt automatically on every push to `main` that touches `release/claude/**`.
+
+            Contains:
+            - `stata-mcp.dxt` — Claude Desktop 설치 wrapper
+            - `cowork-skills/*.zip` — 코워크 슬래시 명령 스킬 6종
+
+            설치 방법은 [INSTALL.md](https://github.com/mhjung0822/stata_mcp-releases/blob/main/INSTALL.md) 참고.
+          files: claude.zip
+          prerelease: false
+          make_latest: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
