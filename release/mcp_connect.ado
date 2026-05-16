@@ -66,7 +66,7 @@ program mcp_connect
             args("`bridgeport'" "`droneport'") jars(stata-drone.jar)
     }
 
-    * ─── 사후 안내 (클릭 가능 명령 링크) ───────────────────────────────────
+    * ─── 사후 안내 (클릭 가능 명령 / URL 링크) ────────────────────────────
     di as text "[Setup] 서버 상태: {stata mcp_server, status:mcp_server, status}"
     capture findfile stata-mcp-server.jar
     if !_rc {
@@ -81,4 +81,5 @@ program mcp_connect
             di as text "[Setup] StataMCP 지침 (getInstructions) 없음 — 설정: {stata mcp_edit_instructions, init:mcp_edit_instructions, init}"
         }
     }
+    di as text "[Setup] 코워크 슬래시 명령 스킬 6종 (선택) — 안내: {browse https://github.com/mhjung0822/stata_mcp-releases/blob/main/INSTALL.md}"
 end
