@@ -1,7 +1,7 @@
-*! mcp_edit_instructions  v0.2.0  17may2026
+*! mcp_edit_instructions  v0.3.0  17may2026
 *!
 *! Open stata_mcp_instructions.md (the Claude analysis-rules file the
-*! MCP server feeds via `getInstructions`) in the OS default editor.
+*! MCP server feeds via `getInstructions`) in Stata's do-file editor.
 *!
 *! Usage:
 *!   mcp_edit_instructions                   // open existing file
@@ -63,13 +63,5 @@ program mcp_edit_instructions
     }
 
     di as text "Opening: " as result `"`dest'"'
-    if "`c(os)'" == "MacOSX" {
-        shell open "`dest'"
-    }
-    else if "`c(os)'" == "Windows" {
-        shell cmd /c start "" "`dest'"
-    }
-    else {
-        shell xdg-open "`dest'"
-    }
+    doedit `"`dest'"'
 end
