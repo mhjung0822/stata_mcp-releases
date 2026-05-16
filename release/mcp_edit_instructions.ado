@@ -62,6 +62,6 @@ program mcp_edit_instructions
         exit
     }
 
-    di as text "Opening: " as result `"`dest'"'
+    di as text "file path: " as result `"`dest'"'
     doedit `"`dest'"'
 end
