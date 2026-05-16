@@ -40,12 +40,14 @@
 
 사용 환경에 따라 두 경로 중 택일:
 
-- **3-A. Claude Desktop 사용자** → `.dxt` 원클릭 설치 (권장)
-- **3-B. Cursor / Claude Code 사용자 또는 고급 사용자** → 수동 설치 (jar 직접 배치)
+- **3-A. Claude Desktop 코워크 모드 중심 사용자** → `.dxt` 원클릭 설치
+- **3-B. Claude Desktop 일반 채팅 / Cursor / Claude Code / 고급 사용자** → 수동 설치 (전역 MCP 등록)
 
 ---
 
-### 3-A. Claude Desktop — `.dxt` 원클릭 설치 (권장)
+### 3-A. Claude Desktop — `.dxt` 원클릭 설치 (코워크 모드 사용자)
+
+> ⚠️ **`.dxt` 는 코워크 모드 전용**: `.dxt` 로 설치하면 MCP 도구가 Claude Desktop **코워크 모드 토글이 켜진 채팅에서만** 호출됩니다 (extension 이 코워크 sandbox 내부에 풀리는 것으로 추정). 일반 채팅에서도 도구를 쓰려면 3-B 수동 설치를 사용하세요. 사용 시작 순서는 [USAGE.md](USAGE.md) 1장 참고.
 
 1. Releases 페이지에서 `stata-mcp.dxt` 다운로드
 2. 파일 더블클릭 → Claude Desktop 이 설치 다이얼로그 표시 → 승인
@@ -299,7 +301,9 @@ claude --dangerously-load-development-channels server:StataMCP
 
 ## 8. (선택) 코워크 슬래시 명령 스킬 등록
 
-`skill-bundles/` 의 5개 zip 을 등록하면 다음 슬래시 명령이 활성화됩니다:
+> ⚠️ **사전 조건**: 스킬은 `.dxt` 의 MCP 도구를 호출하므로 **Claude Desktop 코워크 모드가 켜져 있어야** 동작합니다 (3-A 박스 참고).
+
+`skill-bundles/` 의 6개 zip 을 등록하면 다음 슬래시 명령이 활성화됩니다:
 
 | 명령 | 동작 |
 |---|---|
@@ -308,6 +312,7 @@ claude --dangerously-load-development-channels server:StataMCP
 | `/stata-pull` | Stata GUI 에서 push 한 결과 가져오기 |
 | `/stata-data-fullcontext` | 현재 데이터셋 전체 컨텍스트 요약 |
 | `/stata-graph-get` | 현재 그래프 spec 조회 |
+| `/stata-instruction` | 현재 로드된 분석 지침 (`stata_mcp_instructions.md`) 조회 |
 
 ### 8-A. Claude Desktop / claude.ai 웹
 

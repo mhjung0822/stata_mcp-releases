@@ -10,7 +10,8 @@
 ```
 1. Claude Desktop 실행
    → bridge 가 stdio child 로 spawn → Java jar 자동 시작 (detached)
-2. Stata 실행 → mcp_connect
+2. 코워크 모드 토글 ON  ← .dxt 의 MCP 도구는 코워크 sandbox 내부 (3-B 수동 설치는 불필요)
+3. Stata 실행 → mcp_connect
 ```
 
 ### Claude Code / Cursor 사용자 (Desktop 미사용 시)
