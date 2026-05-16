@@ -58,7 +58,7 @@ Stata GUI에서 직접 분석 후 결과를 Claude로 전송:
 sysuse auto, clear
 regress price mpg weight
 llm push                        // 직전 명령 결과 + r()/e() push (큐에 add + 즉시 알림)
-llm push > predict yhat         // > 뒤의 명령 실행 + push
+llm push > regress price mpg weight    // > 뒤의 명령 실행 + push
 llm push, clear                 // 큐 비우고 새로 push (잔재 정리)
 ```
 
