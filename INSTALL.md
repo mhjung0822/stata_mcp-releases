@@ -8,7 +8,7 @@
 
 | 항목 | 버전 |
 |------|------|
-| Java | 17 이상 — [Eclipse Temurin 다운로드](https://adoptium.net/) |
+| Java | 17 이상 — [Oracle JDK 17 다운로드](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html) |
 | Stata | 17 이상 (19 권장) |
 | Claude Desktop / Claude Code / Cursor | 최신 (Claude Code/Cursor 는 Streamable HTTP MCP transport native 지원) |
 | Node.js | v18+ — [Node.js 다운로드](https://nodejs.org/) (Claude Desktop 사용 시에만 필요 — bridge 가 stdio↔HTTP 변환) |
