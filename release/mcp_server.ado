@@ -1,4 +1,4 @@
-*! mcp_server  v0.1.0  17may2026
+*! mcp_server  v0.2.0  17may2026
 *!
 *! Start / check / stop stata-mcp-server.jar located in the Stata
 *! PERSONAL ado folder (resolved via `findfile`, so no path argument
@@ -45,6 +45,21 @@ program mcp_server
     }
 
     * ─── start (default) ───────────────────────────────────────────────────
+    * 멱등성: 이미 떠있으면 spawn skip (port 8080 점유 → 새 JVM 이 BindException
+    * 으로 죽으면서 server-logs/ 에 잡음 쌓이는 거 방지)
+    tempfile chk
+    capture shell curl -s --max-time 1 http://127.0.0.1:`bridgeport'/status > "`chk'" 2>/dev/null
+    tempname fh
+    capture file open `fh' using "`chk'", read text
+    if !_rc {
+        file read `fh' line
+        capture file close `fh'
+        if strpos(`"`line'"', "running") > 0 {
+            di as text "[Server] already running on port `bridgeport' — skip spawn"
+            exit
+        }
+    }
+
     capture findfile stata-mcp-server.jar
     if _rc {
         di as error "mcp_server: stata-mcp-server.jar not found in adopath"
