@@ -47,7 +47,7 @@ struct over_group {
 }
 
 struct graph_meta {
-    string scalar    name, class_name, family, cmd, timestamp
+    string scalar    name, class_name, family, cmd, user_cmd, timestamp
     string scalar    title, subtitle, note
     string rowvector xtitles, ytitles
     struct legend_meta scalar legend_
@@ -58,6 +58,7 @@ struct graph_meta {
     struct twoway_meta scalar twoway_
     real   scalar              n_over
     struct over_group rowvector over_groups
+    real   scalar              nofill   // bar/hbar 의 nofill 옵션 (1=ON, 0=OFF)
 }
 
 // ---- JSON escape / primitive ----
@@ -99,6 +100,31 @@ string scalar _mcp_json_arr_real(real rowvector v)
     q = J(1, n, "")
     for (i = 1; i <= n; i++) q[i] = _mcp_json_num(v[i])
     return("[" + invtokens(q, ",") + "]")
+}
+
+// ---- bar/hbar/box/hbox/dot single Y + over-only legend 보정 ----
+// Stata 가 single-Y over-only 케이스에서 .legend.labels 를 over[0].labels 로 잘못 채움.
+// over_groups[0].labels == legend.labels 이면 single-Y 케이스이므로 legend 를 비운다.
+// (caller 가 family 가드 — pie 는 slice 라벨이 over[0].labels 라 정상, 제외)
+// NOTE: Mata struct argument 는 by-value 라 함수 안 통째 교체 (legend_.labels = J(...))
+//       caller 에 안 보임. 글로벌 _mcp_gm 을 직접 참조 (다른 mata helper 와 동일 패턴).
+void _mcp_gm_fix_over_legend()
+{
+    external struct graph_meta scalar _mcp_gm
+    real scalar nL, nO, i
+    string rowvector og0, lbl
+    nO = length(_mcp_gm.over_groups)
+    nL = length(_mcp_gm.legend_.labels)
+    if (nO == 0 | nL == 0) return
+    og0 = _mcp_gm.over_groups[1].labels
+    lbl = _mcp_gm.legend_.labels
+    if (length(og0) != nL) return
+    for (i = 1; i <= nL; i++) {
+        if (og0[i] != lbl[i]) return
+    }
+    // 동일 → single-Y over-only 케이스. legend 비우기.
+    _mcp_gm.legend_.labels   = J(1, 0, "")
+    _mcp_gm.legend_.plot_map = J(1, 0, .)
 }
 
 // ---- serset 단일 채움 (frame 내부에서 호출) ----
@@ -202,6 +228,7 @@ string scalar _mcp_gm_to_json(struct graph_meta scalar gm)
         _mcp_json_kv("class_name", _mcp_json_q(gm.class_name))          + "," +
         _mcp_json_kv("family",     _mcp_json_q(gm.family))              + "," +
         _mcp_json_kv("cmd",        _mcp_json_q(gm.cmd))                 + "," +
+        _mcp_json_kv("user_cmd",   _mcp_json_q(gm.user_cmd))            + "," +
         _mcp_json_kv("timestamp",  _mcp_json_q(gm.timestamp))           + "," +
         _mcp_json_kv("title",      _mcp_json_q(gm.title))               + "," +
         _mcp_json_kv("subtitle",   _mcp_json_q(gm.subtitle))            + "," +
@@ -220,6 +247,7 @@ string scalar _mcp_gm_to_json(struct graph_meta scalar gm)
         _mcp_json_kv("panel_paths", _mcp_json_arr_str(gm.panel_paths))  + "," +
         _mcp_json_kv("twoway_",     _mcp_twoway_to_json(gm.twoway_))    + "," +
         _mcp_json_kv("over_groups", "[" + invtokens(og_items, ",") + "]") + "," +
+        _mcp_json_kv("nofill",     _mcp_json_num(gm.nofill))            + "," +
         _mcp_json_kv("sersets", "[" + invtokens(ss_items, ",") + "]")   +
         "}"
 
@@ -247,17 +275,19 @@ end
 // ================================================================
 
 program define graph_meta_put
-    syntax , name(string) [Frame(string) Spec_path(string)]
+    syntax , name(string) [Frame(string) Spec_path(string) User_cmd(string)]
 
     if "`frame'" == "" local frame "_mcp_ss"
 
     local gname `"`name'"'
     local gcmd  `"`.`name'.command'"'
     local gtime `"`.`name'.time'"'
+    local gucmd `"`user_cmd'"'
 
     mata: _mcp_gm = graph_meta()
     mata: _mcp_gm.name      = _mcp_unwrap_cq(st_local("gname"))
     mata: _mcp_gm.cmd       = _mcp_unwrap_cq(st_local("gcmd"))
+    mata: _mcp_gm.user_cmd  = _mcp_unwrap_cq(st_local("gucmd"))
     mata: _mcp_gm.timestamp = _mcp_unwrap_cq(st_local("gtime"))
 
     _graph_meta_family `name'
@@ -272,11 +302,19 @@ program define graph_meta_put
     _graph_meta_subtitle    `name'
     _graph_meta_note        `name'
     _graph_meta_axes        `name'
-    _graph_meta_legend      `name'
     _graph_meta_sersets     `name' "`frame'"
     _graph_meta_panels      `name' "`fam'"
     _graph_meta_twoway      `name' "`fam'"
     _graph_meta_over_groups `name' "`fam'"
+    // legend 는 over_groups 뒤에서 처리 — over[0] 라벨로 잘못 dump 되는 케이스 보정 위해
+    _graph_meta_legend      `name' "`fam'"
+
+    // nofill 옵션 detect (bar/hbar/box/hbox/dot 류) — cmd 안 word boundary 검색
+    local _has_nofill = 0
+    if inlist("`fam'", "bar", "hbar", "box", "hbox", "dot") {
+        if regexm(`"`gcmd'"', "(^|[ ,()])nofill([ ,()]|$)") local _has_nofill = 1
+    }
+    mata: _mcp_gm.nofill = `_has_nofill'
 
     // 직렬화 — spec_path 있으면 file, 없으면 macro
     if `"`spec_path'"' != "" {
@@ -468,7 +506,7 @@ end
 // ================================================================
 
 program _graph_meta_legend
-    args name
+    args name fam
     local n 0
     cap local n `.`name'.legend.labels.arrnels'
     if _rc local n 0
@@ -488,6 +526,13 @@ program _graph_meta_legend
         local m `.`name'.legend.map[`i']'
         if "`m'" == "" local m .
         mata: _mcp_gm.legend_.plot_map[`i'] = `m'
+    }
+
+    // 보정: bar/hbar/box/hbox/dot 의 single Y + over-only 케이스에서 Stata 가
+    // .legend.labels 를 over[0].labels 로 잘못 채워넣는 경우 → legend 비움.
+    // pie 는 slice 라벨로 over[0].labels 가 정상이므로 제외.
+    if inlist("`fam'", "bar", "hbar", "box", "hbox", "dot") {
+        mata: _mcp_gm_fix_over_legend()
     }
 end
 
@@ -666,12 +711,26 @@ program _graph_meta_over_groups
         mata: _mcp_gm.over_groups[`idx'].levels = J(1, `nL', .)
         mata: _mcp_gm.over_groups[`idx'].labels = J(1, `nL', "")
 
+        // string variable 인 경우 levels 는 ordinal index, labels 는 string 값.
+        // (numeric variable 은 levels = 실제 값, labels = value label 또는 숫자)
+        cap confirm string variable `v'
+        local _is_str = !_rc
+
         local k 0
         foreach lev of local L {
             local ++k
-            local lbl : label (`v') `lev'
-            mata: _mcp_gm.over_groups[`idx'].levels[`k'] = `lev'
-            mata: _mcp_gm.over_groups[`idx'].labels[`k'] = `"`lbl'"'
+            if `_is_str' {
+                // string over_var: levels = ordinal index (k), labels = string 값
+                // st_local 사용 — macro substitution 시 compound quote 가 strip 되어
+                // bare name 으로 인식 ('Australia not found' 회피).
+                mata: _mcp_gm.over_groups[`idx'].levels[`k'] = `k'
+                mata: _mcp_gm.over_groups[`idx'].labels[`k'] = st_local("lev")
+            }
+            else {
+                local lbl : label (`v') `lev'
+                mata: _mcp_gm.over_groups[`idx'].levels[`k'] = `lev'
+                mata: _mcp_gm.over_groups[`idx'].labels[`k'] = st_local("lbl")
+            }
         }
     }
 end
