@@ -50,7 +50,7 @@ net install stata-mcp, ///
     replace
 ```
 
-Stata 가 `stata.toc` + `stata-mcp.pkg` 매니페스트를 읽어 7개 파일 (서버 jar, 드론, ado 5종) 을 PERSONAL ado 에 자동 다운로드.
+Stata 가 `stata.toc` + `stata-mcp.pkg` 매니페스트를 읽어 9개 파일 (서버 jar, 드론, ado 5종, 지침 md 2종) 을 PERSONAL ado 에 자동 다운로드.
 
 업데이트:
 ```stata
@@ -70,17 +70,19 @@ adopath
 **macOS (보통)**: `~/Documents/Stata/ado/personal/`
 **Windows (보통)**: `%USERPROFILE%\ado\personal\` 또는 `%USERPROFILE%\Documents\Stata\ado\personal\`
 
-이 경로에 **일곱 파일** 복사:
+이 경로에 **아홉 파일** 복사:
 
 ```
 <PERSONAL>/
-├── stata-mcp-server.jar           ← MCP 서버 jar
-├── stata-drone.jar                ← Stata 내부 드론
-├── mcp_connect.ado                ← 드론 시작 명령
-├── mcp_server.ado                 ← 서버 jar 기동/종료/상태 명령
-├── llm.ado                        ← push 명령
-├── graph_meta_put.ado             ← 그래프 메타정보
-└── mcp_load_serset.ado            ← serset 로드 헬퍼
+├── stata-mcp-server.jar                  ← MCP 서버 jar
+├── stata-drone.jar                       ← Stata 내부 드론
+├── mcp_connect.ado                       ← 드론 시작 명령
+├── mcp_server.ado                        ← 서버 jar 기동/종료/상태 명령
+├── llm.ado                               ← push 명령
+├── graph_meta_put.ado                    ← 그래프 메타정보
+├── mcp_load_serset.ado                   ← serset 로드 헬퍼
+├── stata_mcp_instructions.md             ← 기본 지침 (간결)
+└── stata_mcp_instructions_example_full.md ← 지침 예시 (상세)
 ```
 
 ### stata_mcp.properties (자동 생성)

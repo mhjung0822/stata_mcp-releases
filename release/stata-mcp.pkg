@@ -20,3 +20,5 @@ F mcp_server.ado
 F llm.ado
 F graph_meta_put.ado
 F mcp_load_serset.ado
+F stata_mcp_instructions.md
+F stata_mcp_instructions_example_full.md
