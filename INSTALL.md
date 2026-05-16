@@ -19,7 +19,10 @@
 
 ## 2. 배포 파일 목록
 
-다운로드: <https://github.com/mhjung0822/stata_mcp-releases/releases> 의 최신 버전.
+이 repo 의 `release/` 폴더 자산. 사용자가 직접 다운로드할 일은 두 가지:
+
+- **Stata 측**: 3장 의 `net install` 한 줄로 자동 다운로드 (수동 작업 없음)
+- **Claude 측**: [`claude.zip` (claude-latest Release)](https://github.com/mhjung0822/stata_mcp-releases/releases/tag/claude-latest) 한 번 다운로드 → `.dxt` + 스킬 zip 6종
 
 | 파일 | 설명 |
 |------|------|
@@ -177,7 +180,7 @@ curl http://127.0.0.1:8080/status
 
 ### Claude Desktop — `.dxt` (권장)
 
-1. Releases 페이지에서 `stata-mcp.dxt` 다운로드
+1. [`claude.zip` (claude-latest Release)](../../releases/tag/claude-latest) 다운로드 → 압축 풀면 `stata-mcp.dxt` 포함
 2. 파일 더블클릭 → Claude Desktop 이 설치 다이얼로그 표시 → 승인
    - 또는: Settings → Extensions → **Install from file** → `stata-mcp.dxt` 선택
 3. Claude Desktop **재시작**
