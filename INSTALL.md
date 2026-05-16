@@ -52,12 +52,24 @@ net install stata-mcp, ///
 
 Stata 가 `stata.toc` + `stata-mcp.pkg` 매니페스트를 읽어 9개 파일 (서버 jar, 드론, ado 5종, 지침 md 2종) 을 PERSONAL ado 에 자동 다운로드.
 
-업데이트:
+#### 단계별 설치 (대안)
+
+설치 전 패키지 내용을 미리 확인하고 싶으면:
+```stata
+net from "https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/release"
+net describe stata-mcp
+net install stata-mcp, replace
+```
+
+#### 업데이트
+
 ```stata
 adoupdate stata-mcp, update
 ```
 
 > Stata `adopath` 가 PERSONAL 을 자동 인식 — `mcp_server` 가 `findfile` 로 jar 를 찾아 detached spawn.
+
+> ⚠️ URL 끝에 `/` 붙이면 Stata 가 "is not a Stata download site" 에러 — 슬래시 없이 정확히 위 형태로.
 
 ### 3-B. 수동 복사 (대안)
 
