@@ -11,8 +11,12 @@
 *!   mcp_server, bridgeport(8090)  // override status check port (default 8080)
 *!
 *! Notes:
-*! - On macOS/Linux uses `shell ... &` (detached background).
-*! - On Windows uses `winexec` (asynchronous spawn).
+*! - On macOS/Linux uses `shell bash -c "... & disown"` — wrapping in bash
+*!   with disown is required because Stata itself runs on a JVM, so plain
+*!   `shell java ...` binds the new JVM into Stata's JVM hierarchy and the
+*!   server cannot run independently. Disowning re-parents java to launchd.
+*! - On Windows uses `winexec` (asynchronous CreateProcess — no JVM
+*!   hierarchy issue).
 *! - Server lifecycle is independent of Stata once spawned — kill explicitly
 *!   via `mcp_server, stop` or `taskkill` / `pkill`.
 
@@ -49,15 +53,20 @@ program mcp_server
         adopath
         exit 601
     }
-    local jar `"`r(fn)'"'
+    local jar "`r(fn)'"
 
-    di as text "[Server] starting: " as result `"`jar'"'
+    di as text "[Server] starting: " as result "`jar'"
     if "`c(os)'" == "Windows" {
-        winexec java -jar `"`jar'"'
+        winexec java -jar "`jar'"
     }
     else {
-        shell java -jar `"`jar'"' >/dev/null 2>&1 &
+        * bash -c "... & disown" 패턴이 필수.
+        * Stata 자체가 JVM 위에서 돌아서, `shell java ...` 만 쓰면 새 JVM 이
+        * Stata 의 JVM 위계 안에 묶여 독립 실행이 안 됨. bash 라는 비-Java
+        * 중간 프로세스가 끼어들어 disown 으로 job table 에서 분리해야
+        * java 가 orphan 되어 launchd 로 reparent → Stata 종료에도 생존.
+        shell bash -c "java -jar '`jar'' >/dev/null 2>&1 & disown"
     }
     di as text "[Server] spawned (detached). 확인: " ///
-        as result `"mcp_server, status"'
+        as result "mcp_server, status"
 end
