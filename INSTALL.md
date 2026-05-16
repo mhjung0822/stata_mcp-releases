@@ -8,10 +8,10 @@
 
 | 항목 | 버전 |
 |------|------|
-| Java | 17 이상 |
+| Java | 17 이상 — [Eclipse Temurin 다운로드](https://adoptium.net/) |
 | Stata | 17 이상 (19 권장) |
 | Claude Desktop / Claude Code / Cursor | 최신 (Claude Code/Cursor 는 Streamable HTTP MCP transport native 지원) |
-| Node.js | v18+ (Claude Desktop 사용 시에만 필요 — bridge 가 stdio↔HTTP 변환) |
+| Node.js | v18+ — [Node.js 다운로드](https://nodejs.org/) (Claude Desktop 사용 시에만 필요 — bridge 가 stdio↔HTTP 변환) |
 
 > Claude Code / Cursor 는 Streamable HTTP 직접 지원이므로 Node 불필요. Claude Desktop 은 stdio MCP transport 만 지원하므로 zero-dep bridge (`mcp-bridge-v18.js`) 경유.
 
