@@ -236,22 +236,27 @@ claude --dangerously-load-development-channels server:StataMCP
 
 ## 6. 경로 구조 요약
 
-설치 후 전체 구조:
+`net install` 은 파일을 `c(sysdir_plus)` 의 서브폴더로 분산 배치 — `.jar` 확장자는 `jar/`, `.ado` 는 파일명 첫 글자 폴더 (`m/`, `l/`, `g/`).
 
 ```
-<Stata PERSONAL ado>/                     ← Stata adopath 자동 인식 — 모든 jar/ado 한 곳
-├── stata-mcp-server.jar                  ← MCP 서버 jar (mcp_server 가 spawn)
-├── stata-drone.jar                       ← Stata 내부 드론
-├── mcp_connect.ado                       ← 드론 시작 명령
-├── mcp_server.ado                        ← 서버 jar 기동/종료/상태 명령
-├── llm.ado                               ← push 명령
-├── graph_meta_put.ado                    ← 그래프 메타정보
-├── mcp_load_serset.ado                   ← serset 로드 헬퍼
-├── stata_mcp.properties                  ← 첫 서버 기동 시 자동 생성 (포트만)
-├── stata_mcp_instructions.md             ← (선택) Claude 지침 파일
-└── server-logs/stata-mcp-server_<ts>.log ← Spring Boot 시스템 로그 (자동 생성)
+<PLUS = c(sysdir_plus)>/                  ← adopath 자동 인식
+├── jar/                                  ← .jar 확장자 전용 (net install 컨벤션)
+│   ├── stata-mcp-server.jar              ← MCP 서버 jar
+│   ├── stata-drone.jar                   ← Stata 내부 드론
+│   ├── stata_mcp.properties              ← 첫 서버 기동 시 자동 생성 (포트)
+│   ├── stata_mcp_instructions.md         ← (선택) `mcp_edit_instructions, init` 으로 받음
+│   └── server-logs/stata-mcp-server_<ts>.log  ← Spring Boot 로그 (자동)
+├── m/
+│   ├── mcp_connect.ado
+│   ├── mcp_server.ado
+│   ├── mcp_edit_instructions.ado
+│   └── mcp_load_serset.ado
+├── l/
+│   └── llm.ado
+└── g/
+    └── graph_meta_put.ado
 
-<Claude Extensions dir>/local.dxt.mhjung0822.stata-mcp/   ← Desktop 사용자 — .dxt 설치 시 자동 관리
+<Claude Extensions dir>/local.dxt.mhjung0822.stata-mcp/   ← Desktop — .dxt 설치 시 자동 관리
 ├── manifest.json                                          ← mcp-remote 호출 config
 └── server/launcher.js                                     ← placeholder (실행 X)
 
@@ -259,7 +264,7 @@ claude --dangerously-load-development-channels server:StataMCP
 └── g_yyyyMMddHHmm_xxxx.png               ← 그래프 (드론이 직접 export)
 ```
 
-> 저장 파일 (`save`/`export` 등) 은 사용자가 Stata 에서 지정한 경로 그대로 — 서버/드론이 이동하지 않음.
+> 경로 직접 찾기 부담스러우면 `mcp_edit_instructions` 가 OS 기본 에디터로 지침 파일 열어줌 — 위치 신경 안 써도 됨.
 
 > 저장 파일 (`save`/`export` 등) 은 사용자가 Stata 에서 지정한 경로 그대로 — 서버/드론이 이동하지 않음.
 
