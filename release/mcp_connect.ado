@@ -51,6 +51,6 @@ program mcp_connect
     javacall com.stata_mcp.drone.StataDrone start, ///
         args("`bridgeport'" "`droneport'") jars(stata-drone.jar)
 
-    di as text "[Setup] 지침 편집: " as result "mcp_edit_instructions" ///
+    di as text "[Setup] 지침 설정: " as result "mcp_edit_instructions" ///
         as text "  (없으면 " as result "mcp_edit_instructions, init" as text ")"
 end
