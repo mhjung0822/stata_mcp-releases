@@ -28,6 +28,8 @@
 | `stata-drone.jar` | Stata 내부 실행 드론 (포트 8001) |
 | `mcp_connect.ado` | Stata 드론 연결 명령어 (서버 jar 도 자동 spawn 가능 — 본인 환경에 맞춰 수정) |
 | `llm.ado` | Stata push 명령어 (`llm push [, r e keep clear] [> cmd]`) |
+| `graph_meta_put.ado` | 그래프 메타정보 추출/저장 명령어 |
+| `mcp_load_serset.ado` | Stata serset 데이터 로드 헬퍼 |
 | `stata_mcp_instructions.md` | Claude 기본 지침 (간결) |
 | `stata_mcp_instructions_example_full.md` | Claude 지침 예시 (상세) — 대안 |
 
@@ -97,13 +99,15 @@ adopath
 **macOS (보통)**: `~/Documents/Stata/ado/personal/`
 **Windows (보통)**: `%USERPROFILE%\ado\personal\` 또는 `%USERPROFILE%\Documents\Stata\ado\personal\`
 
-이 경로에 **세 파일** 복사:
+이 경로에 **다섯 파일** 복사:
 
 ```
 <PERSONAL>/
 ├── stata-drone.jar
 ├── mcp_connect.ado
-└── llm.ado
+├── llm.ado
+├── graph_meta_put.ado
+└── mcp_load_serset.ado
 ```
 
 ---
@@ -216,7 +220,9 @@ claude --dangerously-load-development-channels server:StataMCP
 <Stata PERSONAL ado>/                     ← Stata adopath 자동 인식
 ├── stata-drone.jar
 ├── mcp_connect.ado
-└── llm.ado
+├── llm.ado
+├── graph_meta_put.ado
+└── mcp_load_serset.ado
 
 <Claude Extensions dir>/stata-mcp/        ← .dxt 설치 시 Claude Desktop 이 자동 관리
 └── manifest.json                         ← mcp-remote 호출 config
