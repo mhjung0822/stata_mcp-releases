@@ -40,7 +40,28 @@
 
 ## 3. Stata PERSONAL ado 설치 (서버 jar + 드론 + ado)
 
-Stata 에서 PERSONAL 경로 확인:
+### 3-A. 권장 — `net install` (Stata 자동 설치)
+
+Stata 에서 한 줄 실행:
+
+```stata
+net install stata-mcp, ///
+    from("https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/release/") ///
+    replace
+```
+
+Stata 가 `stata.toc` + `stata-mcp.pkg` 매니페스트를 읽어 7개 파일 (서버 jar, 드론, ado 5종) 을 PERSONAL ado 에 자동 다운로드.
+
+업데이트:
+```stata
+adoupdate stata-mcp, update
+```
+
+> Stata `adopath` 가 PERSONAL 을 자동 인식 — `mcp_server` 가 `findfile` 로 jar 를 찾아 detached spawn.
+
+### 3-B. 수동 복사 (대안)
+
+PERSONAL 경로 확인:
 
 ```stata
 adopath
@@ -61,8 +82,6 @@ adopath
 ├── graph_meta_put.ado             ← 그래프 메타정보
 └── mcp_load_serset.ado            ← serset 로드 헬퍼
 ```
-
-> Stata `adopath` 가 PERSONAL 을 자동 인식 — `mcp_server` 가 `findfile` 로 jar 를 찾아 detached spawn 합니다.
 
 ### stata_mcp.properties (자동 생성)
 
