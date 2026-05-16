@@ -76,11 +76,11 @@ program mcp_connect
         capture confirm file `"`instructions_file'"'
         if !_rc {
             di as text "[Setup] StataMCP 지침 있음 (Claude 에서 /stata-instruction 으로 확인)"
-            di as text "        편집: {stata mcp_edit_instructions:mcp_edit_instructions}"
+            di as text "        * 편집: {stata mcp_edit_instructions:mcp_edit_instructions}"
         }
         else {
             di as text "[Setup] StataMCP 지침 없음"
-            di as text "        설정: {stata mcp_edit_instructions, init:mcp_edit_instructions, init}"
+            di as text "        * 설정: {stata mcp_edit_instructions, init:mcp_edit_instructions, init}"
         }
     }
 end
