@@ -23,11 +23,11 @@
 
 | 파일 | 설명 |
 |------|------|
-| `stata-mcp-server.jar` | MCP 서버 (Spring Boot, Streamable HTTP transport, 포트 8080) — **Cursor / Claude Code 사용자가 standalone 으로 사용**. Claude Desktop 만 쓰면 `.dxt` 안에 같이 번들돼 있어 별도 다운로드 불필요 |
-| `stata-mcp.dxt` | **Claude Desktop 설치 wrapper + 서버 jar 번들** — `mcp-remote` 로 stdio↔HTTP 자동 등록 |
+| `stata-mcp-server.jar` | MCP 서버 (Spring Boot, Streamable HTTP transport, 포트 8080) — **Stata PERSONAL ado 에 배치** (드론과 같은 곳) |
+| `stata-mcp.dxt` | **Claude Desktop 설치 wrapper** (~1 KB) — `mcp-remote` 로 stdio↔HTTP 자동 등록 (서버 jar 별도 설치 필요) |
 | `stata-drone.jar` | Stata 내부 실행 드론 (포트 8001) |
-| `mcp_connect.ado` | Stata 드론 연결 명령어 (서버 jar 도 자동 spawn 가능 — 본인 환경에 맞춰 수정) |
-| `mcp_find_server.ado` | `.dxt` 안에 번들된 서버 jar 경로 탐지 (Claude Extensions dir 검색) — `mcp_connect` 에서 호출 가능 |
+| `mcp_connect.ado` | Stata 드론 연결 명령어 |
+| `mcp_server.ado` | MCP 서버 jar 기동/종료/상태 (`mcp_server` / `, status` / `, stop`) — adopath 에서 jar 탐지 후 detached spawn |
 | `llm.ado` | Stata push 명령어 (`llm push [, r e keep clear] [> cmd]`) |
 | `graph_meta_put.ado` | 그래프 메타정보 추출/저장 명령어 |
 | `mcp_load_serset.ado` | Stata serset 데이터 로드 헬퍼 |
@@ -38,68 +38,7 @@
 
 ---
 
-## 3. 서버 jar 배치
-
-사용 환경에 따라 두 경로:
-
-### 3-A. Claude Desktop 사용자 → 별도 배치 불필요
-
-`.dxt` 안에 `stata-mcp-server.jar` 가 같이 번들돼 있습니다. 6장 ([클라이언트 등록](#6-클라이언트-등록)) 에서 `.dxt` 설치 시 자동으로 Claude Extensions 디렉토리에 풀려, Stata 의 `mcp_find_server` 가 그 위치에서 jar 를 찾아 띄웁니다.
-
-별도 폴더 배치 / properties 파일 / 지침 파일 관리는 **3-B** 의 절차를 따르거나, jar 가 풀린 위치를 직접 확인 (`mcp_find_server` 호출 결과 참고) 후 그 옆에 작성.
-
-### 3-B. Cursor / Claude Code 사용자 → jar 수동 배치
-
-`stata-mcp-server.jar` 를 사용자 선택 폴더에 배치.
-
-#### 권장 위치
-
-**macOS**:
-```
-~/Documents/StataMCP/
-└── stata-mcp-server.jar
-```
-
-**Windows**:
-```
-C:\Users\YOUR_NAME\Documents\StataMCP\
-└── stata-mcp-server.jar
-```
-
-#### stata_mcp.properties (자동 생성)
-
-서버 첫 기동 시 jar 옆에 다음 내용으로 **자동 생성**됩니다:
-
-```properties
-# Stata MCP 환경 설정 (자동 생성)
-BRIDGE_PORT="8080"
-DRONE_PORT="8001"
-```
-
-##### 포트 변경 (선택)
-
-서버 기동 전에 jar 옆에 `stata_mcp.properties` 파일을 직접 만들어 원하는 값을 넣어두면 자동 생성 대신 그 값이 사용됩니다.
-
-```properties
-BRIDGE_PORT="8090"
-DRONE_PORT="9001"
-```
-
-#### Claude 지침 파일 (선택)
-
-분석 룰을 Claude 에게 적용하고 싶으면 jar 옆에 `stata_mcp_instructions.md` 배치 (release 의 동명 파일 복사):
-
-```
-~/Documents/StataMCP/
-├── stata-mcp-server.jar
-└── stata_mcp_instructions.md         ← (선택) release 에서 복사 또는 직접 작성
-```
-
-`stata_mcp_instructions.md` (기본, 간결) 또는 `stata_mcp_instructions_example_full.md` (상세) 내용을 시작점으로 사용.
-
----
-
-## 4. Stata ado 폴더 (드론)
+## 3. Stata PERSONAL ado 설치 (서버 jar + 드론 + ado)
 
 Stata 에서 PERSONAL 경로 확인:
 
@@ -110,59 +49,83 @@ adopath
 **macOS (보통)**: `~/Documents/Stata/ado/personal/`
 **Windows (보통)**: `%USERPROFILE%\ado\personal\` 또는 `%USERPROFILE%\Documents\Stata\ado\personal\`
 
-이 경로에 **여섯 파일** 복사:
+이 경로에 **일곱 파일** 복사:
 
 ```
 <PERSONAL>/
-├── stata-drone.jar
-├── mcp_connect.ado
-├── mcp_find_server.ado            ← .dxt 안 jar 경로 탐지 헬퍼
-├── llm.ado
-├── graph_meta_put.ado
-└── mcp_load_serset.ado
+├── stata-mcp-server.jar           ← MCP 서버 jar
+├── stata-drone.jar                ← Stata 내부 드론
+├── mcp_connect.ado                ← 드론 시작 명령
+├── mcp_server.ado                 ← 서버 jar 기동/종료/상태 명령
+├── llm.ado                        ← push 명령
+├── graph_meta_put.ado             ← 그래프 메타정보
+└── mcp_load_serset.ado            ← serset 로드 헬퍼
 ```
+
+> Stata `adopath` 가 PERSONAL 을 자동 인식 — `mcp_server` 가 `findfile` 로 jar 를 찾아 detached spawn 합니다.
+
+### stata_mcp.properties (자동 생성)
+
+서버 첫 기동 시 jar 옆 (= PERSONAL ado) 에 다음 내용으로 **자동 생성**됩니다:
+
+```properties
+# Stata MCP 환경 설정 (자동 생성)
+BRIDGE_PORT="8080"
+DRONE_PORT="8001"
+```
+
+#### 포트 변경 (선택)
+
+서버 기동 전에 jar 옆에 `stata_mcp.properties` 파일을 직접 만들어 원하는 값을 넣어두면 자동 생성 대신 그 값이 사용됩니다.
+
+```properties
+BRIDGE_PORT="8090"
+DRONE_PORT="9001"
+```
+
+### Claude 지침 파일 (선택)
+
+분석 룰을 Claude 에게 적용하고 싶으면 jar 옆 (= PERSONAL ado) 에 `stata_mcp_instructions.md` 배치 (release 의 동명 파일 복사):
+
+```
+<PERSONAL>/
+├── stata-mcp-server.jar
+└── stata_mcp_instructions.md       ← (선택) release 에서 복사 또는 직접 작성
+```
+
+`stata_mcp_instructions.md` (기본, 간결) 또는 `stata_mcp_instructions_example_full.md` (상세) 내용을 시작점으로 사용.
 
 ---
 
-## 5. 서버 기동
+## 4. 서버 기동
 
-서버 jar 가 떠 있어야 클라이언트가 MCP 연결 가능. 두 가지 패턴:
+서버 jar 가 떠 있어야 클라이언트가 MCP 연결 가능.
 
-### A. Stata 안에서 자동 기동 (권장)
-
-`mcp_connect` 가 드론과 서버 jar 를 같이 spawn 하도록 설정해두면 Stata 작업 시작 시 한 번에 인프라 셋업.
+### A. Stata 안에서 (권장)
 
 ```stata
-mcp_connect
+mcp_server           // detached background spawn
+mcp_connect          // 드론 시작
 ```
 
-기본 배포본은 드론만 띄움. 서버 jar 도 같이 띄우려면 본인 환경의 `mcp_connect.ado` 에 다음 패턴 추가:
+`mcp_server` 가 adopath 에서 `stata-mcp-server.jar` 찾아 detached 로 띄움 — Stata 세션 종료해도 서버 생존.
+
+### 기타 명령
 
 ```stata
-* .dxt 안 번들된 jar 경로 탐지
-mcp_find_server
-local jar = r(path)
-
-* 서버 spawn (detached, OS 별 분기)
-if "`c(os)'" == "MacOSX" {
-    shell java -jar "`jar'" >/dev/null 2>&1 &
-}
-else if "`c(os)'" == "Windows" {
-    winexec java -jar "`jar'"
-}
+mcp_server, status    // GET /status — 응답 보면 떠있음
+mcp_server, stop      // 서버 프로세스 종료
 ```
 
-> `mcp_find_server` 는 `.dxt` 설치를 전제 — Cursor / Claude Code 만 쓰는 사용자는 3-B 의 standalone jar 경로를 직접 사용 (`local jar "~/Documents/StataMCP/stata-mcp-server.jar"`).
-
-### B. 사용자가 별도 터미널에서 수동 기동
+### B. 사용자가 별도 터미널에서 수동 기동 (대안)
 
 ```bash
-java -jar ~/Documents/StataMCP/stata-mcp-server.jar
+java -jar "$(stata -e 'di r(fn)' ...)"   # 또는 PERSONAL ado 경로 직접
 ```
 
-터미널 창을 열어둔 동안 백그라운드 유지. 또는 `nohup` / `screen` / `launchd` 같은 데몬 도구로 백그라운드화.
+또는 `nohup` / `screen` / `launchd` 같은 데몬 도구로 백그라운드화.
 
-### 기동 확인
+### 기동 확인 (외부 셸)
 
 ```bash
 curl http://127.0.0.1:8080/status
@@ -171,7 +134,7 @@ curl http://127.0.0.1:8080/status
 
 ---
 
-## 6. 클라이언트 등록
+## 5. 클라이언트 등록
 
 서버는 **단일 Streamable HTTP 엔드포인트** `http://127.0.0.1:8080/mcp` 를 제공합니다.
 
@@ -188,7 +151,7 @@ curl http://127.0.0.1:8080/status
 
 > **사전 조건**: 시스템에 Node 20+ 가 깔려 있어야 합니다 (`npx` / `mcp-remote` 가 Node 20 의 `File` 글로벌 요구). 또한 서버 jar 가 8080 에서 동작 중이어야 합니다.
 
-> **`.dxt` 가 직접 jar 를 띄우진 않습니다** — Claude Desktop 시작 전에 5장 절차로 jar 가 떠 있어야 도구 호출 가능.
+> **`.dxt` 가 직접 jar 를 띄우진 않습니다** — Claude Desktop 시작 전에 4장 절차로 jar 가 떠 있어야 도구 호출 가능.
 
 ### Claude Code (CLI) — 직접 연결
 
@@ -234,43 +197,38 @@ claude --dangerously-load-development-channels server:StataMCP
 
 ---
 
-## 7. 경로 구조 요약
+## 6. 경로 구조 요약
 
 설치 후 전체 구조:
 
 ```
-<Claude Extensions dir>/local.dxt.mhjung0822.stata-mcp/   ← .dxt 설치 시 Claude Desktop 이 자동 관리
-├── manifest.json                                          ← mcp-remote 호출 config
-└── server/
-    ├── stata-mcp-server.jar                               ← Desktop 사용자의 jar (mcp_find_server 가 탐지)
-    ├── stata_mcp.properties                               ← 첫 기동 시 자동 생성 (포트만)
-    └── server-logs/stata-mcp-server_<ts>.log              ← Spring Boot 시스템 로그 (자동 생성)
-
-<서버 설치 폴더>/                          ← 3-B 경로 — Cursor/Code 사용자만 (예: ~/Documents/StataMCP/)
-├── stata-mcp-server.jar
-├── stata_mcp.properties
+<Stata PERSONAL ado>/                     ← Stata adopath 자동 인식 — 모든 jar/ado 한 곳
+├── stata-mcp-server.jar                  ← MCP 서버 jar (mcp_server 가 spawn)
+├── stata-drone.jar                       ← Stata 내부 드론
+├── mcp_connect.ado                       ← 드론 시작 명령
+├── mcp_server.ado                        ← 서버 jar 기동/종료/상태 명령
+├── llm.ado                               ← push 명령
+├── graph_meta_put.ado                    ← 그래프 메타정보
+├── mcp_load_serset.ado                   ← serset 로드 헬퍼
+├── stata_mcp.properties                  ← 첫 서버 기동 시 자동 생성 (포트만)
 ├── stata_mcp_instructions.md             ← (선택) Claude 지침 파일
-└── server-logs/
+└── server-logs/stata-mcp-server_<ts>.log ← Spring Boot 시스템 로그 (자동 생성)
 
-<Stata PERSONAL ado>/                     ← Stata adopath 자동 인식
-├── stata-drone.jar
-├── mcp_connect.ado
-├── mcp_find_server.ado
-├── llm.ado
-├── graph_meta_put.ado
-└── mcp_load_serset.ado
+<Claude Extensions dir>/local.dxt.mhjung0822.stata-mcp/   ← Desktop 사용자 — .dxt 설치 시 자동 관리
+├── manifest.json                                          ← mcp-remote 호출 config
+└── server/launcher.js                                     ← placeholder (실행 X)
 
 <사용자 작업폴더 c(pwd)>/                  ← Stata 에서 cd 한 위치
 └── g_yyyyMMddHHmm_xxxx.png               ← 그래프 (드론이 직접 export)
 ```
 
-> Desktop 경로 (3-A) 사용 시 `stata_mcp.properties` 와 `server-logs/` 가 Claude Extensions 디렉토리 내부에 생성됩니다 (사용자 writable). `.dxt` 재설치/업데이트 시 이 파일들 보존 여부는 Claude Desktop 동작에 따라 다름 — 영구 보관 필요한 설정은 3-B 의 별도 폴더 사용 권장.
+> 저장 파일 (`save`/`export` 등) 은 사용자가 Stata 에서 지정한 경로 그대로 — 서버/드론이 이동하지 않음.
 
 > 저장 파일 (`save`/`export` 등) 은 사용자가 Stata 에서 지정한 경로 그대로 — 서버/드론이 이동하지 않음.
 
 ---
 
-## 8. (선택) 코워크 슬래시 명령 스킬 등록
+## 7. (선택) 코워크 슬래시 명령 스킬 등록
 
 > ⚠️ **사전 조건**: 스킬은 MCP 도구를 호출하므로 **Claude Desktop 코워크 모드가 켜져 있어야** 동작합니다.
 
@@ -306,6 +264,6 @@ done
 
 ---
 
-## 9. 다음 단계
+## 8. 다음 단계
 
 설치가 끝났으면 [USAGE.md](USAGE.md) 에서 시작 순서·문제 해결을 확인하세요.
