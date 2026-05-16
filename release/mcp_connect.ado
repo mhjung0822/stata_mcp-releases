@@ -81,5 +81,4 @@ program mcp_connect
             di as text "[Setup] StataMCP 지침 없음 — 설정: {stata mcp_edit_instructions, init:mcp_edit_instructions, init}"
         }
     }
-    di as text "[Setup] 코워크 슬래시 명령 스킬 6종 (선택) — 안내: {browse https://github.com/mhjung0822/stata_mcp-releases/blob/main/INSTALL.md}"
 end
