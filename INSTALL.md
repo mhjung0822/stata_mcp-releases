@@ -123,6 +123,29 @@ BRIDGE_PORT=8090
 DRONE_PORT=9001
 ```
 
+### 라이선스 키 (필수)
+
+이 도구는 라이선스 키가 있어야 동작합니다. 키는 발급 문의 (mhjung0822@gmail.com) 로 받을 수 있고, 만료일이 포함된 한 줄 문자열입니다.
+
+설치 후 Stata 에서:
+
+```stata
+mcp_edit_license          // jar 옆 stata_mcp.properties 를 에디터로 열어줌
+```
+
+열린 파일의 `LICENSE_KEY=""` 따옴표 사이에 받은 키를 붙여넣고 저장:
+
+```properties
+LICENSE_KEY="eyJ2IjoxLCJleHAiOiIyMDI2LTA3LTEwIn0.hHCZ...JFKCQ"
+```
+
+저장 후 `mcp_connect, reset` 으로 즉시 적용됩니다 (Stata 재시작 불필요).
+
+- 키가 없거나 만료되면 드론이 시작되지 않고 서버도 종료됩니다. Stata Results 창에 사유와 함께 안내가 출력됩니다.
+- 만료 7일 전부터 `mcp_connect` 시 남은 일수를 알려줍니다.
+- 키 갱신 = 새 키를 같은 방법으로 교체.
+- 검증에 인터넷 연결이 필요합니다 (오프라인은 72시간까지 허용).
+
 ### Claude 지침 파일 (선택)
 
 분석 룰을 Claude 에게 적용하고 싶으면 jar 옆 (= PERSONAL ado) 에 `stata_mcp_instructions.md` 배치 (release 의 동명 파일 복사):
