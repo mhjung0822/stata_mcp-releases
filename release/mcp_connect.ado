@@ -1,4 +1,4 @@
-*! mcp_connect  v0.3.0  17may2026
+*! mcp_connect  v0.3.1  10jun2026
 *!
 *! Start / stop / reset the full Stata-MCP stack (server jar + drone).
 *! Internally invokes mcp_server for the JVM-detached server spawn and
@@ -83,4 +83,5 @@ program mcp_connect
             di as text "        * 설정: {stata mcp_edit_instructions, init:mcp_edit_instructions, init}"
         }
     }
+    di as text "[Setup] 라이선스 키 입력/교체: {stata mcp_edit_license:mcp_edit_license}"
 end

@@ -18,6 +18,7 @@ F stata-drone.jar
 F mcp_connect.ado
 F mcp_server.ado
 F mcp_edit_instructions.ado
+F mcp_edit_license.ado
 F llm.ado
 F graph_meta_put.ado
 F mcp_load_serset.ado
