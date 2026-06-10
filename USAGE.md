@@ -223,6 +223,25 @@ Claude Code 는 `Read`/`Write` tool 로 `<c(sysdir_plus)>/jar/stata_mcp_instruct
 
 ## 6. 문제 해결
 
+### 라이선스 키 문제
+
+증상: `mcp_connect` 시 드론이 시작되지 않고 아래 같은 메시지가 출력됨.
+
+```
+[Drone] 라이선스가 YYYY-MM-DD 에 만료되었습니다. 연장 문의: ...
+[Drone] 드론을 시작하지 않고 MCP 서버도 종료합니다. 키 입력: mcp_edit_license → 저장 후 mcp_connect, reset
+```
+
+| 메시지 | 원인 / 조치 |
+|---|---|
+| 라이선스 키가 없습니다 | `mcp_edit_license` 로 properties 를 열어 발급받은 키를 `LICENSE_KEY=""` 사이에 붙여넣기 |
+| 라이선스 키가 유효하지 않습니다 | 키 복사가 잘렸거나 변조됨 — 받은 키 전체를 다시 붙여넣기 |
+| 라이선스가 만료되었습니다 | 새 키 발급 문의 후 교체 |
+| 인터넷 연결이 필요합니다 | 검증에 네트워크 시간이 필요 (오프라인 72시간 초과). 연결 후 `mcp_connect, reset` |
+| 키 형식이 새 버전입니다 | `net install stata-mcp, ... replace` 로 업데이트 |
+
+키 교체 후에는 `mcp_connect, reset` 만으로 적용됨 (Stata 재시작 불필요). 만료 7일 전부터 `mcp_connect` 시 남은 일수가 표시됨.
+
 ### 드론/서버 연결 확인
 
 ```
