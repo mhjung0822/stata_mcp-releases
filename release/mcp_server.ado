@@ -82,5 +82,5 @@ program mcp_server
         * java 가 orphan 되어 launchd 로 reparent → Stata 종료에도 생존.
         shell bash -c "java -jar '`jar'' >/dev/null 2>&1 & disown"
     }
-    di as text "[Server] spawned (detached). 확인: {stata mcp_server, status:mcp_server, status}"
+    di as text "[Server] spawned (detached)"
 end
