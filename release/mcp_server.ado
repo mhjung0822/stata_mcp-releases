@@ -1,4 +1,4 @@
-*! mcp_server  v0.2.0  17may2026
+*! mcp_server  v0.2.1  11jun2026
 *!
 *! Start / check / stop stata-mcp-server.jar located in the Stata
 *! PERSONAL ado folder (resolved via `findfile`, so no path argument
@@ -70,7 +70,6 @@ program mcp_server
     }
     local jar "`r(fn)'"
 
-    di as text "[Server] starting: " as result "`jar'"
     if "`c(os)'" == "Windows" {
         winexec java -jar "`jar'"
     }
@@ -80,7 +79,8 @@ program mcp_server
         * Stata 의 JVM 위계 안에 묶여 독립 실행이 안 됨. bash 라는 비-Java
         * 중간 프로세스가 끼어들어 disown 으로 job table 에서 분리해야
         * java 가 orphan 되어 launchd 로 reparent → Stata 종료에도 생존.
-        shell bash -c "java -jar '`jar'' >/dev/null 2>&1 & disown"
+        * quietly — shell 의 잔여 빈 줄 출력 억제.
+        quietly shell bash -c "java -jar '`jar'' >/dev/null 2>&1 & disown"
     }
     di as text "[Server] spawned (detached)"
 end
