@@ -22,7 +22,7 @@
 이 repo 의 `release/` 폴더 자산. 사용자가 직접 다운로드할 일은 두 가지:
 
 - **Stata 측**: 3장 의 `net install` 한 줄로 자동 다운로드 (수동 작업 없음)
-- **Claude 측**: [`claude.zip` (claude-latest Release)](https://github.com/mhjung0822/stata_mcp-releases/releases/tag/claude-latest) 한 번 다운로드 → `.dxt` + 스킬 zip 6종
+- **Claude 측**: [`claude.zip` (claude-latest Release)](https://github.com/mhjung0822/stata_mcp-releases/releases/tag/claude-latest) 한 번 다운로드 → `.dxt` + 스킬 zip 7종
 
 | 파일 | 설명 |
 |------|------|
@@ -54,7 +54,7 @@ net install stata-mcp, ///
     replace
 ```
 
-Stata 가 `stata.toc` + `stata-mcp.pkg` 매니페스트를 읽어 8개 파일 (서버 jar, 드론, ado 6종) 을 PERSONAL ado 에 자동 다운로드.
+Stata 가 `stata.toc` + `stata-mcp.pkg` 매니페스트를 읽어 9개 파일 (서버 jar, 드론 jar, ado 7종) 을 PERSONAL ado 에 자동 다운로드.
 
 > 지침 파일 (`stata_mcp_instructions.md`) 은 이 패키지에 안 들어감 — 사용자가 직접 편집할 파일이라 `adoupdate` 시 덮어쓰기 방지. 받아서 시작하려면 `mcp_edit_instructions, init` (간결) 또는 `mcp_edit_instructions, init full` (상세).
 
@@ -300,9 +300,9 @@ claude --dangerously-load-development-channels server:StataMCP
 
 > ⚠️ **사전 조건**: 스킬은 MCP 도구를 호출하므로 **Claude Desktop 코워크 모드가 켜져 있어야** 동작합니다.
 
-`release/claude/cowork-skills/` 의 6개 zip 을 등록하면 다음 슬래시 명령이 활성화됩니다:
+`release/claude/cowork-skills/` 의 7개 zip 을 등록하면 다음 슬래시 명령이 활성화됩니다:
 
-> 📦 **한 번에 받기**: [`claude.zip` (latest)](../../releases/tag/claude-latest) — `release/claude/` 전체 (`.dxt` + 스킬 6종) 를 자동 빌드된 zip 으로.
+> 📦 **한 번에 받기**: [`claude.zip` (latest)](../../releases/tag/claude-latest) — `release/claude/` 전체 (`.dxt` + 스킬 7종) 를 자동 빌드된 zip 으로.
 
 | 명령 | 동작 |
 |---|---|
@@ -311,15 +311,16 @@ claude --dangerously-load-development-channels server:StataMCP
 | `/stata-pull` | Stata GUI 에서 push 한 결과 가져오기 |
 | `/stata-data-fullcontext` | 현재 데이터셋 전체 컨텍스트 요약 |
 | `/stata-graph-get` | 현재 그래프 spec 조회 |
+| `/stata-graph-export [name]` | 메모리의 그래프를 PNG 로 export (인자 없으면 현재 그래프) |
 | `/stata-instruction` | 현재 로드된 분석 지침 (`stata_mcp_instructions.md`) 조회 |
 
 ### 8-A. Claude Desktop / claude.ai 웹
 
-claude.ai → **Settings → Customize → Skills** 에서 [release/claude/cowork-skills/](release/claude/cowork-skills) 의 6개 zip 을 하나씩 업로드. 로그인 같으면 Claude Desktop 에도 자동 반영.
+claude.ai → **Settings → Customize → Skills** 에서 [release/claude/cowork-skills/](release/claude/cowork-skills) 의 7개 zip 을 하나씩 업로드. 로그인 같으면 Claude Desktop 에도 자동 반영.
 
 ### 8-B. Claude Code
 
-6개 zip 을 받아 각각 `~/.claude/skills/` 에 압축 해제:
+7개 zip 을 받아 각각 `~/.claude/skills/` 에 압축 해제:
 
 ```bash
 mkdir -p ~/.claude/skills
