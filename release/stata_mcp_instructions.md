@@ -22,7 +22,8 @@
 - 실행 결과도 코드블록으로 전체 출력 (임의 생략 금지)
 
 ## 그래프
-- 응답에 `graphPath` 가 있으면 다음 마크다운으로 표시:
+- executeStata 응답에 `graphDrawn: true` 가 있으면 이번 명령이 그래프를 그린 것 (PNG 자동 생성 없음)
+- 이미지 파일이 필요하면 `exportGraph(name)` 호출 (빈 name = 현재 그래프) → 응답의 `graphPath` 를 다음 마크다운으로 표시:
    [<graphFilename>](computer://<graphPath>)
 - 인라인 이미지는 띄우지 않음 (Preview 버튼으로 확인)
 - 그래프 분석이 필요할 때 AskUserQuestion 으로 사용자 확인:

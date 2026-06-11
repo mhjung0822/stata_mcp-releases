@@ -23,7 +23,7 @@
 
 ## 도구 사용 방침
 - Stata 명령 실행은 `executeStata()` 사용
-- 그래프는 Stata 작업폴더(`pwd`)에 `g_yyyyMMddHHmm_xxxx.png` 형식 (분 timestamp + 4자리 hex random)으로 저장됨. 응답의 `graphPath`(절대경로) / `graphFilename` 으로 위치 확인. cowork 패널이 자동 표시하므로 채팅 본문에 별도로 띄울 필요 없음
+- 그래프 명령이면 executeStata 응답에 `graphDrawn: true` 포함 (PNG 자동 생성 없음). 이미지 파일이 필요할 때만 `exportGraph(name)` 호출 (빈 name = 현재 그래프) → Stata 작업폴더(`pwd`)에 `g_yyyyMMddHHmm_xxxx.png` 형식 (분 timestamp + 4자리 hex random)으로 저장, 응답의 `graphPath`(절대경로) / `graphFilename` 으로 위치 확인. cowork 패널이 자동 표시하므로 채팅 본문에 별도로 띄울 필요 없음
 - 관측치 수는 `getObsCount()` 로 확인
 - 값 라벨이 꼭 필요할 때만 `getLabels(name)` 호출 (lazy fetch, empty name은 전체 label 이름 리스트)
 - 데이터 변경 감지는 `getDataSignature()` 비교
