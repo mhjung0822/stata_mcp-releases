@@ -1,4 +1,4 @@
-*! mcp_server  v0.2.1  11jun2026
+*! mcp_server  v0.2.2  11jun2026
 *!
 *! Start / check / stop stata-mcp-server.jar located in the Stata
 *! PERSONAL ado folder (resolved via `findfile`, so no path argument
@@ -28,11 +28,14 @@ program mcp_server
     * ─── stop ──────────────────────────────────────────────────────────────
     if "`stop'" != "" {
         di as text "[Server] terminating stata-mcp-server.jar process..."
+        * 정상 경로: 서버 자체 shutdown 엔드포인트 (전 OS 동일, 프로세스 매칭 불필요)
+        quietly shell curl -s --max-time 2 -X POST http://127.0.0.1:`bridgeport'/api/shutdown
+        * fallback: HTTP 가 안 받을 때만 의미 (이미 죽었으면 no-op)
         if "`c(os)'" == "Windows" {
-            shell taskkill /F /IM java.exe /FI "WINDOWTITLE eq *stata-mcp-server*"
+            quietly shell taskkill /F /IM java.exe /FI "WINDOWTITLE eq *stata-mcp-server*"
         }
         else {
-            shell pkill -f stata-mcp-server.jar
+            quietly shell pkill -f stata-mcp-server.jar
         }
         exit
     }
