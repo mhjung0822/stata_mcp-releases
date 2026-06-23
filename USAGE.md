@@ -32,6 +32,23 @@
 
 이후 클라이언트에서 Stata 명령을 요청하거나, Stata 에서 `llm push` 로 결과를 클라이언트로 전송.
 
+### 제어판 (GUI) — 명령 대신 버튼으로
+
+Stata 에서 `mcp` (= `db mcp`) 를 치면 제어판 다이얼로그가 뜹니다 — 연결/재시작/종료, 서버 상태 확인, 라이선스·지침 편집을 버튼으로.
+
+```stata
+mcp          // 제어판 다이얼로그
+mcp_set      // 설정 메뉴 (클릭 링크): 라이선스 입력 / 지침 초기화·빈버전·삭제 / 메뉴 등록
+```
+
+메뉴바에 상시 등록 (1회):
+
+```stata
+mcp_menu, install   // User ▸ Stata-MCP ▸ Control Panel... — 다음 실행부터 자동
+```
+
+> 라이선스 키 입력/교체도 제어판의 **Edit license / properties** 버튼 또는 `mcp_set` 에서 가능합니다.
+
 ---
 
 ## 2. 명령 / Push 사용

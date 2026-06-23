@@ -23,16 +23,16 @@ program mcp_connect
 
     * ─── shutdown: 드론 + 서버 모두 종료 ──────────────────────────────────
     if "`shutdown'" != "" {
-        di as text "[Drone] Shutdown 요청..."
+        di as text "[Drone] Shutdown requested..."
         capture javacall com.stata_mcp.drone.StataDrone stop, jars(stata-drone.jar)
-        di as text "[Server] Shutdown 요청..."
+        di as text "[Server] Shutdown requested..."
         capture mcp_server, stop
         exit
     }
 
     * ─── reset: 둘 다 끄고 다시 시작 ──────────────────────────────────────
     if "`reset'" != "" {
-        di as text "[Reset] 드론 + 서버 종료 후 재시작..."
+        di as text "[Reset] Stopping drone + server, then restarting..."
         capture javacall com.stata_mcp.drone.StataDrone stop, jars(stata-drone.jar)
         capture mcp_server, stop
         sleep 1500
@@ -61,30 +61,15 @@ program mcp_connect
         di as text "[Drone] already running on port `droneport' — skip spawn"
         * /status 응답에서 라이선스 만료일 추출해 표시 (fresh 기동 시엔 드론이 직접 출력)
         if regexm(`"`dline'"', `""licenseExp":"([0-9-]+)""') {
-            di as text "[Drone] License OK (" regexs(1) " 까지)"
+            di as text "[Drone] License OK (until " regexs(1) ")"
         }
     }
     else {
-        di as text "[Drone] Java Stata-MCP-Drone 시작..."
+        di as text "[Drone] Starting Java Stata-MCP-Drone..."
         javacall com.stata_mcp.drone.StataDrone start, ///
             args("`bridgeport'" "`droneport'") jars(stata-drone.jar)
     }
 
-    * ─── 사후 안내 (클릭 가능 명령 / URL 링크) ────────────────────────────
-    di as text "[Setup] 서버 상태 확인: {stata mcp_server, status:mcp_server, status}"
-    capture findfile stata-mcp-server.jar
-    if !_rc {
-        local jarpath `"`r(fn)'"'
-        local jardir : subinstr local jarpath "stata-mcp-server.jar" ""
-        local instructions_file `"`jardir'stata_mcp_instructions.md"'
-        capture confirm file `"`instructions_file'"'
-        if !_rc {
-            di as text "[Setup] StataMCP 지침 있음 (Claude 에서 /stata-instruction 으로 확인)"
-            di as text "        * 편집: {stata mcp_edit_instructions:mcp_edit_instructions}"
-        }
-        else {
-            di as text "[Setup] StataMCP 지침 없음 — 설정: {stata mcp_edit_instructions, init:mcp_edit_instructions, init}"
-        }
-    }
-    di as text "[Setup] 라이선스 키 입력/교체: {stata mcp_edit_license:mcp_edit_license}"
+    * 기동 엔진 — 사용자 안내/제어판은 mcp_set 가 담당.
+    * (제어판 [연결] 버튼이 이 명령을 호출해 서버+드론을 기동)
 end

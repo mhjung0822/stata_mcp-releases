@@ -1,0 +1,97 @@
+/*
+    mcp.dlg — Stata-MCP 제어판
+
+    호출:  db mcp
+
+    서버·드론 기동(연결/재시작/종료/상태) + properties 편집을 한 화면에서.
+    라이선스 키는 [라이선스/프로퍼티 편집] 버튼으로 properties 파일에서 직접 수정
+    (파일 편집이라 키가 길어도 잘리지 않음).
+
+    각 버튼은 onpush(program ...) 으로 아래 PROGRAM 블록을 실행하고,
+    PROGRAM 은 put 으로 명령을 조립한 뒤 stata directive 로 실행한다.
+
+    의존 ado:  mcp_connect, mcp_server, mcp_edit_license
+*/
+
+VERSION 17.0
+
+POSITION . . 380 241
+
+DIALOG main, label("Stata-MCP Control Panel") tabtitle("Stata-MCP")
+BEGIN
+  GROUPBOX gb_conn   10    5   360   80,  label("Connection / Server")
+  TEXT     tx_bp     20    25  70     .,   label("Bridge port:")
+  SPINNER  sp_bp     95    23  55     .,   default(8080) min(1) max(65535)
+  TEXT     tx_dp     165   25  70     .,   label("Drone port:")
+  SPINNER  sp_dp     240   23  55     .,   default(8001) min(1) max(65535)
+  BUTTON   bt_conn   20    49  105   24,   label("Connect")         ///
+             onpush(program do_connect)
+  BUTTON   bt_reset  130   49  105   24,   label("Restart")         ///
+             onpush(program do_reset)
+  BUTTON   bt_down   240   49  105   24,   label("Shutdown")        ///
+             onpush(program do_shutdown)
+
+  GROUPBOX gb_tools  10    92  360   114, label("Status / Edit")
+  BUTTON   bt_stat   20    112 165   22,   label("Server status")        ///
+             onpush(program do_status)
+  BUTTON   bt_instr  190   112 165   22,   label("Edit instructions")    ///
+             onpush(program do_editinstr)
+  BUTTON   bt_edit   20    138 335   22,   label("Edit license / properties") ///
+             onpush(program do_editlic)
+  BUTTON   bt_setup  20    164 335   22,   label("Setup menu (mcp_set)") ///
+             onpush(program do_setup)
+END
+
+/* 하단은 닫기만 — 연결/재시작/종료는 위 버튼이 담당 */
+CANCEL can1, label("Close")
+HELP   hlp1, view("help mcp_connect")
+
+PROGRAM do_connect
+BEGIN
+  put "mcp_connect, bridgeport("
+  put main.sp_bp
+  put ") droneport("
+  put main.sp_dp
+  put ")"
+  stata
+END
+
+PROGRAM do_reset
+BEGIN
+  put "mcp_connect, reset bridgeport("
+  put main.sp_bp
+  put ") droneport("
+  put main.sp_dp
+  put ")"
+  stata
+END
+
+PROGRAM do_shutdown
+BEGIN
+  put "mcp_connect, shutdown"
+  stata
+END
+
+PROGRAM do_status
+BEGIN
+  put "mcp_server, status"
+  stata
+END
+
+PROGRAM do_editlic
+BEGIN
+  put "mcp_edit_license"
+  stata
+END
+
+PROGRAM do_editinstr
+BEGIN
+  put "mcp_edit_instructions"
+  stata
+END
+
+PROGRAM do_setup
+BEGIN
+  put "mcp_set"
+  stata
+END
