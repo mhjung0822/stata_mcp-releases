@@ -40,6 +40,7 @@
 | `mcp_set.ado` | 설정 메뉴 (클릭 링크) — 라이선스 입력 / 지침 init·빈버전·삭제 / 메뉴 등록 |
 | `mcp_menu.ado` | User 메뉴에 제어판 등록 (`mcp_menu, install` → profile.do 자동 설정) |
 | `mcp_set_license.ado` / `mcp_get_license.ado` | properties 의 `LICENSE_KEY` 쓰기/읽기 (제어판/다이얼로그용) |
+| `mcp_uninstall.ado` | 전체 제거 (`mcp_uninstall` 미리보기 → `, confirm` 삭제 / `, confirm all` 데이터까지) |
 | `stata_mcp_instructions.md` | Claude 기본 지침 (간결) |
 | `stata_mcp_instructions_example_full.md` | Claude 지침 예시 (상세) — 대안 |
 

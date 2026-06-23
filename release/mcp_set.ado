@@ -61,5 +61,6 @@ program mcp_set
     di as text "  Create empty instructions:    {stata mcp_set, emptyinstr:mcp_set, emptyinstr}"
     di as text "  Delete instructions:          {stata mcp_set, delinstr:mcp_set, delinstr}"
     di as text "  Register control-panel menu:  {stata mcp_menu, install:mcp_menu, install}"
+    di as text "  Uninstall (remove all):       {stata mcp_uninstall:mcp_uninstall}"
     di as text ""
 end
