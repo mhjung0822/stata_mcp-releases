@@ -49,6 +49,14 @@ mcp_menu, install   // User ▸ Stata-MCP ▸ Control Panel... — 다음 실행
 
 > 라이선스 키 입력/교체도 제어판의 **Edit license / properties** 버튼 또는 `mcp_set` 에서 가능합니다.
 
+**전체 제거**:
+
+```stata
+mcp_uninstall              // 미리보기 (삭제 안 함) — 대상 목록 + confirm 링크
+mcp_uninstall, confirm     // ado/dlg/jar + 메뉴 등록 삭제 (라이선스/지침 보존)
+mcp_uninstall, confirm all // 라이선스 키/지침 데이터까지 삭제
+```
+
 ---
 
 ## 2. 명령 / Push 사용
