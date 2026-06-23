@@ -1,27 +1,66 @@
-*! mcp_uninstall  v0.4.0  23jun2026
+*! mcp_uninstall  v0.6.0  24jun2026
 *!
-*! Stata-MCP 제거 — `net install` 로 깐 것만. Stata 가 추적(stata.trk)하므로
-*! 정석 도구 `ado uninstall stata-mcp` 를 쓴다 (수동 경로 추측 없음 = 견고).
-*! 개발/수동 위치(personal, ~/Documents/StataMCP/)는 건드리지 않는다.
+*! Stata-MCP 제거 — `net install` 한 PLUS 레이아웃만. 개발/수동 위치
+*! (c(sysdir_personal), ~/Documents/StataMCP/)는 건드리지 않는다.
+*! 되돌리기 어려우므로 dry-run 기본 + 명시 confirm.
 *!
 *! Usage:
-*!   mcp_uninstall              // 미리보기 (ado describe — 삭제 안 함)
-*!   mcp_uninstall, confirm     // ado uninstall stata-mcp + 메뉴 등록 제거
-*!   mcp_uninstall, confirm all // + 자동생성 데이터(라이선스/지침) 까지
+*!   mcp_uninstall              // 미리보기 (삭제 안 함)
+*!   mcp_uninstall, confirm     // PLUS 의 ado/dlg/jar + 메뉴 등록 + net 추적 제거
+*!   mcp_uninstall, confirm all // + 라이선스/지침 데이터까지
+*!
+*! 제거 방식 (confirm):
+*!   1) ado uninstall stata-mcp  — 단일 설치면 파일 + stata.trk 추적 정리.
+*!      중복 설치면 이름이 모호(rc 101)라 무해 실패 →
+*!   2) 직접 erase  — c(sysdir_plus) 의 정확한 경로로 잔여 파일 확실히 제거.
+*!
+*! 주의: 공백 포함 경로(Application Support)를 sub-program 인자로 넘기면
+*!       매크로 파싱이 깨지므로, erase 로직은 인라인으로 둔다.
 
 cap program drop mcp_uninstall
 program mcp_uninstall
     version 17.0
     syntax [, CONFIRM ALL]
 
+    local plus `"`c(sysdir_plus)'"'
+    local ados                                                   ///
+        mcp_connect.ado mcp_server.ado mcp_edit_license.ado      ///
+        mcp_edit_instructions.ado mcp_load_serset.ado llm.ado    ///
+        graph_meta_put.ado mcp.ado mcp.dlg mcp_set.ado           ///
+        mcp_menu.ado mcp_set_license.ado mcp_get_license.ado     ///
+        mcp_uninstall.ado
+    local jars stata-drone.jar stata-mcp-server.jar
+    local data stata_mcp.properties stata_mcp_instructions.md    ///
+        stata_mcp_instructions_example_full.md                   ///
+        stata_mcp_instructions_example_compact.md
+
+    * ─── 대상 경로 목록 구성 (plus 만) ───────────────────────────────────
+    *   nfiles / P`i' 에 절대경로 누적 (공백 경로라 list 매크로 대신 인덱스 사용)
+    local nfiles 0
+    foreach f of local ados {
+        local c1 = substr("`f'", 1, 1)
+        local ++nfiles
+        local P`nfiles' `"`plus'`c1'/`f'"'
+    }
+    foreach j of local jars {
+        local ++nfiles
+        local P`nfiles' `"`plus'jar/`j'"'
+    }
+    if "`all'" != "" {
+        foreach x of local data {
+            local ++nfiles
+            local P`nfiles' `"`plus'jar/`x'"'
+        }
+    }
+
     * ─── 미리보기 ────────────────────────────────────────────────────────
     if "`confirm'" == "" {
         di as text ""
-        di as text "{bf:[Stata-MCP] Uninstall preview}  (net install package — nothing deleted yet)"
-        di as text "Tracked files that {cmd:ado uninstall} will remove:"
-        capture ado describe stata-mcp
-        if _rc {
-            di as text "  (no stata-mcp net install record found — nothing to remove)"
+        di as text "{bf:[Stata-MCP] Uninstall preview}  (net install / PLUS only — nothing deleted yet)"
+        di as text "Files to remove (only existing shown):"
+        forvalues i = 1/`nfiles' {
+            capture confirm file `"`P`i''"'
+            if !_rc di as text "  - " as result `"`P`i''"'
         }
         di as text ""
         di as text "  Delete now:            {stata mcp_uninstall, confirm:mcp_uninstall, confirm}  (keeps license/instructions)"
@@ -38,33 +77,16 @@ program mcp_uninstall
     _mcp_unreg_menu
     global MCP_MENU_REGISTERED ""
 
-    di as text "[Uninstall] ado uninstall stata-mcp ..."
-    local n 0
+    * net 추적 정리 (단일 설치면 파일+trk; 중복이면 모호=무해 실패)
     capture ado uninstall stata-mcp
-    while _rc == 0 {
-        local ++n
-        if `n' >= 20 continue, break
-        capture ado uninstall stata-mcp
-    }
-    if `n' == 0 {
-        di as text "  (no stata-mcp net install record — nothing removed)"
-    }
-    else {
-        di as text "  Removed `n' stata-mcp net-install record(s)."
-    }
 
-    * ─── 자동생성 데이터 (properties=라이선스 / instructions) : all 일 때만 ──
-    * .pkg 미포함(런타임 생성)이라 ado uninstall 이 안 지움 — plus/jar/ 에서 직접
-    if "`all'" != "" {
-        local plus `"`c(sysdir_plus)'"'
-        foreach x in stata_mcp.properties stata_mcp_instructions.md     ///
-                     stata_mcp_instructions_example_full.md             ///
-                     stata_mcp_instructions_example_compact.md {
-            capture confirm file `"`plus'jar/`x'"'
-            if !_rc {
-                capture erase `"`plus'jar/`x'"'
-                if !_rc di as text "  Deleted: " as result `"`plus'jar/`x'"'
-            }
+    di as text "[Uninstall] Deleting files (PLUS):"
+    forvalues i = 1/`nfiles' {
+        capture confirm file `"`P`i''"'
+        if !_rc {
+            capture erase `"`P`i''"'
+            if !_rc di as text  "  Deleted: " as result `"`P`i''"'
+            else    di as error "  Failed:  " `"`P`i''"'
         }
     }
 
