@@ -6,7 +6,7 @@ d into the user's PERSONAL ado folder.
 d
 d Author: mhjung0822
 d Support: https://github.com/mhjung0822/stata_mcp-releases
-d Distribution-Date: 20260611
+d Distribution-Date: 20260623
 d
 d Requires: Stata 17 or higher, Java 17+
 d
@@ -22,3 +22,10 @@ F mcp_edit_license.ado
 F llm.ado
 F graph_meta_put.ado
 F mcp_load_serset.ado
+F mcp.ado
+F mcp.dlg
+F mcp_set.ado
+F mcp_menu.ado
+F mcp_set_license.ado
+F mcp_get_license.ado
+F mcp_uninstall.ado
