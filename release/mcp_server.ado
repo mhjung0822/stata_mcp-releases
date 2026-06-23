@@ -1,4 +1,4 @@
-*! mcp_server  v0.2.2  11jun2026
+*! mcp_server  v0.2.3  11jun2026
 *!
 *! Start / check / stop stata-mcp-server.jar located in the Stata
 *! PERSONAL ado folder (resolved via `findfile`, so no path argument
@@ -15,8 +15,9 @@
 *!   with disown is required because Stata itself runs on a JVM, so plain
 *!   `shell java ...` binds the new JVM into Stata's JVM hierarchy and the
 *!   server cannot run independently. Disowning re-parents java to launchd.
-*! - On Windows uses `winexec` (asynchronous CreateProcess — no JVM
-*!   hierarchy issue).
+*! - On Windows uses `winexec javaw` (asynchronous CreateProcess — no JVM
+*!   hierarchy issue). `javaw` is the windowless Java launcher: same JVM as
+*!   `java` but no console window pops up (server logs go to server-logs/ file).
 *! - Server lifecycle is independent of Stata once spawned — kill explicitly
 *!   via `mcp_server, stop` or `taskkill` / `pkill`.
 
@@ -74,7 +75,8 @@ program mcp_server
     local jar "`r(fn)'"
 
     if "`c(os)'" == "Windows" {
-        winexec java -jar "`jar'"
+        * javaw = 콘솔 창 없는 Java 런처 (java 와 동일 JVM, 같은 bin 폴더).
+        winexec javaw -jar "`jar'"
     }
     else {
         * bash -c "... & disown" 패턴이 필수.
