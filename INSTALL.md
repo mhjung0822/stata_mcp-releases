@@ -343,14 +343,17 @@ claude.ai → **Settings → Customize → Skills** 에서 [release/claude/cowor
 
 ### 8-B. Claude Code
 
-7개 zip 을 받아 각각 `~/.claude/skills/` 에 압축 해제:
+**묶음 한 줄** — `release/claude/stata-skills.zip` (7종 묶음) 을 통째로 풀면 됩니다:
 
 ```bash
 mkdir -p ~/.claude/skills
-for z in release/claude/cowork-skills/*.zip; do
-  unzip -o "$z" -d ~/.claude/skills/
-done
+unzip -o release/claude/stata-skills.zip -d ~/.claude/skills/
 ```
+
+> 개별로 받고 싶으면 `cowork-skills/` 의 7개 zip 을 각각 풀어도 됩니다:
+> ```bash
+> for z in release/claude/cowork-skills/*.zip; do unzip -o "$z" -d ~/.claude/skills/; done
+> ```
 
 압축 해제 후 `~/.claude/skills/<skill-name>/SKILL.md` 구조가 자동 인식됨.
 
