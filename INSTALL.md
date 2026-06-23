@@ -35,6 +35,11 @@
 | `llm.ado` | Stata push 명령어 (`llm push [, r e keep clear] [> cmd]`) |
 | `graph_meta_put.ado` | 그래프 메타정보 추출/저장 명령어 |
 | `mcp_load_serset.ado` | Stata serset 데이터 로드 헬퍼 |
+| `mcp_edit_license.ado` | 라이선스 키 입력/교체 (properties 편집) |
+| `mcp.dlg` / `mcp.ado` | Stata 제어판 다이얼로그 (`db mcp` / `mcp`) — 연결·재시작·종료·상태·라이선스/지침 편집 GUI |
+| `mcp_set.ado` | 설정 메뉴 (클릭 링크) — 라이선스 입력 / 지침 init·빈버전·삭제 / 메뉴 등록 |
+| `mcp_menu.ado` | User 메뉴에 제어판 등록 (`mcp_menu, install` → profile.do 자동 설정) |
+| `mcp_set_license.ado` / `mcp_get_license.ado` | properties 의 `LICENSE_KEY` 쓰기/읽기 (제어판/다이얼로그용) |
 | `stata_mcp_instructions.md` | Claude 기본 지침 (간결) |
 | `stata_mcp_instructions_example_full.md` | Claude 지침 예시 (상세) — 대안 |
 
@@ -179,6 +184,23 @@ mcp_connect          // 드론 시작
 mcp_server, status    // GET /status — 응답 보면 떠있음
 mcp_server, stop      // 서버 프로세스 종료
 ```
+
+### 제어판 (GUI) — 선택
+
+명령을 일일이 치는 대신 다이얼로그로:
+
+```stata
+mcp                  // = db mcp — 제어판 (연결/재시작/종료·상태·라이선스/지침 편집)
+mcp_set              // 설정 메뉴 (라이선스 입력 / 지침 init·빈버전·삭제 / 메뉴 등록 링크)
+```
+
+메뉴바에 상시 등록하려면 (1회):
+
+```stata
+mcp_menu, install    // User ▸ Stata-MCP ▸ Control Panel... 등록 + profile.do 자동 설정
+```
+
+> 등록 후에는 Stata 를 새로 켤 때마다 메뉴가 자동으로 생깁니다 (`profile.do` 가 시작 시 등록).
 
 ### B. 사용자가 별도 터미널에서 수동 기동 (대안)
 
