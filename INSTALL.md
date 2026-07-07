@@ -86,7 +86,7 @@ curl http://127.0.0.1:8080/status
 
 > 설치 시 `StataMCP` MCP 서버가 자동 등록됩니다 (`npx mcp-remote` → :8080). Node 20+ 필요. 3장의 서버 jar 가 떠 있어야 도구 호출이 됩니다. 업데이트는 새 zip 을 같은 화면에서 다시 Upload.
 
-**출력 규약 스킬 (선택 — 편집해서 쓰는 항목)**: Stata 결과 제시 형식(코드블록·해석 정도·그래프 표기 등)을 취향대로 고쳐 쓰려면 `stata-instruction` 을 **별도 스킬**로 설치합니다 (플러그인과 분리 → 플러그인 업데이트해도 편집분 안 덮임).
+**출력 지침 스킬 (선택 — 편집해서 쓰는 항목)**: Stata 결과 제시 형식(코드블록·해석 정도·그래프 표기 등)을 취향대로 고쳐 쓰려면 `stata-instruction` 을 **별도 스킬**로 설치합니다 (플러그인과 분리 → 플러그인 업데이트해도 편집분 안 덮임).
 
 1. [`stata-instruction.zip` 다운로드](https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/claude-plugins/stata-instruction.zip)
 2. Claude Desktop → **Customize → Skills → Upload** → 받은 zip 선택
