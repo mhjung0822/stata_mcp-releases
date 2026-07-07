@@ -14,7 +14,7 @@
 2. Claude Desktop 실행
 3. 코워크 모드 토글 ON  ← 플러그인의 MCP 도구는 코워크 sandbox 내부
 ```
-> 플러그인/`.dxt` 가 jar 를 자동 띄우지 않음 — 서버는 사용자/Stata 가 띄우고, 플러그인의 mcp-remote 가 그 서버(:8080)에 붙는다.
+> 플러그인이 jar 를 자동 띄우지 않음 — 서버는 사용자/Stata 가 띄우고, 플러그인의 mcp-remote 가 그 서버(:8080)에 붙는다.
 
 ### Claude Code / Cursor 사용자 (Desktop 미사용 시)
 ```

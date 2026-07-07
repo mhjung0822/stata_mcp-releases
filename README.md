@@ -6,13 +6,12 @@ Stata와 Claude를 MCP(Model Context Protocol)로 연결하는 도구의 **공�
 
 > **Stata 측 빠른 설치** (권장): Stata 에서 한 줄 — `net install stata-mcp, from("https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/release") replace`
 >
-> **Claude Desktop / 코워크**: [`stata-mcp-plugin.zip` 다운로드](https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/claude-plugins/stata-mcp-plugin.zip) → Customize → Personal plugins → Upload plugin. 플러그인 하나로 MCP 연결 + 스킬 전부 (`.dxt` 불필요). Claude Code / Cursor 는 INSTALL.md 4장.
+> **Claude Desktop / 코워크**: [`stata-mcp-plugin.zip` 다운로드](https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/claude-plugins/stata-mcp-plugin.zip) → Customize → Personal plugins → Upload plugin. 플러그인 하나로 MCP 연결 + 스킬 전부. Claude Code / Cursor 는 INSTALL.md 4장.
 
 | 파일 | 설명 |
 |---|---|
 | `stata-mcp-server.jar` | MCP 서버 (Spring Boot, Streamable HTTP, 포트 8080) — **Stata PERSONAL ado 에 배치** |
 | `stata-mcp-plugin.zip` | **Claude Desktop/코워크 플러그인** — MCP 연결(mcp-remote→:8080) + 슬래시 명령 스킬 번들. Customize → Personal plugins → Upload |
-| `stata-mcp.dxt` | (레거시) Desktop MCP 전용 wrapper — 플러그인 zip 이 대체 |
 | `stata-drone.jar` | Stata 내부 실행 드론 (포트 8001) |
 | `help_index_v2.json` / `help_nodes_v2.jsonl` | **도움말 DB v2** (v0.12.0) — `getHelp(command, selector)` 가 온톨로지 노드 4,464개에서 필요한 slice 만 계단식 반환 (xtreg 통짜 ~14,000토큰 → 기본 425토큰) |
 | `stata_cmd_index.json` / `stata_help_corpus.jsonl` | 도움말 DB v1 — 약어·프리픽스 해석 + v2 미설치 시 폴백 |
@@ -24,7 +23,7 @@ Stata와 Claude를 MCP(Model Context Protocol)로 연결하는 도구의 **공�
 | `mcp.dlg` / `mcp.ado` / `mcp_set.ado` / `mcp_menu.ado` | Stata 제어판 GUI (`db mcp`) + 설정 메뉴 (`mcp_set`) + User 메뉴 등록 (`mcp_menu, install`) |
 | `mcp_uninstall.ado` | 전체 제거 (`mcp_uninstall` 미리보기 → `, confirm`) |
 
-> Claude Desktop 사용자는 Node 20+ 필요 (`.dxt` 가 `npx mcp-remote` 호출). Claude Code / Cursor 는 Streamable HTTP 직접 지원이라 Node 불필요.
+> Claude Desktop 사용자는 Node 20+ 필요 (플러그인이 `npx mcp-remote` 호출). Claude Code / Cursor 는 Streamable HTTP 직접 지원이라 Node 불필요.
 
 ## 가이드
 
@@ -37,14 +36,14 @@ Stata와 Claude를 MCP(Model Context Protocol)로 연결하는 도구의 **공�
     claude plugin marketplace add mhjung0822/stata_mcp-releases
     claude plugin install stata-mcp@stata-mcp-releases
     ```
-- [claude-plugins/](claude-plugins) — `stata-mcp-plugin.zip` (Desktop/코워크 플러그인, MCP+스킬) + `stata-mcp.dxt` (레거시 MCP wrapper)
+- [claude-plugins/](claude-plugins) — `stata-mcp-plugin.zip` (Desktop/코워크 플러그인, MCP+스킬)
 
 ## 사전 요구 사항
 
 | 항목 | 버전 |
 |---|---|
 | Java | 17 이상 — [Oracle JDK 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html) |
-| Node.js | 20 이상 — [nodejs.org](https://nodejs.org/) (Claude Desktop 의 `.dxt` 사용 시에만) |
+| Node.js | 20 이상 — [nodejs.org](https://nodejs.org/) (Claude Desktop 플러그인의 mcp-remote 용) |
 | Stata | 17 이상 (19 권장) |
 | Claude Desktop / Claude Code / Cursor | 최신 버전 |
 
