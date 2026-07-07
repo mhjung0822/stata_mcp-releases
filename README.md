@@ -6,7 +6,7 @@ Stata와 Claude를 MCP(Model Context Protocol)로 연결하는 도구의 **공�
 
 > **Stata 측 빠른 설치** (권장): Stata 에서 한 줄 — `net install stata-mcp, from("https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/release") replace`
 >
-> **Claude Desktop / 코워크**: [`stata-mcp-plugin.zip` 다운로드](https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/release/claude_dxt/stata-mcp-plugin.zip) → Customize → Personal plugins → Upload plugin. 플러그인 하나로 MCP 연결 + 스킬 전부 (`.dxt` 불필요). Claude Code / Cursor 는 INSTALL.md 4장.
+> **Claude Desktop / 코워크**: [`stata-mcp-plugin.zip` 다운로드](https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/claude-plugins/stata-mcp-plugin.zip) → Customize → Personal plugins → Upload plugin. 플러그인 하나로 MCP 연결 + 스킬 전부 (`.dxt` 불필요). Claude Code / Cursor 는 INSTALL.md 4장.
 
 | 파일 | 설명 |
 |---|---|
@@ -37,7 +37,7 @@ Stata와 Claude를 MCP(Model Context Protocol)로 연결하는 도구의 **공�
     claude plugin marketplace add mhjung0822/stata_mcp-releases
     claude plugin install stata-mcp@stata-mcp-releases
     ```
-- [release/claude_dxt/](release/claude_dxt) — `stata-mcp-plugin.zip` (Desktop/코워크 플러그인, MCP+스킬) + `stata-mcp.dxt` (레거시 MCP wrapper)
+- [claude-plugins/](claude-plugins) — `stata-mcp-plugin.zip` (Desktop/코워크 플러그인, MCP+스킬) + `stata-mcp.dxt` (레거시 MCP wrapper)
 
 ## 사전 요구 사항
 

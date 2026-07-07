@@ -80,7 +80,7 @@ curl http://127.0.0.1:8080/status
 
 플러그인 하나에 **MCP 연결 + 슬래시 명령 스킬이 모두** 들어 있습니다 (`.dxt` 별도 설치 불필요).
 
-1. [`stata-mcp-plugin.zip` 다운로드](https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/release/claude_dxt/stata-mcp-plugin.zip)
+1. [`stata-mcp-plugin.zip` 다운로드](https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/claude-plugins/stata-mcp-plugin.zip)
 2. Claude Desktop → **Customize → Personal plugins → Upload plugin** → 받은 zip 선택
 3. Claude Desktop (코워크면 코워크) 재시작
 
@@ -111,7 +111,7 @@ claude plugin install stata-mcp@stata-mcp-releases
 
 - 업데이트 `claude plugin update stata-mcp@stata-mcp-releases` / 제거 `claude plugin uninstall ...` / 대화형 세션은 `/plugin` 메뉴
 
-> **(레거시) `.dxt`** — 플러그인 zip 이 MCP 를 포함하므로 보통 불필요. 스킬 없이 MCP 만 원하면 [`stata-mcp.dxt`](https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/release/claude_dxt/stata-mcp.dxt) 를 더블클릭 (Settings → Extensions → Install from file).
+> **(레거시) `.dxt`** — 플러그인 zip 이 MCP 를 포함하므로 보통 불필요. 스킬 없이 MCP 만 원하면 [`stata-mcp.dxt`](https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/claude-plugins/stata-mcp.dxt) 를 더블클릭 (Settings → Extensions → Install from file).
 
 ---
 
