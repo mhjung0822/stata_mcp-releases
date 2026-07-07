@@ -111,16 +111,16 @@ claude mcp list        # StataMCP ✓ Connected 확인
 
 **Claude Desktop**
 
-설정 → **Plugins** → 추가 → **마켓플레이스 추가** → 저장소 `mhjung0822/stata_mcp-releases` → `stata-mcp` 설치. 이후 업데이트도 같은 화면에서 한 번.
+설정 → **Plugins** → 추가 → **마켓플레이스 추가** → 저장소 `mhjung0822/stata-mcp-plugin` → `stata-mcp` 설치. 이후 업데이트도 같은 화면에서 한 번.
 
 **Claude Code (CLI)**
 
 ```bash
-claude plugin marketplace add mhjung0822/stata_mcp-releases
-claude plugin install stata-mcp@stata-mcp-hub
+claude plugin marketplace add mhjung0822/stata-mcp-plugin
+claude plugin install stata-mcp@stata-mcp-plugin
 ```
 
-- 업데이트: `claude plugin update stata-mcp@stata-mcp-hub` / 제거: `claude plugin uninstall ...` / 대화형 세션은 `/plugin` 메뉴
+- 업데이트: `claude plugin update stata-mcp@stata-mcp-plugin` / 제거: `claude plugin uninstall ...` / 대화형 세션은 `/plugin` 메뉴
 
 ---
 
