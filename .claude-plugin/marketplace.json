@@ -1,0 +1,20 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "stata-mcp-releases",
+  "description": "Stata MCP 프로젝트의 Claude 측 배포 — 슬래시 명령 스킬 묶음 플러그인",
+  "owner": {
+    "name": "mhjung0822"
+  },
+  "plugins": [
+    {
+      "name": "stata-mcp",
+      "description": "Stata MCP 슬래시 명령 스킬 묶음 (exec/async/help/pull/setup/instruction/graph/data-context 등) 한 번에 설치·업데이트",
+      "author": {
+        "name": "mhjung0822"
+      },
+      "category": "productivity",
+      "source": "./plugins/stata-mcp",
+      "homepage": "https://github.com/mhjung0822/stata_mcp-releases"
+    }
+  ]
+}

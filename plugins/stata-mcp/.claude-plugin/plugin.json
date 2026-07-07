@@ -1,0 +1,15 @@
+{
+  "name": "stata-mcp",
+  "description": "Stata MCP slash-command skills — 명령 실행(exec/async), 결과 push 회수(pull), 도움말(help — selector 계단식), 세션 셋업·출력규약 로드(setup/instruction), 그래프(get/export), 데이터 컨텍스트(data-context/fullcontext). Stata MCP 서버와 짝을 이룸.",
+  "version": "0.12.0",
+  "author": {
+    "name": "mhjung0822"
+  },
+  "homepage": "https://github.com/mhjung0822/stata_mcp-releases",
+  "keywords": [
+    "stata",
+    "mcp",
+    "econometrics",
+    "statistics"
+  ]
+}
