@@ -29,8 +29,6 @@ Stata와 Claude를 MCP(Model Context Protocol)로 연결하는 도구의 **공�
 
 - [INSTALL.md](INSTALL.md) — 설치 가이드 (net install → 라이선스 → 서버 기동 → 클라이언트 등록)
 - [USAGE.md](USAGE.md) — 사용 가이드 (시작 순서, Claude Desktop / Claude Code 사용법, 문제 해결)
-- **슬래시 명령 스킬 + MCP** (`/stata-exec`, `/stata-help`, `/stata-pull` 등 — 전체 목록·용법은 [USAGE.md](USAGE.md)) — `claude-plugins/stata-mcp-plugin.zip` 을 Claude Desktop **Customize → Personal plugins → Upload plugin**. 플러그인 하나로 MCP 연결 + 스킬 전부.
-- [claude-plugins/](claude-plugins) — `stata-mcp-plugin.zip` (Desktop/코워크 플러그인, MCP+스킬)
 
 ## 사전 요구 사항
 
