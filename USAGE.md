@@ -158,19 +158,14 @@ Claude 가 Stata 명령을 헷갈릴 때 스스로 확인하는 도구들 — �
 "Stata 환경/버전 알려줘"               → getStataEnv — 버전·에디션·경로·이론한계 32항목
 ```
 
-- **v0.12.0**: 도움말이 온톨로지 DB(노드 4,464개)에서 **필요한 slice 만 계단식 반환** — 기본 호출은 개요(수백 토큰), `selector` 로 모델(`fe`)/옵션그룹(`fe.se`)/옵션상세(`fe.vce`)/`examples`/`stored`/`post.predict` 등 하강. 잘못된 selector 는 그 명령의 유효 selector 목록을 돌려줌. 자세한 문법은 `/stata-help` 스킬 참고
+- 도움말은 온톨로지 DB(노드 4,464개)에서 **필요한 slice 만 계단식 반환** — 기본 호출은 개요(수백 토큰), `selector` 로 모델(`fe`)/옵션그룹(`fe.se`)/옵션상세(`fe.vce`)/`examples`/`stored`/`post.predict` 등 하강. 잘못된 selector 는 그 명령의 유효 selector 목록을 돌려줌. 자세한 문법은 `/stata-help` 스킬 참고
 - 설치 동봉 DB 라 **장기 명령이 도는 중에도 즉답**, 인터넷 불필요
 - SSC 등 커뮤니티 패키지 도움말도 조회 가능 (설치돼 있으면 — 풀네임으로)
 - 도움말 DB 는 패키지 업데이트로 최신 유지 (Stata 본체 업데이트에 맞춰 배포측에서 재생성)
 
-> **v0.11.0 변경 (마이그레이션)**: `getScalar`/`getMatrix` 툴이 `getMacro` 하나로 통합됐습니다.
-> 이름만 주면 local/global/스칼라/행렬을 한 번에 찾아 있는 것을 전부 반환합니다 —
-> `getMacro("b")`, `getMacro("e(r2)")`, `getMacro("e(V)")` 식. 스킬/노트 등에서 구 툴명을
-> 참조하고 있었다면 갱신하세요.
-
 ### 2-5. 슬래시 명령 스킬 (플러그인 설치 시)
 
-플러그인([INSTALL.md](INSTALL.md) 5장)을 설치하면 다음 슬래시 명령이 활성화됩니다.
+플러그인([INSTALL.md](INSTALL.md) 4장)을 설치하면 다음 슬래시 명령이 활성화됩니다.
 자연어가 아닌 **명시적 슬래시 호출에만 응답**합니다 (`/stata-exec sysuse auto` 식).
 
 | 명령 | 동작 |
@@ -352,16 +347,6 @@ ls "`c(sysdir_personal)'stata-drone.jar"
 
 ```bash
 java -jar /path/to/stata-mcp-server.jar
-```
-
-### Bridge 로그 (Claude Desktop)
-
-```bash
-# macOS / Linux
-tail -f /tmp/stata-mcp-bridge.log
-
-# Windows (PowerShell)
-Get-Content $env:TEMP\stata-mcp-bridge.log -Wait
 ```
 
 ### Claude Code 등록 / 채널 알림 관련

@@ -13,7 +13,7 @@ Stata와 Claude를 MCP(Model Context Protocol)로 연결하는 도구의 **공�
 | `stata-mcp-server.jar` | MCP 서버 (Spring Boot, Streamable HTTP, 포트 8080) — **Stata PERSONAL ado 에 배치** |
 | `stata-mcp-plugin.zip` | **Claude Desktop/코워크 플러그인** — MCP 연결(mcp-remote→:8080) + 슬래시 명령 스킬 번들. Customize → Personal plugins → Upload |
 | `stata-drone.jar` | Stata 내부 실행 드론 (포트 8001) |
-| `help_index_v2.json` / `help_nodes_v2.jsonl` | **도움말 DB v2** (v0.12.0) — `getHelp(command, selector)` 가 온톨로지 노드 4,464개에서 필요한 slice 만 계단식 반환 (xtreg 통짜 ~14,000토큰 → 기본 425토큰) |
+| `help_index_v2.json` / `help_nodes_v2.jsonl` | **도움말 DB** — `getHelp(command, selector)` 가 온톨로지 노드 4,464개에서 필요한 slice 만 계단식 반환 (xtreg 통짜 ~14,000토큰 → 기본 425토큰) |
 | `stata_cmd_index.json` / `stata_help_corpus.jsonl` | 도움말 DB v1 — 약어·프리픽스 해석 + v2 미설치 시 폴백 |
 | `mcp_connect.ado` | Stata 드론 연결 명령어 |
 | `mcp_server.ado` | MCP 서버 jar 기동/종료/상태 명령 (`mcp_server` / `, status` / `, stop`) — adopath 에서 jar 탐지 |
