@@ -12,8 +12,8 @@ net install stata-mcp, from("https://raw.githubusercontent.com/mhjung0822/stata_
 
 **Claude Desktop / 코워크** — zip 다운로드 후 업로드:
 
-- **Stata MCP & 스킬 등록** *(필수)*: [`stata-mcp-plugin.zip`](https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/claude-plugins/stata-mcp-plugin.zip) → **Customize** → **Personal plugins → Upload plugin**. MCP 연결 + 슬래시 명령 스킬
-- **Stata MCP 지침 스킬 등록** *(선택)*: [`stata-instruction.zip`](https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/claude-plugins/stata-instruction.zip) → **Customize** → **Skills → Upload**. 편집해서 쓰는 출력 지침
+- **Stata MCP & 스킬 등록** *(필수)*: [`stata-mcp-plugin.zip`](https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/claude-plugins/stata-mcp-plugin.zip) → **Customize** → **Personal plugins → Upload plugin**
+- **Stata MCP 지침 스킬 등록** *(선택)*: [`stata-instruction.zip`](https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/claude-plugins/stata-instruction.zip) → **Customize** → **Skills → Upload**
 
 > Claude Code / Cursor 설치는 [INSTALL.md](INSTALL.md) 4장 참고.
 
