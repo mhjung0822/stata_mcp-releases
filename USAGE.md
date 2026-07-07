@@ -12,9 +12,9 @@
    a. Stata 실행 → mcp_server + mcp_connect  (권장)
    b. 터미널: java -jar <PLUS>/jar/stata-mcp-server.jar
 2. Claude Desktop 실행
-3. 코워크 모드 토글 ON  ← .dxt 의 MCP 도구는 코워크 sandbox 내부
+3. 코워크 모드 토글 ON  ← 플러그인의 MCP 도구는 코워크 sandbox 내부
 ```
-> `.dxt` 가 jar 를 자동 띄우지 않음 — 서버는 사용자/Stata 가 띄우고, `.dxt` 는 그 서버에 mcp-remote 로 붙는 wrapper.
+> 플러그인/`.dxt` 가 jar 를 자동 띄우지 않음 — 서버는 사용자/Stata 가 띄우고, 플러그인의 mcp-remote 가 그 서버(:8080)에 붙는다.
 
 ### Claude Code / Cursor 사용자 (Desktop 미사용 시)
 ```
@@ -238,7 +238,7 @@ mcp_connect, bridgeport(8090)                    // bridge만 변경
 mcp_connect, bridgeport(8090) droneport(9001)   // 둘 다 변경
 ```
 
-> Claude Desktop(.dxt) 은 8080 고정입니다 — 포트를 바꾸면 `.dxt` 대신 수동 등록이 필요하니 Desktop 사용자는 기본 포트 유지를 권장합니다.
+> Claude Desktop/코워크 플러그인은 8080 고정입니다 — 포트를 바꾸면 플러그인 대신 수동 등록이 필요하니 Desktop 사용자는 기본 포트 유지를 권장합니다.
 
 Claude Code 등록 명령도 같이 갱신 (포트 변경 시):
 ```bash
