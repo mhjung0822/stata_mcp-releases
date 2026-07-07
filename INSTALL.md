@@ -102,14 +102,7 @@ Cursor 는 `~/.cursor/mcp.json` (또는 워크스페이스 `.cursor/mcp.json`):
 { "mcpServers": { "StataMCP": { "url": "http://127.0.0.1:8080/mcp" } } }
 ```
 
-**스킬 플러그인** (마켓플레이스):
-
-```bash
-claude plugin marketplace add mhjung0822/stata_mcp-releases
-claude plugin install stata-mcp@stata-mcp-releases
-```
-
-- 업데이트 `claude plugin update stata-mcp@stata-mcp-releases` / 제거 `claude plugin uninstall ...` / 대화형 세션은 `/plugin` 메뉴
+**슬래시 명령 스킬**: 위 플러그인 zip (Customize → Personal plugins → Upload) 에 MCP 와 함께 들어 있습니다 — Code 도 Claude Desktop 플러그인 UI 를 공유하면 동일하게 설치됩니다. (Cursor 는 MCP 만 지원, 스킬 없음)
 
 ---
 
