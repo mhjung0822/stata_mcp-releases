@@ -61,13 +61,6 @@ mcp_server           // MCP 서버 jar detached spawn (Stata 종료해도 생존
 mcp_connect          // 드론 시작
 ```
 
-확인:
-
-```bash
-curl http://127.0.0.1:8080/status
-# {"bridge":"running"}
-```
-
 > 명령 대신 GUI 제어판(`mcp` = `db mcp`)·메뉴 등록(`mcp_menu, install`)도 있습니다 — [USAGE.md](USAGE.md) 참고.
 
 ---
