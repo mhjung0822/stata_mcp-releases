@@ -170,7 +170,7 @@ Claude 가 Stata 명령을 헷갈릴 때 스스로 확인하는 도구들 — �
 
 | 명령 | 동작 |
 |---|---|
-| `/stata-setup` | Stata 환경·작업폴더 점검 + 마운트 경로 확인 + 세션 출력지침 로드 |
+| `/stata-setup` | Stata 환경·작업폴더 점검 + 마운트 경로 확인 + 세션 작업 지침 로드 |
 | `/stata-exec <cmd>` | Stata 명령 직접 실행 |
 | `/stata-async <cmd>` | 장기 명령 비동기 실행 (즉시 반환, 완료 결과는 `/stata-pull` 로) |
 | `/stata-help <cmd> [selector]` | 명령 도움말 계단식 조회 — 개요→모델→옵션 상세 하강 (예: `/stata-help xtreg fe.vce`), 약어·키워드 검색 |
@@ -179,7 +179,7 @@ Claude 가 Stata 명령을 헷갈릴 때 스스로 확인하는 도구들 — �
 | `/stata-data-fullcontext` | 현재 데이터셋 전체 컨텍스트 요약 (codebook 수준) |
 | `/stata-graph-get` | 현재 그래프 spec 조회 |
 | `/stata-graph-export [name]` | 메모리의 그래프를 PNG 로 export (인자 없으면 현재 그래프) |
-| `/stata-instruction` | 세션 출력형식 지침 로드 (`/stata-setup` 이 자동 호출) — **별도 스킬 설치·사용자 편집용**, [INSTALL.md](INSTALL.md) 4장 |
+| `/stata-instruction` | 세션 작업 지침 로드 (출력형식·분석 규칙·선호; `/stata-setup` 이 자동 호출) — **별도 스킬 설치·사용자 편집용**, [INSTALL.md](INSTALL.md) 4장 |
 
 ### 2-6. 종료
 

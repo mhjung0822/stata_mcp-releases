@@ -13,7 +13,7 @@ net install stata-mcp, from("https://raw.githubusercontent.com/mhjung0822/stata_
 **Claude Desktop / 코워크** — zip 다운로드 후 업로드:
 
 - **Stata MCP & 스킬 등록** *(필수)*: [`stata-mcp-plugin.zip`](https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/claude-plugins/stata-mcp-plugin.zip) → **Customize** → **Personal plugins → Upload plugin**
-- **Stata MCP 지침 스킬 등록** *(선택)*: [`stata-instruction.zip`](https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/claude-plugins/stata-instruction.zip) → **Customize** → **Skills → Upload**
+- **Stata MCP 작업 지침 스킬 등록** *(선택)*: [`stata-instruction.zip`](https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/claude-plugins/stata-instruction.zip) → **Customize** → **Skills → Upload**
 
 > Claude Code / Cursor 설치는 [INSTALL.md](INSTALL.md) 4장 참고.
 
@@ -21,7 +21,7 @@ net install stata-mcp, from("https://raw.githubusercontent.com/mhjung0822/stata_
 |---|---|
 | `stata-mcp-server.jar` | MCP 서버 (Spring Boot, Streamable HTTP, 포트 8080) — **Stata PERSONAL ado 에 배치** |
 | `stata-mcp-plugin.zip` | **Claude Desktop/코워크 플러그인** — MCP 연결(mcp-remote→:8080) + 슬래시 명령 스킬(9종) 번들. Customize → Personal plugins → Upload |
-| `stata-instruction.zip` | **출력 지침 스킬** (선택) — 결과 제시 형식(코드블록·해석·그래프 표기). 사용자 편집용이라 플러그인과 분리 배포. Customize → Skills → Upload |
+| `stata-instruction.zip` | **작업 지침 스킬** (선택) — 출력형식·분석 규칙·선호. 사용자 편집용이라 플러그인과 분리 배포. Customize → Skills → Upload |
 | `stata-drone.jar` | Stata 내부 실행 드론 (포트 8001) |
 | `help_index_v2.json` / `help_nodes_v2.jsonl` | **도움말 DB** — `getHelp(command, selector)` 가 온톨로지 노드 4,464개에서 필요한 slice 만 계단식 반환 (xtreg 통짜 ~14,000토큰 → 기본 425토큰) |
 | `stata_cmd_index.json` / `stata_help_corpus.jsonl` | 도움말 DB v1 — 약어·프리픽스 해석 + v2 미설치 시 폴백 |

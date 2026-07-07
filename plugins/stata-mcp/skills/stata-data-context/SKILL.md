@@ -16,5 +16,5 @@ description: |
 
 각 결과를 코드 블록으로 감싸서 그대로 반환. 추론, 해석, 설명을 추가하지 말 것.
 
-환경(getStataEnv)·출력형식 지침은 `/stata-setup` 에서 로드됨 — 여기선 제외.
+환경(getStataEnv)·작업 지침은 `/stata-setup` 에서 로드됨 — 여기선 제외.
 심층 파악(codebook·상세요약)이 필요하면 `/stata-data-fullcontext`.
