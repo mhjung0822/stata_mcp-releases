@@ -117,10 +117,10 @@ claude mcp list        # StataMCP ✓ Connected 확인
 
 ```bash
 claude plugin marketplace add mhjung0822/stata_mcp-releases
-claude plugin install stata-mcp@stata-mcp-releases
+claude plugin install stata-mcp@stata-mcp-hub
 ```
 
-- 업데이트: `claude plugin update stata-mcp@stata-mcp-releases` / 제거: `claude plugin uninstall ...` / 대화형 세션은 `/plugin` 메뉴
+- 업데이트: `claude plugin update stata-mcp@stata-mcp-hub` / 제거: `claude plugin uninstall ...` / 대화형 세션은 `/plugin` 메뉴
 
 ---
 

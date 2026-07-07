@@ -1,6 +1,6 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
-  "name": "stata-mcp-releases",
+  "name": "stata-mcp-hub",
   "description": "Stata MCP 프로젝트의 Claude 측 배포 — 슬래시 명령 스킬 묶음 플러그인",
   "owner": {
     "name": "mhjung0822"
