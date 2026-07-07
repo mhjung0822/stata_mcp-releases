@@ -243,38 +243,11 @@ claude mcp add -s user --transport http StataMCP http://127.0.0.1:8090/mcp
 
 ---
 
-## 5. 푸시 알림 흐름 (Streamable HTTP)
-
-Stata `llm push` 결과가 클라이언트에 자동 도달하는 경로:
-
-```
-Stata GUI (llm push)
-    ↓ drone javacall
-StataDrone :8001
-    ↓ HTTP POST /push
-Spring Boot :8080 /push
-    ├─→ push 저장소에 add (id/read/note 부여 — pull 은 읽음 표시, 삭제 아님)
-    └─→ mcpTransportProvider.notifyClients("notifications/claude/channel", ...)
-              ↓
-        Streamable HTTP standby SSE stream (GET /mcp)
-              ↓
-        Claude Code / Desktop / Cursor 세션
-              ↓ (capability experimental.claude/channel 매칭 시 채널 UI 표시)
-        클라이언트가 getPushResults tool 호출 → 안 읽은 것부터 본문 fetch
-```
-
-별도 채널 서버 / Node bridge 불필요 — 단일 Streamable HTTP transport 가 양방향 모두 처리.
+## 5. 문제 해결
 
 ### 첫 실행 시 MCP 서버 승인
 
-Claude Code 가 새 MCP 서버를 처음 사용할 때 **승인 프롬프트** 표시:
-- `Trust this MCP server?` / `Approve` 계열 다이얼로그
-- **Approve / Y 선택** 필수 — dismiss 하면 tool 호출 불가
-- 한 번 승인 후 `~/.claude.json` 에 저장되어 재등록/초기화 전까지 자동
-
----
-
-## 6. 문제 해결
+새 MCP 서버를 처음 사용할 때 **승인 프롬프트**가 뜹니다 (`Trust this MCP server?` / `Approve` 계열). 승인해야 도구 호출이 되며, 한 번 승인하면 이후 자동입니다.
 
 ### 라이선스 키 문제
 
