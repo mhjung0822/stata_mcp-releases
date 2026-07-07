@@ -78,13 +78,19 @@ curl http://127.0.0.1:8080/status
 
 ### Claude Desktop / 코워크 (주 사용 환경) — 플러그인 zip
 
-플러그인 하나에 **MCP 연결 + 슬래시 명령 스킬이 모두** 들어 있습니다.
+플러그인 하나에 **MCP 연결 + 슬래시 명령 스킬**이 들어 있습니다.
 
 1. [`stata-mcp-plugin.zip` 다운로드](https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/claude-plugins/stata-mcp-plugin.zip)
 2. Claude Desktop → **Customize → Personal plugins → Upload plugin** → 받은 zip 선택
 3. Claude Desktop (코워크면 코워크) 재시작
 
 > 설치 시 `StataMCP` MCP 서버가 자동 등록됩니다 (`npx mcp-remote` → :8080). Node 20+ 필요. 3장의 서버 jar 가 떠 있어야 도구 호출이 됩니다. 업데이트는 새 zip 을 같은 화면에서 다시 Upload.
+
+**출력 규약 스킬 (선택 — 편집해서 쓰는 항목)**: Stata 결과 제시 형식(코드블록·해석 정도·그래프 표기 등)을 취향대로 고쳐 쓰려면 `stata-instruction` 을 **별도 스킬**로 설치합니다 (플러그인과 분리 → 플러그인 업데이트해도 편집분 안 덮임).
+
+1. [`stata-instruction.zip` 다운로드](https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/claude-plugins/stata-instruction.zip)
+2. Claude Desktop → **Customize → Skills → Upload** → 받은 zip 선택
+3. 옵션에서 내용 편집 (또는 Claude 에게 수정 요청) — `/stata-setup` 이 설치돼 있으면 자동 로드, 없으면 기본 형식으로 동작
 
 ### Claude Code / Cursor
 

@@ -179,7 +179,7 @@ Claude 가 Stata 명령을 헷갈릴 때 스스로 확인하는 도구들 — �
 | `/stata-data-fullcontext` | 현재 데이터셋 전체 컨텍스트 요약 (codebook 수준) |
 | `/stata-graph-get` | 현재 그래프 spec 조회 |
 | `/stata-graph-export [name]` | 메모리의 그래프를 PNG 로 export (인자 없으면 현재 그래프) |
-| `/stata-instruction` | 세션 출력형식 규약 로드 (`/stata-setup` 이 자동 호출) |
+| `/stata-instruction` | 세션 출력형식 규약 로드 (`/stata-setup` 이 자동 호출) — **별도 스킬 설치·사용자 편집용**, [INSTALL.md](INSTALL.md) 4장 |
 
 ### 2-6. 종료
 
