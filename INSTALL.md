@@ -105,11 +105,11 @@ Cursor 는 `~/.cursor/mcp.json` (또는 워크스페이스 `.cursor/mcp.json`):
 **스킬 플러그인** (마켓플레이스):
 
 ```bash
-claude plugin marketplace add mhjung0822/stata-mcp-plugin
-claude plugin install stata-mcp@stata-mcp-plugin
+claude plugin marketplace add mhjung0822/stata_mcp-releases
+claude plugin install stata-mcp@stata-mcp-releases
 ```
 
-- 업데이트 `claude plugin update stata-mcp@stata-mcp-plugin` / 제거 `claude plugin uninstall ...` / 대화형 세션은 `/plugin` 메뉴
+- 업데이트 `claude plugin update stata-mcp@stata-mcp-releases` / 제거 `claude plugin uninstall ...` / 대화형 세션은 `/plugin` 메뉴
 
 > **(레거시) `.dxt`** — 플러그인 zip 이 MCP 를 포함하므로 보통 불필요. 스킬 없이 MCP 만 원하면 [`stata-mcp.dxt`](https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/release/claude_dxt/stata-mcp.dxt) 를 더블클릭 (Settings → Extensions → Install from file).
 

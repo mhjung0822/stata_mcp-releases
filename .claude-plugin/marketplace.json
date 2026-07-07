@@ -1,0 +1,20 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "stata-mcp-releases",
+  "description": "Stata MCP — Claude 슬래시 명령 스킬 + MCP 번들 (플러그인)",
+  "owner": {
+    "name": "mhjung0822"
+  },
+  "plugins": [
+    {
+      "name": "stata-mcp",
+      "description": "Stata MCP 슬래시 명령 스킬 + MCP 서버(mcp-remote→:8080) 번들",
+      "author": {
+        "name": "mhjung0822"
+      },
+      "category": "productivity",
+      "source": "./plugins/stata-mcp",
+      "homepage": "https://github.com/mhjung0822/stata_mcp-releases"
+    }
+  ]
+}

@@ -34,8 +34,8 @@ Stata와 Claude를 MCP(Model Context Protocol)로 연결하는 도구의 **공�
   - **Claude Desktop / 코워크**: `stata-mcp-plugin.zip` 을 Customize → Personal plugins → Upload plugin (MCP 포함)
   - **Claude Code (CLI)**:
     ```bash
-    claude plugin marketplace add mhjung0822/stata-mcp-plugin
-    claude plugin install stata-mcp@stata-mcp-plugin
+    claude plugin marketplace add mhjung0822/stata_mcp-releases
+    claude plugin install stata-mcp@stata-mcp-releases
     ```
 - [release/claude_dxt/](release/claude_dxt) — `stata-mcp-plugin.zip` (Desktop/코워크 플러그인, MCP+스킬) + `stata-mcp.dxt` (레거시 MCP wrapper)
 
