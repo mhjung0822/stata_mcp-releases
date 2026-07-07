@@ -4,10 +4,18 @@ Stata와 Claude를 MCP(Model Context Protocol)로 연결하는 도구의 **공�
 
 ## 다운로드
 
-> **Stata 측 빠른 설치** (권장): Stata 에서 한 줄 — `net install stata-mcp, from("https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/release") replace`
->
-> **Claude Desktop / 코워크**: [`stata-mcp-plugin.zip` 다운로드](https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/claude-plugins/stata-mcp-plugin.zip) → Customize → Personal plugins → Upload plugin. 플러그인 하나로 MCP 연결 + 스킬 전부.
-> 출력 규약을 편집해 쓰려면 [`stata-instruction.zip` 다운로드](https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/claude-plugins/stata-instruction.zip) → Customize → Skills → Upload (선택). Claude Code / Cursor 는 INSTALL.md 4장.
+**Stata 측** — Stata 에서 한 줄 (PERSONAL ado 에 자동 설치):
+
+```stata
+net install stata-mcp, from("https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/release") replace
+```
+
+**Claude Desktop / 코워크** — zip 다운로드 후 업로드:
+
+- [`stata-mcp-plugin.zip`](https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/claude-plugins/stata-mcp-plugin.zip) *(필수)* — Customize → **Personal plugins → Upload plugin**. MCP 연결 + 슬래시 명령 스킬
+- [`stata-instruction.zip`](https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/claude-plugins/stata-instruction.zip) *(선택)* — Customize → **Skills → Upload**. 편집해서 쓰는 출력 규약
+
+> Claude Code / Cursor 설치는 [INSTALL.md](INSTALL.md) 4장 참고.
 
 | 파일 | 설명 |
 |---|---|
