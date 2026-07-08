@@ -57,7 +57,7 @@ mcp_edit_license          // jar 옆 stata_mcp.properties 를 에디터로 열�
 ## 3. 서버 기동
 
 ```stata
-mcp_server           // MCP 서버 jar detached spawn (Stata 종료해도 생존)
+mcp_server           // MCP 서버 시작 (Stata 를 꺼도 계속 실행)
 mcp_connect          // 드론 시작
 ```
 

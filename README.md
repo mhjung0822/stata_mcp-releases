@@ -23,8 +23,8 @@ net install stata-mcp, from("https://raw.githubusercontent.com/mhjung0822/stata_
 | `stata-mcp-plugin.zip` | **Claude Desktop/코워크 플러그인** — MCP 연결(mcp-remote→:8080) + 슬래시 명령 스킬(9종) 번들. Customize → Personal plugins → Upload |
 | `stata-instruction.zip` | **작업 지침 스킬** (선택) — 출력형식·분석 규칙·선호. 사용자 편집용이라 플러그인과 분리 배포. Customize → Skills → Upload |
 | `stata-drone.jar` | Stata 내부 실행 드론 (포트 8001) |
-| `help_index_v2.json` / `help_nodes_v2.jsonl` | **도움말 DB** — `getHelp(command, selector)` 가 온톨로지 노드 4,464개에서 필요한 slice 만 계단식 반환 (xtreg 통짜 ~14,000토큰 → 기본 425토큰) |
-| `stata_cmd_index.json` / `stata_help_corpus.jsonl` | 도움말 DB v1 — 약어·프리픽스 해석 + v2 미설치 시 폴백 |
+| `help_index_v2.json` / `help_nodes_v2.jsonl` | **도움말 DB** — Claude 가 Stata 명령 도움말을 필요한 부분만 빠르게 조회 |
+| `stata_cmd_index.json` / `stata_help_corpus.jsonl` | 도움말 DB (보조) |
 | `mcp_connect.ado` | Stata 드론 연결 명령어 |
 | `mcp_server.ado` | MCP 서버 jar 기동/종료/상태 명령 (`mcp_server` / `, status` / `, stop`) — adopath 에서 jar 탐지 |
 | `llm.ado` | Stata push 명령어 (`llm push [, note(메모)] > cmd`) |
