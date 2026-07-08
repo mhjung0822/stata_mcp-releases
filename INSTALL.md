@@ -67,8 +67,6 @@ mcp_connect          // 드론 시작
 
 ## 4. Claude 등록 (MCP 연결 + 슬래시 명령 스킬)
 
-서버는 단일 Streamable HTTP 엔드포인트 `http://127.0.0.1:8080/mcp` 를 제공합니다.
-
 ### Claude Desktop / 코워크 (주 사용 환경) — 플러그인 zip
 
 플러그인 하나에 **MCP 연결 + 슬래시 명령 스킬**이 들어 있습니다.
@@ -77,7 +75,7 @@ mcp_connect          // 드론 시작
 2. Claude Desktop → **Customize → Personal plugins → Upload plugin** → 받은 zip 선택
 3. Claude Desktop (코워크면 코워크) 재시작
 
-> 설치 시 `StataMCP` MCP 서버가 자동 등록됩니다 (`npx mcp-remote` → :8080). Node 20+ 필요. 3장의 서버 jar 가 떠 있어야 도구 호출이 됩니다. 업데이트는 새 zip 을 같은 화면에서 다시 Upload.
+> 설치하면 `StataMCP` 가 자동 등록됩니다. Node 20+ 가 설치돼 있어야 하고, 3장에서 서버를 먼저 띄워 두어야 도구가 동작합니다. 업데이트는 새 zip 을 같은 화면에서 다시 Upload.
 
 **작업 지침 스킬 (선택 — 편집해서 쓰는 항목)**: 출력형식(코드블록·해석 정도·그래프 표기)뿐 아니라 분석 규칙·자주 쓰는 옵션·선호를 세션에 적용하려면 `stata-instruction` 을 **별도 스킬**로 설치합니다 (플러그인과 분리 → 플러그인 업데이트해도 편집분 안 덮임).
 

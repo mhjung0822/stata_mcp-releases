@@ -8,28 +8,18 @@
 
 ### Claude Desktop 사용자
 ```
-1. 서버 jar 기동 (둘 중 택일):
-   a. Stata 실행 → mcp_server + mcp_connect  (권장)
-   b. 터미널: java -jar <PLUS>/jar/stata-mcp-server.jar
+1. Stata 실행 → mcp_server → mcp_connect
 2. Claude Desktop 실행
-3. 코워크 모드 토글 ON  ← 플러그인의 MCP 도구는 코워크 sandbox 내부
+3. 코워크 모드 토글 ON
 ```
-> 플러그인이 jar 를 자동 띄우지 않음 — 서버는 사용자/Stata 가 띄우고, 플러그인의 mcp-remote 가 그 서버(:8080)에 붙는다.
 
 ### Claude Code / Cursor 사용자 (Desktop 미사용 시)
 ```
-1. Stata 실행 → mcp_server  (서버 jar detached 기동)
-2. mcp_connect  (드론 시작)
-3. Claude Code / Cursor 실행 — 등록된 Streamable HTTP URL 로 자동 연결
+1. Stata 실행 → mcp_server → mcp_connect
+2. Claude Code / Cursor 실행 (등록해 둔 서버로 자동 연결)
 ```
 
-`mcp_connect` 출력 예:
-```
-[Drone] Stata-MCP-Drone launching on port 8001...
-[Drone] Ready for commands on port 8001 (bridge=8080)
-```
-
-이후 클라이언트에서 Stata 명령을 요청하거나, Stata 에서 `llm push` 로 결과를 클라이언트로 전송.
+이후 채팅에서 Stata 작업을 요청하거나, Stata 에서 `llm push` 로 결과를 Claude 로 보냅니다.
 
 ### 제어판 (GUI) — 명령 대신 버튼으로
 
@@ -105,10 +95,8 @@ llm push, note(발표용 본검정) > regress price mpg weight, robust
 llm push, clear                          // 안 읽은 항목 비우고 새로 push (잔재 정리)
 ```
 
-- 매 `llm push` 마다 서버 **push 저장소**에 add + Streamable HTTP standby SSE stream 으로 클라이언트에 즉시 알림 (`notifications/claude/channel`)
-- Claude 가 알림 받을 때마다 `getPushResults` 호출 → 안 읽은 것부터 한 개씩 가져감
-- 빠른 연속 push 도 race 없이 누적 (Claude 처리 중 새 push 도착해도 안전)
-- 서버는 `experimental.claude/channel` capability 를 advertise — 별도 채널 서버 불필요
+- `llm push` 하면 결과가 **저장소에 쌓이고** Claude 에 즉시 알림이 갑니다
+- Claude 는 안 읽은 것부터 하나씩 가져옵니다 — 빠르게 여러 번 push 해도 순서대로 누적됩니다
 
 #### push 저장소 — 읽어도 사라지지 않습니다
 
@@ -118,33 +106,21 @@ llm push, clear                          // 안 읽은 항목 비우고 새로 p
 "아까 그 bootstrap 결과 다시 보여줘"        → 목차(history)에서 찾아 재조회
 "robust 로 돌린 것들만 찾아줘"              → 명령·출력·메모를 키워드 검색
 "3번 결과에 '최종 스펙' 메모 달아줘"          → note 부여 (검색 대상)
-"지금까지 결과 전부 파일로 저장해"            → c(pwd) 에 push_all_*.json 스냅샷
+"지금까지 결과 전부 파일로 저장해"            → 작업폴더에 스냅샷 파일로 저장
 "어제 저장한 파일 불러와"                    → 스냅샷 재적재 (이어서 작업)
 ```
 
-- 서버 정상 종료 시 잔여 결과를 `push_autosave_*.json` 으로 자동 저장 — 급히 꺼도 다음 세션에서 load 로 복구
-- 서버가 잠시 죽어 있어도 드론이 결과를 보관했다가 재전송 (배달 보장)
+- 결과는 세션 종료 후에도 자동 저장돼, 급히 꺼도 다음 세션에서 이어 볼 수 있습니다
+- 서버가 잠시 꺼져 있어도 결과는 보관됐다가 다시 전달됩니다 (유실 없음)
 
-**Claude Code 자동 알림 표시**:
-```bash
-claude --dangerously-load-development-channels server:StataMCP
-```
-- 이 플래그가 있어야 Claude Code 가 `notifications/claude/channel` 을 채널 UI 로 라우팅
-- 플래그 없이도 transport 는 정상 — `getPushResults` tool 명시 호출하면 큐 본문 가져옴
-- 매 세션 지정 부담스러우면 alias:
-  ```bash
-  alias statamcp="claude --dangerously-load-development-channels server:StataMCP"
-  ```
-
-> 클라이언트가 MCP `notification` 처리 안 하는 경우(구버전 Claude Desktop 등) 에는 자동 주입이 안 보임. "push 결과 봐줘" 로 명시 호출하면 `getPushResults` 가 실행되어 큐 결과를 가져옴.
+> 알림이 자동으로 안 보이면 채팅에 **"push 결과 봐줘"** 라고 하면 가져옵니다.
 
 ### 2-3. 그래프/저장 파일
 
 | 종류 | 어디로 |
 |---|---|
-| 그래프 | `<c(pwd)>/g_yyyyMMddHHmm_xxxx.png` (`exportGraph` 호출 시에만 생성 — 자동 export 없음, 분 timestamp + 4자리 hex random) |
-| 저장 파일 (`save`/`export` 등) | 사용자가 Stata에서 지정한 그 경로 (서버/드론 무관) |
-| 서버 시스템 로그 | `<jar 옆>/server-logs/stata-mcp-server_<ts>.log` |
+| 그래프 | 현재 작업폴더에 `g_...png` (이미지가 필요할 때만 생성 — 자동 저장 안 함) |
+| 저장 파일 (`save`/`export` 등) | 사용자가 Stata 에서 지정한 그 경로 |
 
 ### 2-4. 도움말 / 환경 조회
 
@@ -195,55 +171,17 @@ mcp_connect, shutdown
 mcp_server, stop
 ```
 
-또는 `curl -X POST http://127.0.0.1:8080/api/shutdown`
-
-> 서버는 detached 프로세스라 Stata/Claude 를 꺼도 살아 있습니다 — 명시적으로 정지해야 합니다.
-
-#### 완전 정리
-
-- `mcp_server, stop` 으로 서버 종료
-- Stata 종료 → 드론 자동 종료 (JVM이 Stata 프로세스 내)
+> 서버는 Stata/Claude 를 꺼도 계속 떠 있으니, 끝낼 때 `mcp_server, stop` 으로 명시적으로 정지합니다 (Stata 를 종료하면 드론은 자동 종료).
 
 ---
 
-## 3. pwd 변경 감지
+## 3. 작업폴더(pwd) 변경 감지
 
-Stata에서 `cd /다른/경로` 로 작업폴더를 옮기면 다음 `executeStata` 응답에 `pwdChange` 필드가 포함됩니다:
-
-```json
-{
-  "pwdChange": {
-    "from": "/Users/me/proj-A",
-    "to": "/Users/me/proj-B"
-  },
-  ...
-}
-```
-
-Claude는 이 신호를 보고 사용자에게 마운트로 되돌릴지 질문하거나 새 폴더 유지 안내. CLAUDE.md/스킬에 처리 룰을 적어두면 자동 응대.
+Stata 에서 `cd` 로 작업폴더를 옮기면 Claude 가 자동으로 알아차려, 되돌릴지 새 폴더를 유지할지 안내합니다. 작업 지침(`stata-instruction`)에 처리 방식을 적어두면 매번 자동 응대합니다.
 
 ---
 
-## 4. 포트 변경
-
-`stata_mcp.properties`에서 `BRIDGE_PORT` 또는 `DRONE_PORT` 변경 시, `mcp_connect` 호출할 때 맞춰 지정:
-
-```stata
-mcp_connect, bridgeport(8090)                    // bridge만 변경
-mcp_connect, bridgeport(8090) droneport(9001)   // 둘 다 변경
-```
-
-> Claude Desktop/코워크 플러그인은 8080 고정입니다 — 포트를 바꾸면 플러그인 대신 수동 등록이 필요하니 Desktop 사용자는 기본 포트 유지를 권장합니다.
-
-Claude Code 등록 명령도 같이 갱신 (포트 변경 시):
-```bash
-claude mcp remove StataMCP -s user
-claude mcp add -s user --transport http StataMCP http://127.0.0.1:8090/mcp
-```
-
----
-
-## 5. 문제 해결
+## 4. 문제 해결
 
 ### 첫 실행 시 MCP 서버 승인
 
@@ -268,14 +206,9 @@ claude mcp add -s user --transport http StataMCP http://127.0.0.1:8090/mcp
 
 키 교체 후에는 `mcp_connect, reset` 만으로 적용됨 (Stata 재시작 불필요). 만료 7일 전부터 `mcp_connect` 시 남은 일수가 표시됨.
 
-### 드론/서버 연결 확인
+### 연결이 안 될 때
 
-```
-curl http://localhost:8001/status    # 드론 (Stata 내부)
-curl http://localhost:8080/status    # MCP 서버
-curl http://localhost:8080/api/drone-status    # 서버 기준 드론 상태
-```
-
-- 드론은 서버 없이도 기동 가능 (포트 충돌만 없으면). 응답 없으면 Stata에서 `mcp_connect` 호출 확인.
-- 서버 미동작 시: Stata 에서 `mcp_server` (또는 `java -jar <PLUS>/jar/stata-mcp-server.jar` 수동).
+- Stata 에서 `mcp_connect` 을 다시 실행 (드론 재연결)
+- 서버가 꺼져 있으면 `mcp_server` 로 다시 기동
+- 제어판(`db mcp`)의 **Server status** 버튼으로 상태 확인
 
