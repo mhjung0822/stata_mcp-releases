@@ -8,14 +8,14 @@
 
 ### Claude Desktop 사용자
 ```
-1. Stata 실행 → mcp_server → mcp_connect
+1. Stata 실행 → mcp_connect (서버 + 드론 한 번에)
 2. Claude Desktop 실행
 3. 코워크 모드 토글 ON
 ```
 
 ### Claude Code / Cursor 사용자 (Desktop 미사용 시)
 ```
-1. Stata 실행 → mcp_server → mcp_connect
+1. Stata 실행 → mcp_connect (서버 + 드론 한 번에)
 2. Claude Code / Cursor 실행 (등록해 둔 서버로 자동 연결)
 ```
 
@@ -23,11 +23,11 @@
 
 ### 제어판 (GUI) — 명령 대신 버튼으로
 
-Stata 에서 `mcp` (= `db mcp`) 를 치면 제어판 다이얼로그가 뜹니다 — 연결/재시작/종료, 서버 상태 확인, 라이선스 편집을 버튼으로.
+Stata 에서 `mcp` (= `db mcp`) 를 치면 제어판 다이얼로그가 뜹니다 — 연결/재시작/종료, 서버 상태, 라이선스 편집, 도움말 DB 갱신, 제거를 버튼으로.
 
 ```stata
 mcp          // 제어판 다이얼로그
-mcp_set      // 설정 메뉴 (클릭 링크): 라이선스 입력 / 메뉴 등록 / 제거
+mcp_setup    // 설정 메뉴 + 도움말 DB 다운로드 (라이선스/기동/제거 링크)
 ```
 
 메뉴바에 상시 등록 (1회):
@@ -36,7 +36,7 @@ mcp_set      // 설정 메뉴 (클릭 링크): 라이선스 입력 / 메뉴 등�
 mcp_menu, install   // User ▸ Stata-MCP ▸ Control Panel... — 다음 실행부터 자동
 ```
 
-> 라이선스 키 입력/교체도 제어판의 **Edit license / properties** 버튼 또는 `mcp_set` 에서 가능합니다.
+> 라이선스 키 입력/교체도 제어판의 **Edit license / properties** 버튼 또는 `mcp_setup` 에서 가능합니다.
 
 **전체 제거**:
 
@@ -45,6 +45,8 @@ mcp_uninstall              // 미리보기 (삭제 안 함) — 대상 목록 + 
 mcp_uninstall, confirm     // ado/dlg/jar + 메뉴 등록 삭제 (라이선스/지침 보존)
 mcp_uninstall, confirm all // 라이선스 키/지침 데이터까지 삭제
 ```
+
+> 제어판(`db mcp`)의 **Uninstall** 버튼으로도 미리보기(위 첫 줄)가 실행됩니다.
 
 ---
 
@@ -135,9 +137,9 @@ Claude 가 Stata 명령을 헷갈릴 때 스스로 확인하는 도구들 — �
 ```
 
 - 도움말은 온톨로지 DB(노드 4,464개)에서 **필요한 slice 만 계단식 반환** — 기본 호출은 개요(수백 토큰), `selector` 로 모델(`fe`)/옵션그룹(`fe.se`)/옵션상세(`fe.vce`)/`examples`/`stored`/`post.predict` 등 하강. 잘못된 selector 는 그 명령의 유효 selector 목록을 돌려줌. 자세한 문법은 `/stata-help` 스킬 참고
-- 설치 동봉 DB 라 **장기 명령이 도는 중에도 즉답**, 인터넷 불필요
+- `mcp_setup` 다운로드 DB 라 **장기 명령이 도는 중에도 즉답**, 조회 시 인터넷 불필요
 - SSC 등 커뮤니티 패키지 도움말도 조회 가능 (설치돼 있으면 — 풀네임으로)
-- 도움말 DB 는 패키지 업데이트로 최신 유지 (Stata 본체 업데이트에 맞춰 배포측에서 재생성)
+- 도움말 DB 는 `mcp_setup, updatedb`(또는 제어판 [Update help DB])로 최신화 (Stata 본체 업데이트에 맞춰 배포측에서 재생성)
 
 ### 2-5. 슬래시 명령 스킬 (플러그인 설치 시)
 
@@ -159,19 +161,17 @@ Claude 가 Stata 명령을 헷갈릴 때 스스로 확인하는 도구들 — �
 
 ### 2-6. 종료
 
-#### 드론만 정지 (Stata는 유지)
+#### 완전 종료 (서버 + 드론)
 
 ```stata
-mcp_connect, shutdown
+mcp_connect, shutdown        // 서버·드론 모두 정지 (제어판 [Shutdown] 버튼과 동일)
 ```
 
-#### MCP 서버 정지
+#### 자동 종료
 
-```stata
-mcp_server, stop
-```
+Stata 를 종료하면 서버도 **~15초 내 자동 종료**됩니다 (드론이 사라지면 서버가 스스로 정지 — 워치독). 이전처럼 좀비 서버가 남지 않습니다.
 
-> 서버는 Stata/Claude 를 꺼도 계속 떠 있으니, 끝낼 때 `mcp_server, stop` 으로 명시적으로 정지합니다 (Stata 를 종료하면 드론은 자동 종료).
+> 서버만 따로 내리려면 `mcp_server, stop` 도 가능합니다.
 
 ---
 

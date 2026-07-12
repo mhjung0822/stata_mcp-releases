@@ -29,10 +29,19 @@ net install stata-mcp, ///
     replace
 ```
 
-jar 2종 + 도움말 DB + ado/dlg 전부가 자동 다운로드됩니다. 업데이트는:
+jar 2종 + ado/dlg 가 자동 다운로드됩니다. 이어서 **`mcp_setup`** 으로 도움말 DB 를 받고 제어판 메뉴를 등록합니다 (설치 후 1회):
+
+```stata
+mcp_setup            // 도움말 DB(~32MB) 다운로드 + User 메뉴 등록
+```
+
+> 도움말 DB 는 용량이 커서 net install 번들 대신 `mcp_setup` 이 온디맨드로 받습니다 (패키지 경량화). 인터넷 연결 필요.
+
+업데이트는:
 
 ```stata
 adoupdate stata-mcp, update
+mcp_setup, updatedb   // 도움말 DB 도 최신으로 (제어판 [Update help DB] 버튼과 동일)
 ```
 
 > ⚠️ URL 끝에 `/` 를 붙이면 "is not a Stata download site" 에러 — 슬래시 없이 위 형태 그대로.
@@ -57,11 +66,10 @@ mcp_edit_license          // jar 옆 stata_mcp.properties 를 에디터로 열�
 ## 3. 서버 기동
 
 ```stata
-mcp_server           // MCP 서버 시작 (Stata 를 꺼도 계속 실행)
-mcp_connect          // 드론 시작
+mcp_connect          // MCP 서버 + 드론 기동 (한 번에)
 ```
 
-> 명령 대신 GUI 제어판(`mcp` = `db mcp`)·메뉴 등록(`mcp_menu, install`)도 있습니다 — [USAGE.md](USAGE.md) 참고.
+> Stata 를 종료하면 서버도 ~15초 내 자동 종료됩니다 (드론이 사라지면 서버가 스스로 정지). 명령 대신 GUI 제어판(`mcp` = `db mcp`)·메뉴 등록(`mcp_setup` / `mcp_menu, install`)도 있습니다 — [USAGE.md](USAGE.md) 참고.
 
 ---
 
