@@ -1,4 +1,4 @@
-*! mcp_menu  v0.2.0  23jun2026
+*! mcp_menu  v0.3.0  12jul2026
 *!
 *! Stata-MCP 제어판(db mcp)을 Stata 의 User 메뉴에 등록.
 *! 메뉴는 세션마다 초기화되므로 profile.do 에서 매 시작 시 호출해야 한다.
@@ -11,7 +11,8 @@
 *!   - profile.do 가 있으면  → 맨 아래에 'capture mcp_menu' 추가
 *!   - 없으면               → profile.do 생성 후 추가
 *!   - 이미 들어있으면       → 중복 추가 안 함 (멱등)
-*!   대상 = Stata 설치 폴더 profile.do (c(sysdir_stata)) — 시작 시 가장 먼저 탐색.
+*!   대상 = findfile 로 찾은 기존 profile.do, 없으면 c(sysdir_personal) 에 생성
+*!         (Stata 설치폴더 c(sysdir_stata) 는 Windows 권한 문제로 회피).
 *!
 *! 주의: window menu clear 는 쓰지 않는다(다른 패키지가 등록한 메뉴 보존).
 
@@ -22,8 +23,16 @@ program mcp_menu
 
     * ─── install: profile.do 에 영구 등록 ────────────────────────────────
     if "`install'" != "" {
-        * 대상 = Stata 설치 폴더 (c(sysdir_stata)는 끝에 구분자 포함). 시작 시 가장 먼저 탐색됨
-        local pf `"`c(sysdir_stata)'profile.do"'
+        * profile.do 탐색: findfile 로 adopath 전체에서 찾음 → 있으면 그 위치에 append.
+        * 없으면 c(sysdir_personal) 에 생성 (adopath 에 있어 시작 시 로드됨).
+        * Stata 설치폴더(c(sysdir_stata))는 Windows Program Files 라 쓰기권한 없을 수 있어 피함.
+        capture findfile profile.do
+        if !_rc {
+            local pf `"`r(fn)'"'
+        }
+        else {
+            local pf `"`c(sysdir_personal)'profile.do"'
+        }
 
         * 존재 여부 + 이미 등록됐는지 검사
         local exists 0
@@ -46,15 +55,23 @@ program mcp_menu
         }
         else {
             tempname wfh
-            if `exists' {
-                file open `wfh' using `"`pf'"', write text append
+            capture {
+                if `exists' {
+                    file open `wfh' using `"`pf'"', write text append
+                }
+                else {
+                    file open `wfh' using `"`pf'"', write text replace
+                }
+                file write `wfh' _n "* ─── Stata-MCP: User 메뉴에 제어판 등록 (세션마다) ───" _n
+                file write `wfh' "capture mcp_menu" _n
+                file close `wfh'
             }
-            else {
-                file open `wfh' using `"`pf'"', write text replace
+            if _rc {
+                capture file close `wfh'
+                di as error "[Menu] profile.do 쓰기 실패 (권한 문제일 수 있음): " `"`pf'"'
+                di as error `"        수동으로 'capture mcp_menu' 한 줄을 profile.do 에 추가하세요."'
+                exit
             }
-            file write `wfh' _n "* ─── Stata-MCP: User 메뉴에 제어판 등록 (세션마다) ───" _n
-            file write `wfh' "capture mcp_menu" _n
-            file close `wfh'
             if `exists' {
                 di as text "[Menu] Appended to profile.do → " as result `"`pf'"'
             }
