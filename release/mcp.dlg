@@ -15,7 +15,7 @@
 
 VERSION 17.0
 
-POSITION . . 380 241
+POSITION . . 380 267
 
 DIALOG main, label("Stata-MCP Control Panel") tabtitle("Stata-MCP")
 BEGIN
@@ -31,13 +31,15 @@ BEGIN
   BUTTON   bt_down   240   49  105   24,   label("Shutdown")        ///
              onpush(program do_shutdown)
 
-  GROUPBOX gb_tools  10    92  360   114, label("Status / Edit")
+  GROUPBOX gb_tools  10    92  360   140, label("Status / Edit")
   BUTTON   bt_stat   20    112 335   22,   label("Server status")        ///
              onpush(program do_status)
   BUTTON   bt_edit   20    138 335   22,   label("Edit license / properties") ///
              onpush(program do_editlic)
-  BUTTON   bt_setup  20    164 335   22,   label("Setup menu (mcp_set)") ///
+  BUTTON   bt_setup  20    164 335   22,   label("Update help DB (mcp_setup, updatedb)") ///
              onpush(program do_setup)
+  BUTTON   bt_uninst 20    190 335   22,   label("Uninstall (mcp_uninstall)") ///
+             onpush(program do_uninstall)
 END
 
 /* 하단은 닫기만 — 연결/재시작/종료는 위 버튼이 담당 */
@@ -84,6 +86,12 @@ END
 
 PROGRAM do_setup
 BEGIN
-  put "mcp_set"
+  put "mcp_setup, updatedb"
+  stata
+END
+
+PROGRAM do_uninstall
+BEGIN
+  put "mcp_uninstall"
   stata
 END

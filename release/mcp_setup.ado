@@ -1,11 +1,12 @@
-*! mcp_setup  v0.1.0  12jul2026
+*! mcp_setup  v0.2.0  12jul2026
 *!
-*! Stata-MCP 최초 설정 — help DB 를 GitHub 에서 받아 드론 jar 옆에 배치하고
-*! 제어판 메뉴를 profile.do 에 등록한다. net install 직후 1회 실행.
+*! Stata-MCP 설정 진입점 (구 mcp_set 흡수) — help DB 를 GitHub 에서 받아
+*! 드론 jar 옆에 배치하고, 제어판 메뉴 등록 + 설정 링크(라이선스/기동/제거)를
+*! 출력한다. net install 직후 1회 실행, 이후 설정 허브로도 사용.
 *!
 *! Usage:
-*!   mcp_setup             // help DB 없으면 다운로드 + mcp_menu, install
-*!   mcp_setup, updatedb   // help DB 강제 재다운로드 (본체 업데이트 시)
+*!   mcp_setup             // help DB 다운로드(없으면) + mcp_menu,install + 설정 메뉴
+*!   mcp_setup, updatedb   // help DB 갱신만 (다이얼로그 [Update help DB] 버튼용) — 메뉴/허브 생략
 *!
 *! help DB (~32MB) 는 pkg 에 번들하지 않고 여기서 온디맨드로 받는다 —
 *! net install 을 가볍게 유지하기 위함. 파일은 stata-drone.jar 옆에 둔다
@@ -60,6 +61,12 @@ program mcp_setup
         di as error "[Setup] 일부 실패 — 인터넷/방화벽 확인 후 'mcp_setup, updatedb' 로 재시도하세요."
     }
 
+    * updatedb = help DB 갱신만 (다이얼로그 [Update help DB] 버튼) — 메뉴 등록/허브 생략
+    if "`updatedb'" != "" {
+        di as text "[Setup] help DB 갱신 완료."
+        exit
+    }
+
     * ─── 제어판 메뉴 등록 (profile.do) ───────────────────────────────────
     di as text "[Setup] 제어판 메뉴 등록..."
     capture mcp_menu, install
@@ -67,8 +74,12 @@ program mcp_setup
         di as error "[Setup] 메뉴 등록 실패 — 수동으로 'mcp_menu, install' 실행하세요."
     }
 
+    * ─── 설정 허브 (구 mcp_set 흡수 — 클릭 링크, 서버·드론 기동 안 함) ────
     di as text ""
-    di as text "{bf:[Stata-MCP] 설정 완료.}"
-    di as text "  라이선스 키 등록:  {stata mcp_edit_license:mcp_edit_license}"
-    di as text "  서버/드론 기동:    {stata mcp_connect:mcp_connect}  (help DB 는 기동 시 로드됨)"
+    di as text "{bf:[Stata-MCP] Setup}"
+    di as text "  라이선스 키 편집:   {stata mcp_edit_license:mcp_edit_license}"
+    di as text "  help DB 갱신:        {stata mcp_setup, updatedb:mcp_setup, updatedb}"
+    di as text "  서버·드론 기동:      {stata mcp_connect:mcp_connect}"
+    di as text "  제거:               {stata mcp_uninstall:mcp_uninstall}"
+    di as text ""
 end

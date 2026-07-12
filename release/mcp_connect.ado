@@ -70,6 +70,6 @@ program mcp_connect
             args("`bridgeport'" "`droneport'") jars(stata-drone.jar)
     }
 
-    * 기동 엔진 — 사용자 안내/제어판은 mcp_set 가 담당.
+    * 기동 엔진 — 사용자 안내/제어판은 mcp_setup 가 담당.
     * (제어판 [연결] 버튼이 이 명령을 호출해 서버+드론을 기동)
 end

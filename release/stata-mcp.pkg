@@ -23,7 +23,6 @@ F graph_meta_put.ado
 F mcp_load_serset.ado
 F mcp.ado
 F mcp.dlg
-F mcp_set.ado
 F mcp_menu.ado
 F mcp_setup.ado
 F mcp_set_license.ado

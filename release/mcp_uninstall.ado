@@ -26,7 +26,7 @@ program mcp_uninstall
     local ados                                                   ///
         mcp_connect.ado mcp_server.ado mcp_edit_license.ado      ///
         mcp_edit_instructions.ado mcp_load_serset.ado llm.ado    ///
-        graph_meta_put.ado mcp.ado mcp.dlg mcp_set.ado           ///
+        graph_meta_put.ado mcp.ado mcp.dlg mcp_setup.ado         ///
         mcp_menu.ado mcp_set_license.ado mcp_get_license.ado     ///
         mcp_uninstall.ado
     local jars stata-drone.jar stata-mcp-server.jar
