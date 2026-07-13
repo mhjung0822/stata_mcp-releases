@@ -23,7 +23,7 @@ net install stata-mcp, from("https://raw.githubusercontent.com/mhjung0822/stata_
 | 파일 | 설명 |
 |---|---|
 | `stata-mcp-server.jar` | MCP 서버 (Spring Boot, Streamable HTTP, 포트 8080) — **Stata PERSONAL ado 에 배치** |
-| `stata-mcp-plugin.zip` | **Claude Desktop/코워크 플러그인** — MCP 연결(HTTP→:8080, node 런처 Win/mac 겸용) + 슬래시 명령 스킬(9종) 번들. Customize → Personal plugins → Upload |
+| `stata-mcp-plugin.zip` | **Claude Desktop/코워크 플러그인** — MCP 연결(mcp-remote→:8080) + 슬래시 명령 스킬(9종) 번들. Customize → Personal plugins → Upload |
 | `stata-instruction.zip` | **작업 지침 스킬** (선택) — 출력형식·분석 규칙·선호. 사용자 편집용이라 플러그인과 분리 배포. Customize → Skills → Upload |
 | `stata-panel-merge.zip` | **패널 병합 절차 스킬** (선택) — 웨이브(차수)별 .dta 를 stata-mcp 로 하나의 long 패널로 합치는 표준 절차. "패널 만들어줘" 등 자연어로 트리거. Customize → Skills → Upload |
 | `stata-drone.jar` | Stata 내부 실행 드론 (포트 8001) |
@@ -37,7 +37,7 @@ net install stata-mcp, from("https://raw.githubusercontent.com/mhjung0822/stata_
 | `mcp.dlg` / `mcp.ado` / `mcp_setup.ado` / `mcp_menu.ado` | Stata 제어판 GUI (`db mcp`) + 설정·도움말DB 다운로드 (`mcp_setup`) + User 메뉴 등록 (`mcp_menu, install`) |
 | `mcp_uninstall.ado` | 전체 제거 (`mcp_uninstall` 미리보기 → `, confirm`) |
 
-> Claude Desktop 사용자는 Node 20+ 필요 (플러그인의 node 런처가 `npx mcp-remote` 호출 — Windows/mac 겸용). Claude Code / Cursor 는 Streamable HTTP 직접 지원이라 Node 불필요.
+> Claude Desktop 사용자는 Node 20+ 필요 (플러그인이 `npx mcp-remote` 호출). Claude Code / Cursor 는 Streamable HTTP 직접 지원이라 Node 불필요.
 
 ## 가이드
 

@@ -13,7 +13,7 @@
 | Java | 17 이상 — [Oracle JDK 17 다운로드](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html) |
 | Stata | 17 이상 (19 권장) |
 | Claude Desktop / Claude Code / Cursor | 최신 — [Claude Desktop 다운로드](https://claude.ai/download) |
-| Node.js | v20+ — [nodejs.org 다운로드](https://nodejs.org/) — Claude Desktop/코워크 만 필요 (플러그인의 node 런처가 `mcp-remote` 로 stdio↔HTTP 변환) |
+| Node.js | v20+ — [nodejs.org 다운로드](https://nodejs.org/) — Claude Desktop/코워크 만 필요 (플러그인의 `mcp-remote` 가 stdio↔HTTP 변환) |
 
 > Claude Code / Cursor 는 Streamable HTTP 직접 지원이라 Node 불필요.
 
