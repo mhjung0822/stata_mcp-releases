@@ -1,7 +1,7 @@
 {
   "name": "stata-mcp",
   "description": "Stata MCP — 슬래시 명령 스킬(9종) + MCP 서버(mcp-remote→:8080) 번들. 명령 실행(exec/async)·도움말(help selector 계단식)·push 회수(pull)·세션 셋업(setup)·그래프·데이터 컨텍스트. 작업 지침(stata-instruction)은 사용자 편집용이라 별도 스킬로 배포.",
-  "version": "0.12.8",
+  "version": "0.12.9",
   "author": {
     "name": "mhjung0822"
   },

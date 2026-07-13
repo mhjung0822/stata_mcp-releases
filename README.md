@@ -14,7 +14,7 @@ net install stata-mcp, from("https://raw.githubusercontent.com/mhjung0822/stata_
 
 **Claude Desktop / 코워크** — zip 다운로드 후 업로드:
 
-- **Stata MCP & 스킬 등록** *(필수)*: [`stata-mcp-plugin.zip`](https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/claude-plugins/stata-mcp-plugin.zip) → **Customize** → **Personal plugins → Upload plugin**
+- **Stata MCP & 스킬 등록** *(필수)*: **Mac/Linux** [`stata-mcp-plugin.zip`](https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/claude-plugins/stata-mcp-plugin.zip) · **Windows** [`stata-mcp-plugin-win.zip`](https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/claude-plugins/stata-mcp-plugin-win.zip) → **Customize** → **Personal plugins → Upload plugin**
 - **Stata MCP 작업 지침 스킬 등록** *(선택)*: [`stata-instruction.zip`](https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/claude-plugins/stata-instruction.zip) → **Customize** → **Skills → Upload**
 - **패널 병합 절차 스킬 등록** *(선택)*: [`stata-panel-merge.zip`](https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/claude-plugins/stata-panel-merge.zip) → **Customize** → **Skills → Upload**
 
@@ -23,7 +23,8 @@ net install stata-mcp, from("https://raw.githubusercontent.com/mhjung0822/stata_
 | 파일 | 설명 |
 |---|---|
 | `stata-mcp-server.jar` | MCP 서버 (Spring Boot, Streamable HTTP, 포트 8080) — **Stata PERSONAL ado 에 배치** |
-| `stata-mcp-plugin.zip` | **Claude Desktop/코워크 플러그인** — MCP 연결(mcp-remote→:8080) + 슬래시 명령 스킬(9종) 번들. Customize → Personal plugins → Upload |
+| `stata-mcp-plugin.zip` | **Claude Desktop 플러그인 (Mac/Linux)** — MCP 연결(`npx mcp-remote`→:8080) + 슬래시 명령 스킬(9종). Customize → Personal plugins → Upload |
+| `stata-mcp-plugin-win.zip` | **Claude Desktop 플러그인 (Windows)** — 위와 동일하나 MCP 를 `cmd /c npx` 로 실행 (Windows 는 셸 래핑 필요). Windows 사용자는 이 zip 설치 |
 | `stata-instruction.zip` | **작업 지침 스킬** (선택) — 출력형식·분석 규칙·선호. 사용자 편집용이라 플러그인과 분리 배포. Customize → Skills → Upload |
 | `stata-panel-merge.zip` | **패널 병합 절차 스킬** (선택) — 웨이브(차수)별 .dta 를 stata-mcp 로 하나의 long 패널로 합치는 표준 절차. "패널 만들어줘" 등 자연어로 트리거. Customize → Skills → Upload |
 | `stata-drone.jar` | Stata 내부 실행 드론 (포트 8001) |
