@@ -91,6 +91,11 @@ mcp_connect          // MCP 서버 + 드론 기동 (한 번에)
 2. Claude Desktop → **Customize → Skills → Upload** → 받은 zip 선택
 3. 옵션에서 내용 편집 (또는 Claude 에게 수정 요청) — `/stata-setup` 이 설치돼 있으면 자동 로드, 없으면 기본 형식으로 동작
 
+**패널 병합 절차 스킬 (선택)**: 웨이브(차수)별로 나뉜 .dta 를 stata-mcp 로 하나의 long 패널로 합치는 표준 절차를 담은 스킬입니다. 병합 방법을 몰라도 "웨이브 합쳐줘 / 패널 만들어줘" 같은 자연어로 트리거되어 rename→append→xtset 절차를 안내·검증합니다.
+
+1. [`stata-panel-merge.zip` 다운로드](https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/claude-plugins/stata-panel-merge.zip)
+2. Claude Desktop → **Customize → Skills → Upload** → 받은 zip 선택
+
 ### Claude Code / Cursor
 
 **MCP 등록** (HTTP 직접):

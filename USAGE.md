@@ -159,6 +159,8 @@ Claude 가 Stata 명령을 헷갈릴 때 스스로 확인하는 도구들 — �
 | `/stata-graph-export [name]` | 메모리의 그래프를 PNG 로 export (인자 없으면 현재 그래프) |
 | `/stata-instruction` | 세션 작업 지침 로드 (출력형식·분석 규칙·선호; `/stata-setup` 이 자동 호출) — **별도 스킬 설치·사용자 편집용**, [INSTALL.md](INSTALL.md) 4장 |
 
+> **패널 병합 절차 스킬** *(선택 설치)*: 위 슬래시 명령과 달리 자연어로 트리거됩니다. "웨이브 합쳐줘 / 패널 만들어줘 / long 으로 변환" 처럼 요청하면 stata-mcp 로 웨이브별 .dta 를 하나의 long 패널로 합치는 절차(rename→append→xtset·검증)를 안내합니다. 설치는 [INSTALL.md](INSTALL.md) 4장 (`stata-panel-merge.zip`).
+
 ### 2-6. 종료
 
 #### 완전 종료 (서버 + 드론)
