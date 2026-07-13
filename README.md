@@ -49,7 +49,7 @@ net install stata-mcp, from("https://raw.githubusercontent.com/mhjung0822/stata_
 | Java | 17 이상 — [Oracle JDK 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html) |
 | Node.js | 20 이상 — [nodejs.org](https://nodejs.org/) (Claude Desktop 플러그인의 mcp-remote 용) |
 | Stata | 17 이상 (19 권장) |
-| Claude Desktop / Claude Code / Cursor | 최신 버전 |
+| Claude Desktop / Claude Code / Cursor | 최신 버전 — [Claude Desktop 다운로드](https://claude.ai/download) |
 
 ## 라이선스
 
