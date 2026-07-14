@@ -79,13 +79,30 @@ mcp_connect          // MCP 서버 + 드론 기동 (한 번에)
 
 플러그인 하나에 **MCP 연결 + 슬래시 명령 스킬**이 들어 있습니다.
 
-1. **OS 맞는 zip** 다운로드 — **Mac/Linux**: [`stata-mcp-plugin.zip`](https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/claude-plugins/stata-mcp-plugin.zip) · **Windows**: [`stata-mcp-plugin-win.zip`](https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/claude-plugins/stata-mcp-plugin-win.zip)
+1. [`stata-mcp-plugin.zip` 다운로드](https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/claude-plugins/stata-mcp-plugin.zip)
 2. Claude Desktop → **Customize → Personal plugins → Upload plugin** → 받은 zip 선택
 3. Claude Desktop (코워크면 코워크) 재시작
 
 > 설치하면 `StataMCP` 가 자동 등록됩니다. Node 20+ 가 설치돼 있어야 하고, 3장에서 서버를 먼저 띄워 두어야 도구가 동작합니다. 업데이트는 새 zip 을 같은 화면에서 다시 Upload.
->
-> **⚠️ Windows 는 반드시 `-win.zip`** 을 설치하세요 — 일반 zip 은 MCP 를 bare `npx` 로 띄워 Windows 에서 연결이 안 됩니다 (`-win` 은 `cmd /c npx` 로 감쌈).
+
+#### ⚠️ Windows + Claude Desktop — MCP 는 config 로 등록
+
+Claude Desktop 은 플러그인 MCP 서버를 내부 VM(yukonSilver) 경유로 띄우는데 **그 VM 이 Windows 미지원**입니다 ([claude-code #27357](https://github.com/anthropics/claude-code/issues/27357) — `VM not supported (win32/x64)`). 그래서 **Windows + Claude Desktop 에선 플러그인의 MCP 가 연결되지 않습니다** (스킬은 정상). MCP 는 `claude_desktop_config.json` 에 직접 등록하세요:
+
+```json
+{
+  "mcpServers": {
+    "StataMCP": { "command": "cmd", "args": ["/c", "npx", "-y", "mcp-remote", "http://127.0.0.1:8080/mcp"] }
+  }
+}
+```
+
+정리 — MCP 연결 방법 (스킬은 어느 환경이든 플러그인으로):
+
+| | Claude Code | Claude Desktop |
+|---|---|---|
+| **Mac/Linux** | 플러그인 (또는 `claude mcp add`) | 플러그인 |
+| **Windows** | 플러그인 (네이티브 spawn) | **`claude_desktop_config.json` 수동등록** (`cmd /c npx`) |
 
 **작업 지침 스킬 (선택 — 편집해서 쓰는 항목)**: 출력형식(코드블록·해석 정도·그래프 표기)뿐 아니라 분석 규칙·자주 쓰는 옵션·선호를 세션에 적용하려면 `stata-instruction` 을 **별도 스킬**로 설치합니다 (플러그인과 분리 → 플러그인 업데이트해도 편집분 안 덮임).
 
