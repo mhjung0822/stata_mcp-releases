@@ -88,7 +88,7 @@ mcp_edit_license          // jar 옆 stata_mcp.properties 를 에디터로 열�
 mcp_connect          // MCP 서버 + 드론 기동 (한 번에)
 ```
 
-> Stata 를 종료하면 서버도 ~15초 내 자동 종료됩니다 (드론이 사라지면 서버가 스스로 정지). 명령 대신 GUI 제어판(`mcp` = `db mcp`)·메뉴 등록(`mcp_setup` / `mcp_menu, install`)도 있습니다 — [USAGE.md](USAGE.md) 참고.
+> Stata 를 종료하면 서버도 자동으로 함께 종료됩니다. 명령 대신 GUI 제어판(`db mcp`)으로도 켤 수 있습니다 — [USAGE.md](USAGE.md) 참고.
 
 ---
 
@@ -106,14 +106,14 @@ mcp_connect          // MCP 서버 + 드론 기동 (한 번에)
 
 #### ⚠️ Windows + Claude Desktop — MCP 는 config 로 등록
 
-Claude Desktop 은 플러그인 MCP 서버를 내부 VM(yukonSilver) 경유로 띄우는데 **그 VM 이 Windows 미지원**입니다 ([claude-code #27357](https://github.com/anthropics/claude-code/issues/27357) — `VM not supported (win32/x64)`). 그래서 **Windows + Claude Desktop 에선 플러그인의 MCP 가 연결되지 않습니다** (스킬은 정상). MCP 는 `claude_desktop_config.json` 에 직접 등록하세요.
+**Windows 에서는 플러그인의 MCP 가 연결되지 않습니다** (슬래시 명령 스킬은 정상). MCP 는 아래 순서로 설정 파일에 직접 등록하세요.
 
 **① 설정 파일(`claude_desktop_config.json`) 열기** — **반드시 Claude 메뉴로**
 
 Claude Desktop → **Settings(설정)** → **Developer(개발자)** 탭 → **Edit Config** 버튼
 → 파일탐색기가 열리며 `claude_desktop_config.json` 이 보임 → **메모장**으로 열기 (파일이 없으면 이 폴더에 새로 만들기 — 메모장 저장 시 파일형식 "모든 파일")
 
-> ⚠️ **경로를 직접 찾아가지 마세요.** 설치 방식(일반 설치 / 스토어·MSIX 설치)에 따라 **앱이 실제로 읽는 파일 위치가 다릅니다.** `%APPDATA%\Claude` 로 직접 가면 엉뚱한 파일을 고쳐서 **저장은 됐는데 아무 일도 안 일어나는** 상태가 됩니다 — 제일 찾기 어려운 실패입니다. 이 버튼은 앱이 실제로 읽는 파일을 열어주니 **항상 이 버튼을 쓰세요.**
+> ⚠️ **폴더를 직접 찾아가지 마세요.** 설정 파일 위치는 PC 마다 달라서, 직접 찾아가면 **엉뚱한 파일을 고치게 됩니다** (저장은 되는데 아무 일도 안 일어남). 이 버튼은 항상 맞는 파일을 열어줍니다.
 
 **② 내용 붙여넣기** — 파일이 비었으면 통째로, 이미 내용이 있으면 `mcpServers` 항목만 병합
 
@@ -130,7 +130,7 @@ Claude Desktop → **Settings(설정)** → **Developer(개발자)** 탭 → **E
 
 **③ 사내망/보안 PC — 인증서 오류(`UNABLE_TO_VERIFY_LEAF_SIGNATURE`) 시**
 
-회사·기관 PC 는 보안망이 TLS 를 가로채(inspection) 자체 인증서를 끼워넣어서, `npx` 가 npm 에서 `mcp-remote` 를 **못 받아올 수** 있습니다. 로그에 `unable to verify the first certificate` 가 뜨면 `env` 를 추가:
+회사·기관 PC 는 보안 설정 때문에 필요한 파일을 못 받아올 수 있습니다. 로그에 `unable to verify the first certificate` 가 뜨면 `env` 를 추가:
 
 ```json
 {
@@ -143,20 +143,11 @@ Claude Desktop → **Settings(설정)** → **Developer(개발자)** 탭 → **E
   }
 }
 ```
-`--use-system-ca` = Node 가 **Windows 인증서 저장소**(회사 루트 CA 가 이미 설치된 곳)를 신뢰 → 다운로드 성공. **Node 22 이상** 필요.
-
-`--use-system-ca` 로도 안 되면:
-- **회사 CA 파일 지정**: `"env": { "NODE_EXTRA_CA_CERTS": "C:\\경로\\회사루트CA.pem" }` (IT 부서에서 받은 인증서 파일)
+**Node 22 이상**이 필요합니다. 그래도 안 되면:
+- **회사 인증서 파일 지정**: `"env": { "NODE_EXTRA_CA_CERTS": "C:\\경로\\회사인증서.pem" }` (IT 부서에서 받은 파일)
 - **빠른 우회(보안↓·비권장)**: cmd 에서 `npm config set strict-ssl false`
 
 **④ 저장 후 Claude Desktop 완전 재시작** — 창만 닫지 말고 **트레이 아이콘(우하단) 우클릭 → 종료(Quit)** 후 다시 실행 (설정 반영 필수). 그리고 Stata 에서 `mcp_connect` 로 서버가 떠 있어야 도구가 동작합니다.
-
-정리 — MCP 연결 방법 (스킬은 어느 환경이든 플러그인으로):
-
-| | Claude Code | Claude Desktop |
-|---|---|---|
-| **Mac/Linux** | 플러그인 (또는 `claude mcp add`) | 플러그인 |
-| **Windows** | 플러그인 (네이티브 spawn) | **`claude_desktop_config.json` 수동등록** (`cmd /c npx`, 사내망은 `--use-system-ca`) |
 
 **작업 지침 스킬 (선택 — 편집해서 쓰는 항목)**: 출력형식(코드블록·해석 정도·그래프 표기)뿐 아니라 분석 규칙·자주 쓰는 옵션·선호를 세션에 적용하려면 `stata-instruction` 을 **별도 스킬**로 설치합니다 (플러그인과 분리 → 플러그인 업데이트해도 편집분 안 덮임).
 
