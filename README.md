@@ -6,8 +6,8 @@ Stata와 Claude를 MCP(Model Context Protocol)로 연결하는 도구의 **공�
 
 > 💡 **설정이 번거로우면 Claude Code 에 맡기세요** (Windows 권장) — Claude Code 에 아래를 붙여넣으면 config 편집·사내망 인증서까지 알아서 처리합니다:
 > ```
-> https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/INSTALL.md
-> 이 문서 읽고 내 환경에 Stata MCP 설치해줘.
+> https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/AGENT_INSTALL.md
+> 이 문서 읽고 Stata MCP 설치해줘.
 > ```
 > 상세: [INSTALL.md](INSTALL.md) 0장.
 
