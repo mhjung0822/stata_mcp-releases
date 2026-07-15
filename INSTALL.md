@@ -10,6 +10,11 @@
 
 Windows 는 설정 파일 경로·JSON 병합·사내망 인증서 때문에 수동 설치가 번거롭습니다. **Claude Code** 를 열고 아래를 그대로 붙여넣으면 알아서 해줍니다:
 
+> **먼저 준비물 — Git for Windows.** Claude Desktop 앱에서 **로컬 세션(Claude Code)** 을 열려면 필요합니다.
+> [git-scm.com/downloads/win](https://git-scm.com/downloads/win) 에서 받아 **전부 기본값으로 "다음"만 눌러** 설치하세요.
+> **로그인·계정 필요 없습니다** — Claude Code 가 여기 딸려오는 터미널(Git Bash)을 쓰기 때문이지, 버전관리를 쓰는 게 아닙니다. git 이 뭔지 몰라도 됩니다.
+> (설치에 관리자 권한이 필요할 수 있음 — 막히면 IT 부서에 "Git for Windows 설치" 요청)
+
 ```
 https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/AGENT_INSTALL.md
 이 문서 읽고 Stata MCP 설치해줘.
@@ -104,15 +109,12 @@ mcp_connect          // MCP 서버 + 드론 기동 (한 번에)
 
 Claude Desktop 은 플러그인 MCP 서버를 내부 VM(yukonSilver) 경유로 띄우는데 **그 VM 이 Windows 미지원**입니다 ([claude-code #27357](https://github.com/anthropics/claude-code/issues/27357) — `VM not supported (win32/x64)`). 그래서 **Windows + Claude Desktop 에선 플러그인의 MCP 가 연결되지 않습니다** (스킬은 정상). MCP 는 `claude_desktop_config.json` 에 직접 등록하세요.
 
-**① 설정 파일(`claude_desktop_config.json`) 열기** — 둘 중 편한 방법
+**① 설정 파일(`claude_desktop_config.json`) 열기** — **반드시 Claude 메뉴로**
 
-- **방법 A (Claude 메뉴):** Claude Desktop → **Settings(설정)** → **Developer(개발자)** 탭 → **Edit Config** 버튼 → 파일탐색기가 열리며 파일 위치가 보임 → `claude_desktop_config.json` 을 **메모장**으로 열기
-  - *메뉴 이름/위치는 버전마다 조금 다를 수 있음. 안 보이면 방법 B.*
-- **방법 B (파일 직접, 확실):**
-  1. `Win + R` → `%APPDATA%\Claude` 입력 → Enter
-  2. `claude_desktop_config.json` **우클릭 → 연결 프로그램 → 메모장**
-  3. 파일이 없으면 메모장에서 새로 만들어 이 경로에 `claude_desktop_config.json` 으로 저장 (파일형식 "모든 파일")
-  - 정확한 경로: `C:\Users\<사용자명>\AppData\Roaming\Claude\claude_desktop_config.json`
+Claude Desktop → **Settings(설정)** → **Developer(개발자)** 탭 → **Edit Config** 버튼
+→ 파일탐색기가 열리며 `claude_desktop_config.json` 이 보임 → **메모장**으로 열기 (파일이 없으면 이 폴더에 새로 만들기 — 메모장 저장 시 파일형식 "모든 파일")
+
+> ⚠️ **경로를 직접 찾아가지 마세요.** 설치 방식(일반 설치 / 스토어·MSIX 설치)에 따라 **앱이 실제로 읽는 파일 위치가 다릅니다.** `%APPDATA%\Claude` 로 직접 가면 엉뚱한 파일을 고쳐서 **저장은 됐는데 아무 일도 안 일어나는** 상태가 됩니다 — 제일 찾기 어려운 실패입니다. 이 버튼은 앱이 실제로 읽는 파일을 열어주니 **항상 이 버튼을 쓰세요.**
 
 **② 내용 붙여넣기** — 파일이 비었으면 통째로, 이미 내용이 있으면 `mcpServers` 항목만 병합
 
