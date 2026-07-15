@@ -6,6 +6,73 @@
 
 ---
 
+## 0. 빠른 설치 — Claude Code 에 맡기기 (Windows 권장)
+
+Windows 는 설정 파일 경로·JSON 병합·사내망 인증서 때문에 수동 설치가 번거롭습니다. **Claude Code** 를 열고 아래를 그대로 붙여넣으면 알아서 해줍니다:
+
+```
+https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/INSTALL.md
+이 문서 읽고 내 환경에 Stata MCP 설치해줘.
+```
+
+Claude Code 가 처리: 설정 파일 위치 찾기·생성·**기존 내용 보존 병합**, `mcpServers` 등록, 사내망이면 인증서 옵션 추가, Node/Java 확인, 서버 상태 검증.
+사용자가 직접: Stata 안에서 명령 붙여넣기 (Claude Code 가 알려줌 — Stata 는 외부에서 못 조작).
+
+<!-- ─────────────────────────────────────────────────────────────
+     AGENT INSTRUCTIONS — 아래는 Claude Code(에이전트)용 실행 절차.
+     사람은 1장부터 읽으면 됩니다.
+     ───────────────────────────────────────────────────────────── -->
+
+<details>
+<summary><b>▸ Claude Code 용 실행 절차</b> (에이전트가 이 문서를 읽을 때 이 순서로 수행)</summary>
+
+**0) 환경 파악**
+- OS: Windows / macOS / Linux
+- 클라이언트: **사용자에게 물어볼 것** — Claude Desktop 인지 Claude Code 인지 (설치 방법이 갈림)
+- `node -v` (20+ 필요, 인증서 옵션엔 22+), `java -version` (17+)
+
+**1) Stata 측** — 에이전트는 Stata 를 직접 못 돌리므로 **사용자에게 아래를 제시하고 붙여넣게 함**:
+```stata
+net install stata-mcp, from("https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/release") replace
+mcp_setup      // 도움말 DB 다운로드 + 메뉴 등록
+mcp_edit_license   // 라이선스 키 붙여넣고 저장 (키 없으면 mhjung0822@gmail.com 문의)
+mcp_connect    // 서버+드론 기동
+```
+
+**2) 클라이언트 등록** — 위 0)에서 확인한 조합대로:
+
+| 조합 | 방법 |
+|---|---|
+| **Windows + Claude Desktop** | `claude_desktop_config.json` 편집 (아래 3항) — **플러그인 MCP 는 Windows 에서 안 됨**(yukonSilver VM 미지원, #27357) |
+| **Windows + Claude Code** | `claude mcp add -s user --transport http StataMCP http://127.0.0.1:8080/mcp` |
+| **macOS (Desktop/Code)** | 플러그인 zip 설치 안내 (4장) — 또는 위 `claude mcp add` |
+
+스킬(슬래시 명령)은 **어느 환경이든** 플러그인 zip 설치로 (4장 안내).
+
+**3) Windows + Claude Desktop — config 편집 규칙 (중요)**
+- 경로: `%APPDATA%\Claude\claude_desktop_config.json` (= `C:\Users\<user>\AppData\Roaming\Claude\...`)
+- **반드시 기존 JSON 을 읽어 파싱 후 `mcpServers.StataMCP` 키만 병합할 것.** 다른 키(`preferences` 등)를 절대 지우지 말 것. 편집 전 `.bak` 백업 권장. 파일이 없으면 새로 생성.
+- 넣을 값:
+  ```json
+  { "command": "cmd", "args": ["/c", "npx", "-y", "mcp-remote", "http://127.0.0.1:8080/mcp"] }
+  ```
+- **사내망/보안 PC** (npm 이 `UNABLE_TO_VERIFY_LEAF_SIGNATURE` / `unable to verify the first certificate` 로 실패):
+  `"env": { "NODE_OPTIONS": "--use-system-ca" }` 추가 (Node 22+). 안 되면 `NODE_EXTRA_CA_CERTS` 로 회사 루트 CA 파일 지정, 최후 수단 `npm config set strict-ssl false`(보안↓).
+- 저장 후 **사용자에게 Claude Desktop 완전 재시작 안내** (트레이 아이콘 우클릭 → 종료 후 재실행 — 창만 닫으면 반영 안 됨).
+
+**4) 검증**
+- `curl http://127.0.0.1:8080/status` → `{"bridge":"running"}` 이면 서버 정상 (아니면 Stata 에서 `mcp_connect` 재실행 요청)
+- 재시작 후 Claude Desktop 에서 `StataMCP` 도구가 보이는지 사용자에게 확인 요청
+
+**5) 알려진 함정**
+- Windows + Desktop 에서 **플러그인 MCP 가 안 뜨는 건 정상** (VM 미지원) → config 방식으로. 플러그인은 스킬용으로 설치.
+- 드론 jar 갱신 후엔 **Stata 완전 재시작** 필요 (classloader 캐시 — `mcp_connect, reset` 으론 반영 안 됨).
+- 도움말 DB 는 pkg 번들이 아니라 `mcp_setup` 이 받음 — 설치 후 `mcp_setup` 을 반드시 실행.
+
+</details>
+
+---
+
 ## 1. 사전 요구 사항
 
 | 항목 | 버전 |
