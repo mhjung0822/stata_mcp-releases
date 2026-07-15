@@ -12,7 +12,6 @@ Windows 는 설정 파일 경로·JSON 병합·사내망 인증서 때문에 수
 
 > **먼저 준비물 — Git for Windows.** Claude Desktop 앱에서 **로컬 세션(Claude Code)** 을 열려면 필요합니다.
 > [git-scm.com/downloads/win](https://git-scm.com/downloads/win) 에서 받아 **전부 기본값으로 "다음"만 눌러** 설치하세요.
-> **로그인·계정 필요 없습니다** — Claude Code 가 여기 딸려오는 터미널(Git Bash)을 쓰기 때문이지, 버전관리를 쓰는 게 아닙니다. git 이 뭔지 몰라도 됩니다.
 > (설치에 관리자 권한이 필요할 수 있음 — 막히면 IT 부서에 "Git for Windows 설치" 요청)
 
 ```
