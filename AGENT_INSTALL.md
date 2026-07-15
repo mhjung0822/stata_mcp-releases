@@ -52,15 +52,23 @@ mcp_connect         // 서버(:8080) + 드론 기동
 
 ## 3) config 등록 (핵심)
 
-**경로** — 설치 방식에 따라 다릅니다. **둘 다 확인하세요:**
+**경로:**
+```
+%APPDATA%\Claude\claude_desktop_config.json
+```
+스토어(MSIX) 설치여도 이 경로로 쓰면 됩니다 — Windows 가 실제 저장 위치로 연결해 줍니다 (실측 확인).
+파일이 없으면 새로 만드세요 (폴더도 없으면 생성).
 
-| 설치 | 경로 |
-|---|---|
-| 일반 | `%APPDATA%\Claude\claude_desktop_config.json` (= `C:\Users\<user>\AppData\Roaming\Claude\...`) |
-| MSIX/스토어 | `%LOCALAPPDATA%\Packages\Claude_<hash>\LocalCache\Roaming\Claude\claude_desktop_config.json` |
+<details>
+<summary>위 경로에 폴더 자체가 없는 경우</summary>
 
-> MSIX 설치는 `%APPDATA%` 가 **가상화**돼서, 거기 써도 앱이 안 읽을 수 있습니다.
-> `%LOCALAPPDATA%\Packages\` 에 `Claude*` 폴더가 있으면 **그쪽이 실경로**입니다. 존재하는 쪽에 쓰고, 애매하면 **양쪽 다** 쓰세요.
+1. 파일명으로 검색 (`claude_desktop_config.json` 은 Claude Desktop 전용 파일명이라 다른 앱 설정과 안 헷갈립니다):
+   ```powershell
+   Get-ChildItem $env:USERPROFILE -Filter claude_desktop_config.json -Recurse -Force -ErrorAction SilentlyContinue |
+     Select-Object -ExpandProperty FullName
+   ```
+2. 그래도 없으면 사용자에게 요청: *"Claude Desktop → **Settings → Developer → Edit Config** 를 누르면 파일탐색기가 열립니다. 그 파일의 전체 경로를 알려주세요."*
+</details>
 
 **병합 규칙 (반드시 지킬 것):**
 - 파일이 있으면 **읽어서 파싱한 뒤 `mcpServers.StataMCP` 키만** 넣으세요. `preferences` 등 **다른 키를 절대 지우지 말 것.**
