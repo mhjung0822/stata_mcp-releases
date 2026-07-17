@@ -78,6 +78,17 @@ mcp_connect          // MCP 서버 + 드론 기동 (한 번에)
 
 ## 4. Claude 등록 (코워크)
 
+> **Windows 에서 코워크가 활성화되지 않으면** — "가상 머신 플랫폼" Windows 기능이
+> 필요합니다. **관리자 PowerShell** 에서 아래 입력 후 엔터, 그리고 **재부팅**:
+>
+> ```powershell
+> Enable-WindowsOptionalFeature -Online -FeatureName VirtualMachinePlatform -All -NoRestart
+> ```
+>
+> 재부팅 후 Claude Desktop 에서 코워크를 켜세요. 그래도 안 되면 BIOS 에서
+> 하드웨어 가상화(Intel VT-x / AMD SVM)가 꺼져 있는 경우입니다 — 작업 관리자 →
+> 성능 → CPU 의 "가상화" 항목으로 확인할 수 있습니다.
+
 ### 4-1. 확장 프로그램 설치 (MCP 연결)
 
 1. 자신의 OS 에 맞는 파일 **하나만** 다운로드:
