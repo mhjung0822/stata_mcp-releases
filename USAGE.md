@@ -6,17 +6,10 @@
 
 ## 1. 공통 시작 순서
 
-### Claude Desktop 사용자
 ```
 1. Stata 실행 → mcp_connect (서버 + 드론 한 번에)
 2. Claude Desktop 실행
 3. 코워크 모드 토글 ON
-```
-
-### Claude Code / Cursor 사용자 (Desktop 미사용 시)
-```
-1. Stata 실행 → mcp_connect (서버 + 드론 한 번에)
-2. Claude Code / Cursor 실행 (등록해 둔 서버로 자동 연결)
 ```
 
 이후 채팅에서 Stata 작업을 요청하거나, Stata 에서 `llm push` 로 결과를 Claude 로 보냅니다.
@@ -35,6 +28,14 @@ mcp_setup    // 설정 메뉴 + 도움말 DB 다운로드 (라이선스/기동/�
 ```stata
 mcp_menu, install   // User ▸ Stata-MCP ▸ Control Panel... — 다음 실행부터 자동
 ```
+
+> **등록했는데 다음 실행에서 메뉴가 안 보이면** — profile.do 가 다른 곳(예: Stata
+> 설치 폴더)에 이미 있는 경우입니다. Stata 는 시작 시 처음 발견한 profile.do
+> **하나만** 실행합니다. 그 파일을 열어 맨 아래에 다음 한 줄을 추가하세요:
+>
+> ```stata
+> capture mcp_menu
+> ```
 
 > 라이선스 키 입력/교체도 제어판의 **Edit license / properties** 버튼 또는 `mcp_setup` 에서 가능합니다.
 
