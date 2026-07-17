@@ -1,15 +1,15 @@
 # Stata MCP Java — Releases
 
-Stata와 Claude를 MCP(Model Context Protocol)로 연결하는 도구의 **공개 배포 저장소**입니다. 주 사용 환경은 **Claude Desktop (채팅·코워크)** 이며 Claude Code / Cursor 도 지원합니다. 소스 코드는 비공개이며, 이 저장소는 빌드된 배포 파일과 사용자 문서만 제공합니다.
+Stata와 Claude를 MCP(Model Context Protocol)로 연결하는 도구의 **공개 배포 저장소**입니다. 주 사용 환경은 **Claude Desktop 코워크**입니다. 소스 코드는 비공개이며, 이 저장소는 빌드된 배포 파일과 사용자 문서만 제공합니다.
 
 ## 다운로드
 
-> 💡 **설정이 번거로우면 Claude Code 에 맡기세요** (Windows 권장) — Claude Code 에 아래를 붙여넣으면 config 편집·사내망 인증서까지 알아서 처리합니다:
+> 💡 **채팅 등록(설정 파일 편집)이 번거로우면 Claude Code 에 맡기세요** (Windows 권장) — Claude Code 에 아래를 붙여넣으면 config 편집·사내망 인증서까지 알아서 처리합니다:
 > ```
 > https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/AGENT_INSTALL.md
 > 이 문서 읽고 Stata MCP 설치해줘.
 > ```
-> 상세: [INSTALL.md](INSTALL.md) 0장.
+> 상세: [INSTALL.md](INSTALL.md) 부록.
 
 **Stata 측** — Stata 에서 한 줄 (PERSONAL ado 에 자동 설치):
 
@@ -19,20 +19,18 @@ net install stata-mcp, from("https://raw.githubusercontent.com/mhjung0822/stata_
 
 > 설치 후 Stata 에서 **`mcp_setup`** 실행 — 도움말 DB 다운로드 + 메뉴 등록 ([INSTALL.md](INSTALL.md) 2장).
 
-**Claude Desktop / 코워크** — zip 다운로드 후 업로드:
+**Claude Desktop 코워크** — 파일 2개:
 
-- **Stata MCP & 스킬 등록** *(필수)*: [`stata-mcp-plugin.zip`](https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/claude-plugins/stata-mcp-plugin.zip) → **Customize** → **Personal plugins → Upload plugin**
-- **Stata MCP 작업 지침 스킬 등록** *(선택)*: [`stata-instruction.zip`](https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/claude-plugins/stata-instruction.zip) → **Customize** → **Skills → Upload**
-- **패널 병합 절차 스킬 등록** *(선택)*: [`stata-panel-merge.zip`](https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/claude-plugins/stata-panel-merge.zip) → **Customize** → **Skills → Upload**
+- **MCP 연결** *(필수)*: OS 에 맞는 것 **하나만** — [`stata-mcp-mac.mcpb`](https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/claude-plugins/stata-mcp-mac.mcpb) / [`stata-mcp-win.mcpb`](https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/claude-plugins/stata-mcp-win.mcpb) → **설정 → 확장 프로그램 → 파일로 설치**
+- **스킬 11종** *(권장)*: [`stata-skills-all.zip`](https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/claude-plugins/stata-skills-all.zip) → **설정 → 스킬 → 업로드** (한 번 올리면 같은 계정 모든 기기에 적용)
 
-> **⚠️ Windows + Claude Desktop**: 플러그인 MCP 가 연결 안 됩니다 (yukonSilver VM 미지원) — MCP 는 `claude_desktop_config.json` 수동등록, 스킬만 플러그인. Windows+Claude Code·Mac 은 플러그인 그대로. Claude Code / Cursor 설치 포함 상세는 [INSTALL.md](INSTALL.md) 4장.
+> 코워크가 없는 환경(채팅)은 [INSTALL.md](INSTALL.md) 부록의 설정 파일 등록 참고.
 
 | 파일 | 설명 |
 |---|---|
 | `stata-mcp-server.jar` | MCP 서버 (Spring Boot, Streamable HTTP, 포트 8080) — **Stata PERSONAL ado 에 배치** |
-| `stata-mcp-plugin.zip` | **Claude Desktop/Code 플러그인** — MCP 연결(`npx mcp-remote`→:8080) + 슬래시 명령 스킬(9종). Customize → Personal plugins → Upload. ⚠️ Windows+Desktop 은 MCP 를 config 로 등록 (INSTALL 4장) |
-| `stata-instruction.zip` | **작업 지침 스킬** (선택) — 출력형식·분석 규칙·선호. 사용자 편집용이라 플러그인과 분리 배포. Customize → Skills → Upload |
-| `stata-panel-merge.zip` | **패널 병합 절차 스킬** (선택) — 웨이브(차수)별 .dta 를 stata-mcp 로 하나의 long 패널로 합치는 표준 절차. "패널 만들어줘" 등 자연어로 트리거. Customize → Skills → Upload |
+| `stata-mcp-mac.mcpb` / `stata-mcp-win.mcpb` | **Claude Desktop 확장 프로그램** — 코워크 MCP 연결(`npx mcp-remote`→:8080). OS 에 맞는 것 하나만 설치 (설정 → 확장 프로그램 → 파일로 설치) |
+| `stata-skills-all.zip` | **스킬 11종 일괄** — 슬래시 명령 9종 + 작업 지침(stata-instruction, 편집 가능) + 패널 병합(stata-panel-merge). 설정 → 스킬 → 업로드. 개별 파일은 `claude-plugins/skill-zips/` |
 | `stata-drone.jar` | Stata 내부 실행 드론 (포트 8001) |
 | `help_index_v2.json` / `help_nodes_v2.jsonl` | **도움말 DB** — Claude 가 Stata 명령 도움말을 필요한 부분만 빠르게 조회. `mcp_setup` 이 온디맨드 다운로드 (net install 번들 아님) |
 | `stata_cmd_index.json` / `stata_help_corpus.jsonl` | 도움말 DB (보조) — 동일하게 `mcp_setup` 다운로드 |
@@ -44,21 +42,21 @@ net install stata-mcp, from("https://raw.githubusercontent.com/mhjung0822/stata_
 | `mcp.dlg` / `mcp.ado` / `mcp_setup.ado` / `mcp_menu.ado` | Stata 제어판 GUI (`db mcp`) + 설정·도움말DB 다운로드 (`mcp_setup`) + User 메뉴 등록 (`mcp_menu, install`) |
 | `mcp_uninstall.ado` | 전체 제거 (`mcp_uninstall` 미리보기 → `, confirm`) |
 
-> Claude Desktop 사용자는 Node 20+ 필요 (플러그인이 `npx mcp-remote` 호출). Claude Code / Cursor 는 Streamable HTTP 직접 지원이라 Node 불필요.
+> Claude Desktop 사용자는 Node 20+ 필요 (확장 프로그램이 `npx mcp-remote` 호출).
 
 ## 가이드
 
 - [INSTALL.md](INSTALL.md) — 설치 가이드 (net install → 라이선스 → 서버 기동 → 클라이언트 등록)
-- [USAGE.md](USAGE.md) — 사용 가이드 (시작 순서, Claude Desktop / Claude Code 사용법, 문제 해결)
+- [USAGE.md](USAGE.md) — 사용 가이드 (시작 순서, 사용법, 문제 해결)
 
 ## 사전 요구 사항
 
 | 항목 | 버전 |
 |---|---|
 | Java | 17 이상 — [Oracle JDK 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html) |
-| Node.js | 20 이상 — [nodejs.org](https://nodejs.org/) (Claude Desktop 플러그인의 mcp-remote 용) |
+| Node.js | 20 이상 — [nodejs.org](https://nodejs.org/) (확장 프로그램의 mcp-remote 용) |
 | Stata | 17 이상 (19 권장) |
-| Claude Desktop / Claude Code / Cursor | 최신 버전 — [Claude Desktop 다운로드](https://claude.ai/download) |
+| Claude Desktop | 최신 버전 — [다운로드](https://claude.ai/download) |
 
 ## 라이선스
 

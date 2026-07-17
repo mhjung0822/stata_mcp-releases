@@ -12,7 +12,7 @@
 - **`claude mcp add` 를 실행하지 말 것.** 그건 당신 자신에게 등록하는 것이라 사용자에겐 아무 효과가 없습니다.
 - 등록 대상은 **언제나 Claude Desktop 의 `claude_desktop_config.json`** 입니다.
 - **묻지 말 것, 분기하지 말 것.** 대상은 고정입니다.
-- macOS 라면 이 절차는 불필요합니다 — [INSTALL.md](INSTALL.md) 4장의 플러그인 zip 설치를 안내하고 종료하세요.
+- macOS 라면 [INSTALL.md](INSTALL.md) 를 안내하고 종료하세요 (코워크 = 4장 확장 프로그램 / 채팅 = 부록 방법 B 의 Mac JSON).
 
 구조: **Stata 안에서 도는 서버(:8080)** ↔ **Claude Desktop**. 당신이 할 일은 **둘을 잇는 config 등록**입니다.
 서버는 당신이 못 켭니다 — Stata 안에서만 뜹니다(1단계).
@@ -125,15 +125,15 @@ curl http://127.0.0.1:8080/status
 
 ## 6) 스킬 (선택)
 
-슬래시 명령 스킬은 config 로 안 되고 **zip 업로드**뿐입니다 (Desktop 은 플러그인 로컬 설치 경로가 없음). 필요하면 안내:
-[`stata-mcp-plugin.zip`](https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/claude-plugins/stata-mcp-plugin.zip) → Claude Desktop **Customize → Personal plugins → Upload plugin**
-(이 zip 의 MCP 부분은 Windows 에서 안 뜹니다 — 정상입니다. 스킬만 쓰는 겁니다. MCP 는 위 3)의 config 가 담당)
+슬래시 명령 스킬은 config 로 안 되고 **zip 업로드**뿐입니다. 필요하면 안내:
+[`stata-skills-all.zip`](https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/claude-plugins/stata-skills-all.zip) → Claude Desktop **설정 → 스킬 → 업로드** (한 번 올리면 같은 계정 모든 기기에 적용)
+(스킬은 StataMCP 도구를 호출하므로 위 3)의 config 등록이 되어 있어야 동작합니다)
 
 ---
 
 ## 알려진 함정
 
-- **Windows + Desktop 에서 플러그인 MCP 가 안 뜨는 건 정상**입니다 (Claude Desktop 이 플러그인 MCP 를 cowork VM 경유로 띄우는데 그 VM 이 win32 미지원 — [#27357](https://github.com/anthropics/claude-code/issues/27357)). 그래서 config 방식을 쓰는 겁니다. **플러그인으로 MCP 를 살리려 시도하지 마세요 — 안 됩니다.**
+- **채팅의 MCP 연결은 이 config 방식이 유일**합니다. 확장 프로그램(.mcpb)은 코워크 전용이라 채팅에는 연결되지 않습니다 — **확장 설치로 채팅 MCP 를 살리려 시도하지 마세요.**
 - **서버는 Stata 가 켭니다.** `mcp-remote` 는 순수 클라이언트라 서버를 안 켭니다. Stata 가 안 떠 있으면 도구도 안 뜹니다 — 이건 config 문제가 아닙니다.
 - **낯선 경로가 로그에 보이면** 옛 커넥터 잔재일 수 있습니다. 활성 config 에 실제로 있는지부터 확인하세요 (백업 파일만 남아 유령 로그를 뿜은 사례 있음).
 - **드론 jar 갱신 후엔 Stata 완전 재시작** 필요 (classloader 캐시 — `mcp_connect, reset` 으론 반영 안 됨).
