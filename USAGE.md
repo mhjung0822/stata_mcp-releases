@@ -131,25 +131,34 @@ Claude 가 Stata 명령을 헷갈릴 때 스스로 확인하는 도구들 — �
 - SSC 등 커뮤니티 패키지 도움말도 조회 가능 (설치돼 있으면 — 풀네임으로)
 - 도움말 DB 는 `mcp_setup, updatedb`(또는 제어판 [Update help DB])로 최신화 (Stata 본체 업데이트에 맞춰 배포측에서 재생성)
 
-### 2-5. 슬래시 명령 스킬 (스킬 등록 시)
+### 2-5. 슬래시 명령 스킬
 
-스킬([INSTALL.md](INSTALL.md) 4-2)을 등록하면 다음 슬래시 명령이 활성화됩니다.
-자연어가 아닌 **명시적 슬래시 호출에만 응답**합니다 (`/stata-exec sysuse auto` 식).
+`/stata-setup` 으로 세션을 시작하세요 — 환경·작업폴더 확인 + 작업 지침(출력형식 등) 로드.
 
-| 명령 | 동작 |
-|---|---|
-| `/stata-setup` | Stata 환경·작업폴더 점검 + 마운트 경로 확인 + 세션 작업 지침 로드 |
-| `/stata-exec <cmd>` | Stata 명령 직접 실행 |
-| `/stata-async <cmd>` | 장기 명령 비동기 실행 (즉시 반환, 완료 결과는 `/stata-pull` 로) |
-| `/stata-help <cmd> [selector]` | 명령 도움말 계단식 조회 — 개요→모델→옵션 상세 하강 (예: `/stata-help xtreg fe.vce`), 약어·키워드 검색 |
-| `/stata-pull` | Stata GUI 에서 push 한 결과 가져오기 |
-| `/stata-data-context` | 데이터 변경 후 컨텍스트 재동기화 (pwd·obs·변수) |
-| `/stata-data-fullcontext` | 현재 데이터셋 전체 컨텍스트 요약 (codebook 수준) |
-| `/stata-graph-get` | 현재 그래프 spec 조회 |
-| `/stata-graph-export [name]` | 메모리의 그래프를 PNG 로 export (인자 없으면 현재 그래프) |
-| `/stata-instruction` | 세션 작업 지침 로드 (출력형식·분석 규칙·선호; `/stata-setup` 이 자동 호출) — **별도 스킬 설치·사용자 편집용**, [INSTALL.md](INSTALL.md) 4장 |
+나머지는 필요할 때:
 
-> **패널 병합 절차 스킬** *(선택 설치)*: 위 슬래시 명령과 달리 자연어로 트리거됩니다. "웨이브 합쳐줘 / 패널 만들어줘 / long 으로 변환" 처럼 요청하면 stata-mcp 로 웨이브별 .dta 를 하나의 long 패널로 합치는 절차(rename→append→xtset·검증)를 안내합니다. 설치는 [INSTALL.md](INSTALL.md) 4장 (`stata-panel-merge.zip`).
+- `/stata-exec 명령` — 수정·추론 없이 그대로 실행
+- `/stata-async 명령` — 오래 걸리는 작업(~30초+)을 던져두고 대화 계속 → 완료는 `/stata-pull` 로 회수 (`history 키워드` 검색, 읽어도 보존)
+- `/stata-pull` — Stata 창에서 `llm push > 명령` 한 결과 가져오기
+- `/stata-help 명령` — 문법 확인. Claude 가 옵션을 잘못 쓰면 이걸로 교정 (`xtreg` → `xtreg fe` → `xtreg fe.vce` 계단식)
+- `/stata-data-context` — Claude 가 데이터를 잘못 알고 있을 때 (Stata 창에서 데이터를 바꾼 경우) 재동기화. 상세 파악은 `/stata-data-fullcontext` (+ codebook)
+- `/stata-graph-export` — 그래프를 PNG 파일로 작업폴더에 저장 / `/stata-graph-get` — 그래프 spec 조회
+
+작업 지침(`stata-instruction`)은 직접 편집해 출력형식·분석 규칙을 바꿀 수 있습니다. 패널 병합은 "웨이브 합쳐줘" 같은 자연어로.
+
+**자연어 vs 스킬 — 같은 작업, 두 방식**
+
+| 하고 싶은 것 | 자연어로 | 스킬로 | 비고 |
+|---|---|---|---|
+| 데이터 열기 | "auto 데이터 열어줘" | `/stata-exec sysuse auto` | 명령을 정확히 알면<br>스킬이 빠르고 정확 |
+| 검정 실행 | "이분산 검정 해줘" | `/stata-exec estat hettest` | 해석까지 원하면 자연어,<br>결과만 보려면 스킬 |
+| 오래 걸리는 작업 | "부트스트랩 5000번 돌려줘" | `/stata-async bootstrap, reps(5000):`<br>`regress price mpg weight foreign` | exec 면 끝까지 대화 막힘 —<br>길면 스킬로 바로 비동기 |
+| 문법·옵션 확인 | "vce 옵션 뭐 있어?" | `/stata-help xtreg fe.vce` | Claude 가 옵션 잘못 쓰면<br>원문을 읽혀 교정 |
+| 결과 회수 | "방금 push 한 결과 가져와" | `/stata-pull` | 검색 `history 키워드`,<br>재조회 `<id>` |
+| 데이터 인식 교정 | "지금 데이터 다시 확인해봐" | `/stata-data-context` | Stata 창에서 데이터<br>바꾼 뒤엔 스킬로 확실히 |
+| 그래프 저장 | "그래프 PNG 로 저장해줘" | `/stata-graph-export` | 현재 그래프를 작업폴더로<br>즉시 내보냄 |
+
+요컨대 **자연어 = 질의를 해석해 적절한 도구·스킬을 호출** / **스킬 = 의도된 동작을 그대로 수행**.
 
 ### 2-6. 종료
 
