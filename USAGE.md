@@ -23,19 +23,8 @@ mcp          // 제어판 다이얼로그
 mcp_setup    // 설정 메뉴 + 도움말 DB 다운로드 (라이선스/기동/제거 링크)
 ```
 
-메뉴바에 상시 등록 (1회):
-
-```stata
-mcp_menu, install   // User ▸ Stata-MCP ▸ Control Panel... — 다음 실행부터 자동
-```
-
-> **등록했는데 다음 실행에서 메뉴가 안 보이면** — profile.do 가 다른 곳(예: Stata
-> 설치 폴더)에 이미 있는 경우입니다. Stata 는 시작 시 처음 발견한 profile.do
-> **하나만** 실행합니다. 그 파일을 열어 맨 아래에 다음 한 줄을 추가하세요:
->
-> ```stata
-> capture mcp_menu
-> ```
+> 메뉴바 등록(User ▸ Stata-MCP)은 `mcp_setup` 이 함께 처리합니다. 다음 실행에서
+> 메뉴가 안 보이면 `mcp_menu, install` 을 실행하고 출력 안내를 따르세요.
 
 > 라이선스 키 입력/교체도 제어판의 **Edit license / properties** 버튼 또는 `mcp_setup` 에서 가능합니다.
 
