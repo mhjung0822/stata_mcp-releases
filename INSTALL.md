@@ -4,7 +4,7 @@
 주 사용 환경은 **Claude Desktop 코워크**입니다.
 
 > ⚠️ **코워크가 활성화되지 않은 환경 주의** — 4-1 확장 프로그램은 코워크 전용입니다.
-> 채팅으로 쓰려면 [부록 — 채팅에서 쓰기](#부록--채팅에서-쓰기)의 설정 파일 등록을 하세요.
+> 채팅으로 쓰려면 [INSTALL_CHAT.md](INSTALL_CHAT.md)의 설정 파일 등록을 하세요.
 > (스킬 등록 4-2 는 공통)
 
 배포 파일 목록은 [README.md](README.md), 설치 후 사용법·문제 해결은 [USAGE.md](USAGE.md) 참고.
@@ -116,86 +116,3 @@ mcp_connect          // MCP 서버 + 드론 기동 (한 번에)
 ## 5. 다음 단계
 
 [USAGE.md](USAGE.md) — 시작 순서, 제어판, push 알림, 도움말 조회, 문제 해결.
-
----
-
-## 부록 — 채팅에서 쓰기
-
-> 스킬(4-2)은 채팅에서도 사용할 수 있습니다. 다만 이 스킬들은 StataMCP 도구를
-> 호출하는 스킬이라, 채팅에서 쓰려면 아래 **설정 파일 등록(MCP 연결)이 먼저**
-> 되어 있어야 동작합니다.
-
-### 방법 A — Claude Code 에 맡기기 (Windows 권장)
-
-설정 파일 경로·JSON 병합이 번거로우면 **Claude Code** 를 열고 아래를 그대로 붙여넣으세요:
-
-> **먼저 준비물 — Git for Windows.** Claude Desktop 앱에서 **로컬 세션(Claude Code)** 을 열려면 필요합니다.
-> [git-scm.com/downloads/win](https://git-scm.com/downloads/win) 에서 받아 **전부 기본값으로 "다음"만 눌러** 설치하세요.
-> (설치에 관리자 권한이 필요할 수 있음 — 막히면 IT 부서에 "Git for Windows 설치" 요청)
-
-```
-https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/AGENT_INSTALL.md
-이 문서 읽고 Stata MCP 설치해줘.
-```
-
-Claude Code 가 처리: 설정 파일 위치 찾기·생성·**기존 내용 보존 병합**, `mcpServers` 등록, 사내망이면 인증서 옵션 추가, Node/Java 확인, 서버 상태 검증.
-사용자가 직접: Stata 안에서 명령 붙여넣기 (Claude Code 가 알려줌 — Stata 는 외부에서 못 조작).
-
-### 방법 B — 직접 등록
-
-**① 설정 파일(`claude_desktop_config.json`) 열기** — **반드시 Claude 메뉴로**
-
-Claude Desktop → **Settings(설정)** → **Developer(개발자)** 탭 → **Edit Config** 버튼
-→ 파일탐색기가 열리며 `claude_desktop_config.json` 이 보임 → 텍스트 에디터로 열기 (파일이 없으면 이 폴더에 새로 만들기 — 메모장 저장 시 파일형식 "모든 파일")
-
-> ⚠️ **폴더를 직접 찾아가지 마세요.** 설정 파일 위치는 PC 마다 다릅니다. 직접 찾아가면 **파일이 없어서 새로 만들게 되는데, 그건 앱이 읽지 않는 파일입니다** — 저장은 되는데 아무 일도 안 일어납니다. 이 버튼은 항상 맞는 파일을 열어줍니다.
-
-**② 내용 붙여넣기** — 파일이 비었으면 통째로, 이미 내용이 있으면 `mcpServers` 항목만 병합
-
-Windows:
-
-```json
-{
-  "mcpServers": {
-    "StataMCP": {
-      "command": "cmd",
-      "args": ["/c", "npx", "-y", "mcp-remote", "http://127.0.0.1:8080/mcp"]
-    }
-  }
-}
-```
-
-Mac:
-
-```json
-{
-  "mcpServers": {
-    "StataMCP": {
-      "command": "npx",
-      "args": ["-y", "mcp-remote", "http://127.0.0.1:8080/mcp"]
-    }
-  }
-}
-```
-
-**③ 사내망/보안 PC — 인증서 오류(`UNABLE_TO_VERIFY_LEAF_SIGNATURE`) 시**
-
-회사·기관 PC 는 보안 설정 때문에 필요한 파일을 못 받아올 수 있습니다. 로그에 `unable to verify the first certificate` 가 뜨면 `env` 를 추가:
-
-```json
-{
-  "mcpServers": {
-    "StataMCP": {
-      "command": "cmd",
-      "args": ["/c", "npx", "-y", "mcp-remote", "http://127.0.0.1:8080/mcp"],
-      "env": { "NODE_OPTIONS": "--use-system-ca" }
-    }
-  }
-}
-```
-
-**Node 22 이상**이 필요합니다. 그래도 안 되면:
-- **회사 인증서 파일 지정**: `"env": { "NODE_EXTRA_CA_CERTS": "C:\\경로\\회사인증서.pem" }` (IT 부서에서 받은 파일)
-- **빠른 우회(보안↓·비권장)**: cmd 에서 `npm config set strict-ssl false`
-
-**④ 저장 후 Claude Desktop 완전 재시작** — 창만 닫지 말고 완전히 종료(Windows: 트레이 아이콘 우클릭 → Quit / Mac: ⌘Q) 후 다시 실행. 그리고 Stata 에서 `mcp_connect` 로 서버가 떠 있어야 도구가 동작합니다.

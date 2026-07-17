@@ -12,7 +12,7 @@
 - **`claude mcp add` 를 실행하지 말 것.** 그건 당신 자신에게 등록하는 것이라 사용자에겐 아무 효과가 없습니다.
 - 등록 대상은 **언제나 Claude Desktop 의 `claude_desktop_config.json`** 입니다.
 - **묻지 말 것, 분기하지 말 것.** 대상은 고정입니다.
-- macOS 라면 [INSTALL.md](INSTALL.md) 를 안내하고 종료하세요 (코워크 = 4장 확장 프로그램 / 채팅 = 부록 방법 B 의 Mac JSON).
+- macOS 라면 [INSTALL.md](INSTALL.md) 를 안내하고 종료하세요 (코워크 = 4장 확장 프로그램 / 채팅 = [INSTALL_CHAT.md](INSTALL_CHAT.md) 방법 B 의 Mac JSON).
 
 구조: **Stata 안에서 도는 서버(:8080)** ↔ **Claude Desktop**. 당신이 할 일은 **둘을 잇는 config 등록**입니다.
 서버는 당신이 못 켭니다 — Stata 안에서만 뜹니다(1단계).

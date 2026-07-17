@@ -17,7 +17,7 @@ net install stata-mcp, from("https://raw.githubusercontent.com/mhjung0822/stata_
 - **MCP 연결** *(필수)*: OS 에 맞는 것 **하나만** — [`stata-mcp-mac.mcpb`](https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/claude-plugins/stata-mcp-mac.mcpb) / [`stata-mcp-win.mcpb`](https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/claude-plugins/stata-mcp-win.mcpb) → **설정 → 확장 프로그램 → 파일로 설치**
 - **스킬 11종** *(권장)*: [`stata-skills-all.zip`](https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/claude-plugins/stata-skills-all.zip) → **설정 → 스킬 → 업로드** (한 번 올리면 같은 계정 모든 기기에 적용)
 
-> 코워크가 없는 환경(채팅)은 [INSTALL.md](INSTALL.md) 부록의 설정 파일 등록 참고.
+> 코워크가 없는 환경(채팅)은 [INSTALL_CHAT.md](INSTALL_CHAT.md) 참고.
 
 | 파일 | 설명 |
 |---|---|
