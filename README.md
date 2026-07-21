@@ -26,6 +26,7 @@ net install stata-mcp, from("https://raw.githubusercontent.com/mhjung0822/stata_
 | `stata-mcp-server.jar` | MCP 서버 (Spring Boot, Streamable HTTP, 포트 8080) — **Stata PERSONAL ado 에 배치** |
 | `stata-mcp-mac.mcpb` / `stata-mcp-win.mcpb` | **Claude Desktop 확장 프로그램** — 코워크 MCP 연결(`npx mcp-remote`→:8080). OS 에 맞는 것 하나만 설치 (설정 → 확장 프로그램 → 파일로 설치) |
 | `stata-skills-all.zip` | **스킬 11종 일괄** — 슬래시 명령 9종 + 작업 지침(stata-instruction, 편집 가능) + 패널 병합(stata-panel-merge). 설정 → 스킬 → 업로드. 개별 파일은 `claude-plugins/skill-zips/` |
+| `stata-skills-all-en.zip` | **스킬 11종 영어판** — 위와 동일 구성의 영어 버전. 스킬 이름이 같으므로 계정당 한 언어팩만 설치. 개별 파일은 `claude-plugins/skill-zips-en/` |
 | `stata-drone.jar` | Stata 내부 실행 드론 (포트 8001) |
 | `help_index_v2.json` / `help_nodes_v2.jsonl` | **도움말 DB** — Claude 가 Stata 명령 도움말을 필요한 부분만 빠르게 조회. `mcp_setup` 이 온디맨드 다운로드 (net install 번들 아님) |
 | `stata_cmd_index.json` / `stata_help_corpus.jsonl` | 도움말 DB (보조) — 동일하게 `mcp_setup` 다운로드 |
