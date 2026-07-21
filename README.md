@@ -1,5 +1,7 @@
 # Stata MCP Java — Releases
 
+> English: [README.en.md](README.en.md)
+
 Stata와 Claude를 MCP(Model Context Protocol)로 연결하는 도구의 **공개 배포 저장소**입니다. 주 사용 환경은 **Claude Desktop 코워크**입니다. 소스 코드는 비공개이며, 이 저장소는 빌드된 배포 파일과 사용자 문서만 제공합니다.
 
 ## 다운로드
