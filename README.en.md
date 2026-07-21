@@ -73,7 +73,9 @@ mcp_connect          // starts the MCP server; stops automatically when Stata ex
 
 ## Guides
 
-The full step-by-step guides are currently in Korean — [INSTALL.md](INSTALL.md) (install), [USAGE.md](USAGE.md) (usage & troubleshooting), [INSTALL_CHAT.md](INSTALL_CHAT.md) (chat-only environments without cowork). They are command-centric, so they are easy to follow with any translator — or simply ask Claude to walk you through them.
+- [INSTALL.en.md](INSTALL.en.md) — installation guide (net install → license → server start → Claude registration)
+- [USAGE.en.md](USAGE.en.md) — usage guide (startup order, control panel, push, help lookup, troubleshooting)
+- [INSTALL_CHAT.md](INSTALL_CHAT.md) — chat-only environments without cowork (Korean)
 
 ## License
 

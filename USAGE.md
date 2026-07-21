@@ -1,5 +1,7 @@
 # 사용 가이드
 
+> English: [USAGE.en.md](USAGE.en.md)
+
 설치는 [INSTALL.md](INSTALL.md) 참고.
 
 ---

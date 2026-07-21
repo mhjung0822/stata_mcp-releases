@@ -1,5 +1,7 @@
 # 설치 가이드
 
+> English: [INSTALL.en.md](INSTALL.en.md)
+
 설치는 4단계입니다: **① Stata 측 설치 → ② 라이선스 → ③ 서버 기동 → ④ Claude 등록 (확장 + 스킬)**.
 주 사용 환경은 **Claude Desktop 코워크**입니다.
 
