@@ -105,8 +105,9 @@ mcp_connect          // starts the MCP server + drone in one go
 ### 4-2. Register the skills (slash commands)
 
 1. [Download `stata-skills-all-en.zip`](https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/claude-plugins/stata-skills-all-en.zip) (individual skills: `claude-plugins/skill-zips-en/`)
-2. Claude Desktop → **Settings → Skills** → Upload → select the downloaded zip
-3. Upload once and it applies automatically to every device on the same account
+2. **Unzip it** — you get 11 per-skill zips
+3. Claude Desktop → **Settings → Skills** → Upload → upload the extracted **per-skill zips** (do not upload the bundle zip itself)
+4. Upload once and it applies automatically to every device on the same account
 
 > A Korean edition also exists (`stata-skills-all.zip`). The skills share names across the two packs, so install only one language pack per account.
 

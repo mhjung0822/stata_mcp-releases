@@ -209,6 +209,26 @@ Stata 에서 `cd` 로 작업폴더를 옮기면 Claude 가 자동으로 알아�
 
 키 교체 후에는 `mcp_connect, reset` 만으로 적용됨 (Stata 재시작 불필요). 만료 7일 전부터 `mcp_connect` 시 남은 일수가 표시됨.
 
+### mcp_connect 시 UnsupportedClassVersionError (드론이 시작 안 됨)
+
+증상: `mcp_connect` 시 붉은 글씨로 아래 에러가 출력됨.
+
+```
+java.lang.UnsupportedClassVersionError: ... has been compiled by a more recent
+version of the Java Runtime (class file version 61.0), this version of the
+Java Runtime only recognizes class file versions up to 55.0
+```
+
+Stata 에 내장된 Java 가 구버전이어서 생기는 문제입니다. Stata 를 최신으로 업데이트하세요:
+
+```stata
+update all
+```
+
+업데이트 후 **Stata 재시작** → `mcp_connect` 재실행.
+
+> 업데이트가 어려운 환경(사이트 라이선스 등)이면 JDK 17 설치 후 Stata 에서 `java set home` 으로 지정 — `help java` 참고. 현재 Java 는 `java query` 로 확인.
+
 ### 연결이 안 될 때
 
 - Stata 에서 `mcp_connect` 을 다시 실행 (드론 재연결)

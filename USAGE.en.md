@@ -209,6 +209,26 @@ Symptom: on `mcp_connect` the drone does not start and a message like this is pr
 
 After replacing the key, `mcp_connect, reset` alone applies it (no Stata restart). Starting 7 days before expiry, `mcp_connect` shows the days remaining.
 
+### UnsupportedClassVersionError on mcp_connect (drone won't start)
+
+Symptom: `mcp_connect` prints this error in red:
+
+```
+java.lang.UnsupportedClassVersionError: ... has been compiled by a more recent
+version of the Java Runtime (class file version 61.0), this version of the
+Java Runtime only recognizes class file versions up to 55.0
+```
+
+Stata's bundled Java is outdated. Update Stata to the latest revision:
+
+```stata
+update all
+```
+
+After updating, **restart Stata** → run `mcp_connect` again.
+
+> If updating is not an option (site licenses etc.), install JDK 17 and point Stata at it with `java set home` — see `help java`. Check the current Java with `java query`.
+
 ### When it won't connect
 
 - Run `mcp_connect` again in Stata (reconnects the drone)

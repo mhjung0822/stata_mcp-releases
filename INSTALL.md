@@ -104,8 +104,9 @@ mcp_connect          // MCP 서버 + 드론 기동 (한 번에)
 ### 4-2. 스킬 등록 (슬래시 명령)
 
 1. [`stata-skills-all.zip` 다운로드](https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/claude-plugins/stata-skills-all.zip)
-2. Claude Desktop → **설정 → 스킬** → 업로드 → 받은 zip 선택
-3. 한 번 올리면 같은 계정의 모든 기기에 자동 적용됩니다
+2. 받은 zip 의 **압축을 풀면** 스킬별 zip 11개가 나옵니다
+3. Claude Desktop → **설정 → 스킬** → 업로드 → 압축 푼 **스킬별 zip** 들을 업로드 (묶음 zip 을 그대로 올리지 마세요)
+4. 한 번 올리면 같은 계정의 모든 기기에 자동 적용됩니다
 
 포함 스킬:
 
