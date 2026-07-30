@@ -1,4 +1,4 @@
-*! mcp_connect  v0.3.3  11jun2026
+*! mcp_connect  v0.3.4  25jul2026
 *!
 *! Start / stop / reset the full Stata-MCP stack (server jar + drone).
 *! Internally invokes mcp_server for the JVM-detached server spawn and
@@ -59,7 +59,10 @@ program mcp_connect
 
     if `drone_up' {
         di as text "[Drone] already running on port `droneport' — skip spawn"
-        * /status 응답에서 라이선스 만료일 추출해 표시 (fresh 기동 시엔 드론이 직접 출력)
+        * /status 응답에서 버전·라이선스 만료일 추출해 표시 (fresh 기동 시엔 드론이 직접 출력)
+        if regexm(`"`dline'"', `""version":"([^"]+)""') {
+            di as text "[Drone] Stata-MCP v" regexs(1)
+        }
         if regexm(`"`dline'"', `""licenseExp":"([0-9-]+)""') {
             di as text "[Drone] License OK (until " regexs(1) ")"
         }
