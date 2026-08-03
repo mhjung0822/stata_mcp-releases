@@ -49,6 +49,8 @@ adoupdate stata-mcp, update
 mcp_setup, updatedb   // refresh the help DB too (same as the control panel's [Update help DB] button)
 ```
 
+> To apply an update, **restart Stata** and reconnect with `mcp_connect`.
+
 > ⚠️ A trailing `/` on the URL causes an "is not a Stata download site" error — use the form above exactly, no trailing slash.
 
 ### License key (required)
@@ -75,6 +77,8 @@ mcp_connect          // starts the MCP server + drone in one go
 ```
 
 > The server shuts down automatically when you quit Stata. You can also start it from the GUI control panel (`db mcp`) — see [USAGE.en.md](USAGE.en.md).
+
+> ⚠️ **If a red `java.lang.UnsupportedClassVersionError` appears and the drone won't start** — Stata's bundled Java is outdated. Run `update all` in Stata, **restart Stata**, then run `mcp_connect` again. Details in the troubleshooting section of [USAGE.en.md](USAGE.en.md).
 
 ---
 

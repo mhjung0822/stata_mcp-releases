@@ -18,7 +18,7 @@ From there, ask for Stata work in the chat, or send results from Stata to Claude
 
 ### Control panel (GUI) — buttons instead of commands
 
-Type `mcp` (= `db mcp`) in Stata to open the control-panel dialog — connect / restart / shutdown, server status, license editing, help-DB update, and uninstall, all as buttons.
+Type `mcp` (= `db mcp`) in Stata to open the control-panel dialog — connect / restart / shutdown, server status (including version and license expiry), auto-shutdown settings, license key entry, help-DB update, and uninstall, all as buttons.
 
 ```stata
 mcp          // control-panel dialog
@@ -28,7 +28,18 @@ mcp_setup    // setup menu + help-DB download (links for license / start / unins
 > Menu-bar registration (User ▸ Stata-MCP) is handled by `mcp_setup`. If the menu
 > is missing on the next launch, run `mcp_menu, install` and follow the printed instructions.
 
-> Entering or replacing the license key is also possible via the control panel's **Edit license / properties** button or `mcp_setup`.
+> To enter or replace the license key, paste it into the control panel's **License** field and click **Save**, then reconnect as prompted. The **Edit license / properties** button (direct file editing) and `mcp_setup` work too.
+
+**Auto-shutdown** — when you quit Stata, the server cleans itself up shortly after.
+Use the control panel's Auto-shutdown group to turn this off (keep the server running)
+or adjust the wait time, or use the command:
+
+```stata
+mcp_watchdog, grace(120)     // clean up the server 120 s after Stata quits
+mcp_watchdog, enabled(0)     // disable auto-cleanup — server stays after Stata quits
+```
+
+> If you restart Stata and reconnect within the wait time, the server carries on without dropping the connection.
 
 **Full uninstall**:
 

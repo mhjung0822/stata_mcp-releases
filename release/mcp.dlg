@@ -10,12 +10,12 @@
     각 버튼은 onpush(program ...) 으로 아래 PROGRAM 블록을 실행하고,
     PROGRAM 은 put 으로 명령을 조립한 뒤 stata directive 로 실행한다.
 
-    의존 ado:  mcp_connect, mcp_server, mcp_edit_license
+    의존 ado:  mcp_connect, mcp_server, mcp_edit_license, mcp_watchdog, mcp_set_license
 */
 
 VERSION 17.0
 
-POSITION . . 380 267
+POSITION . . 380 395
 
 DIALOG main, label("Stata-MCP Control Panel") tabtitle("Stata-MCP")
 BEGIN
@@ -40,6 +40,19 @@ BEGIN
              onpush(program do_setup)
   BUTTON   bt_uninst 20    190 335   22,   label("Uninstall (mcp_uninstall)") ///
              onpush(program do_uninstall)
+
+  GROUPBOX gb_wd     10    237 360   58,  label("Auto-shutdown (Stata quit -> server cleanup)")
+  CHECKBOX ck_wd     20    259 175    .,  label("Auto-stop when Stata quits") default(1)
+  TEXT     tx_gr     200   261 55     .,  label("Grace(s):")
+  SPINNER  sp_gr     255   259 50     .,  default(30) min(5) max(3600)
+  BUTTON   bt_wd     310   258 50    24,  label("Apply")   ///
+             onpush(program do_watchdog)
+
+  GROUPBOX gb_lic    10    300 360   58,  label("License")
+  TEXT     tx_key    20    322 35     .,  label("Key:")
+  EDIT     ed_key    55    320 245    .,  label("License key")
+  BUTTON   bt_savek  310   319 50    24,  label("Save")    ///
+             onpush(program do_savekey)
 END
 
 /* 하단은 닫기만 — 연결/재시작/종료는 위 버튼이 담당 */
@@ -93,5 +106,22 @@ END
 PROGRAM do_uninstall
 BEGIN
   put "mcp_uninstall"
+  stata
+END
+
+PROGRAM do_watchdog
+BEGIN
+  put "mcp_watchdog, grace("
+  put main.sp_gr
+  put ") enabled("
+  put main.ck_wd
+  put ")"
+  stata
+END
+
+PROGRAM do_savekey
+BEGIN
+  put "mcp_set_license "
+  put main.ed_key
   stata
 END

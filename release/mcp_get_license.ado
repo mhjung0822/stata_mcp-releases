@@ -5,26 +5,29 @@
 *! 키가 없으면 global 을 빈 문자열로 둔다.
 *!
 *! 대상 파일 = 드론 읽기 우선순위와 동일 (mcp_set_license 와 일치):
-*!   1) adopath 의 stata_mcp.properties (findfile)
-*!   2) 없으면 stata-drone.jar 옆
+*!   1) stata-drone.jar 옆 (드론 1순위)
+*!   2) 없으면 adopath 의 stata_mcp.properties (findfile)
 
 cap program drop mcp_get_license
 program mcp_get_license
     version 17.0
     global MCP_LICENSE_KEY ""
 
+    * 드론 읽기 우선순위와 동일 (jar 옆 우선) — mcp_set_license 와 일치 (2026-08-03 역순 수정)
     local target ""
-    capture findfile stata_mcp.properties
+    capture findfile stata-drone.jar
     if !_rc {
-        local target `"`r(fn)'"'
-    }
-    else {
-        capture findfile stata-drone.jar
-        if _rc exit 0
         local jarpath `"`r(fn)'"'
         local jardir : subinstr local jarpath "stata-drone.jar" ""
         local target `"`jardir'stata_mcp.properties"'
+        capture confirm file `"`target'"'
+        if _rc local target ""
     }
+    if `"`target'"' == "" {
+        capture findfile stata_mcp.properties
+        if !_rc local target `"`r(fn)'"'
+    }
+    if `"`target'"' == "" exit 0
 
     capture confirm file `"`target'"'
     if _rc exit 0

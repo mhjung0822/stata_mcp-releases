@@ -1,4 +1,4 @@
-*! mcp_server  v0.2.3  11jun2026
+*! mcp_server  v0.2.4  03aug2026
 *!
 *! Start / check / stop stata-mcp-server.jar located in the Stata
 *! PERSONAL ado folder (resolved via `findfile`, so no path argument
@@ -24,7 +24,7 @@
 cap program drop mcp_server
 program mcp_server
     version 17.0
-    syntax [, STATUS STOP BRIDGEPORT(integer 8080)]
+    syntax [, STATUS STOP BRIDGEPORT(integer 8080) DRONEPORT(integer 8001)]
 
     * ─── stop ──────────────────────────────────────────────────────────────
     if "`stop'" != "" {
@@ -45,6 +45,37 @@ program mcp_server
     if "`status'" != "" {
         di as text "[Server] GET http://127.0.0.1:`bridgeport'/status"
         shell curl -s --max-time 2 http://127.0.0.1:`bridgeport'/status
+        di ""
+        * 드론 상태 + 버전 + 라이선스 만료를 한 화면에 (제어판 Status 버튼용)
+        tempfile dchk
+        capture shell curl -s --max-time 2 http://127.0.0.1:`droneport'/status > "`dchk'" 2>/dev/null
+        local dline ""
+        tempname dfh
+        capture file open `dfh' using "`dchk'", read text
+        if !_rc {
+            file read `dfh' dline
+            capture file close `dfh'
+        }
+        if `"`dline'"' == "" {
+            di as error "[Drone]  not running (port `droneport') — run mcp_connect in Stata"
+        }
+        else {
+            local dver ""
+            local dlic ""
+            local dexp ""
+            local ddays ""
+            if regexm(`"`dline'"', `""version":"([^"]+)""')          local dver = regexs(1)
+            if regexm(`"`dline'"', `""license":"([^"]+)""')          local dlic = regexs(1)
+            if regexm(`"`dline'"', `""licenseExp":"([0-9-]+)""')     local dexp = regexs(1)
+            if regexm(`"`dline'"', `""licenseDaysLeft":([0-9]+)"')   local ddays = regexs(1)
+            di as text "[Drone]  v`dver' running (port `droneport')"
+            if "`dlic'" == "VALID" {
+                di as text "[License] VALID — `dexp' 까지 (`ddays'일 남음)"
+            }
+            else if "`dlic'" != "" {
+                di as error "[License] `dlic' — {stata mcp_edit_license:키 입력} 후 {stata \"mcp_connect, reset\":재연결}"
+            }
+        }
         exit
     }
 
@@ -84,8 +115,13 @@ program mcp_server
         * Stata 의 JVM 위계 안에 묶여 독립 실행이 안 됨. bash 라는 비-Java
         * 중간 프로세스가 끼어들어 disown 으로 job table 에서 분리해야
         * java 가 orphan 되어 launchd 로 reparent → Stata 종료에도 생존.
+        * FD 3+ 일괄 close 가 java 실행 전 선행 — Stata JVM 의 열린 FD
+        * (특히 드론 8001 리스닝 소켓) 가 자식 java 에 상속되면, 드론 재시작
+        * 시 8001 재바인드 실패 + 응답 없는 좀비 LISTEN 이 남는 사고 방지
+        * (2026-08-03 실사고). 바깥 작은따옴표라 $fd 는 sh 를 그대로 통과,
+        * Stata 단계에선 \$ 로 글로벌 매크로 확장 회피 (전달 경로 실기검증됨).
         * quietly — shell 의 잔여 빈 줄 출력 억제.
-        quietly shell bash -c "java -jar '`jar'' >/dev/null 2>&1 & disown"
+        quietly shell bash -c 'for fd in {3..1023}; do eval "exec \$fd>&-"; done 2>/dev/null; java -jar "`jar'" >/dev/null 2>&1 & disown'
     }
     di as text "[Server] spawned (detached)"
 end
