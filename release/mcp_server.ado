@@ -26,6 +26,11 @@ program mcp_server
     version 17.0
     syntax [, STATUS STOP BRIDGEPORT(integer 8080) DRONEPORT(integer 8001)]
 
+    * stderr 버림 리다이렉트 — Windows cmd 는 /dev/null 을 경로로 해석해 명령
+    * 전체가 깨진다 (멱등성 체크가 항상 빈손 → mcp_connect 때마다 서버 중복
+    * 스폰되던 Windows 버그의 원인, 2026-08-04 실측)
+    local devnul = cond("`c(os)'" == "Windows", "nul", "/dev/null")
+
     * ─── stop ──────────────────────────────────────────────────────────────
     if "`stop'" != "" {
         di as text "[Server] terminating stata-mcp-server.jar process..."
@@ -48,7 +53,7 @@ program mcp_server
         di ""
         * 드론 상태 + 버전 + 라이선스 만료를 한 화면에 (제어판 Status 버튼용)
         tempfile dchk
-        capture shell curl -s --max-time 2 http://127.0.0.1:`droneport'/status > "`dchk'" 2>/dev/null
+        capture shell curl -s --max-time 2 http://127.0.0.1:`droneport'/status > "`dchk'" 2>`devnul'
         local dline ""
         tempname dfh
         capture file open `dfh' using "`dchk'", read text
@@ -83,7 +88,7 @@ program mcp_server
     * 멱등성: 이미 떠있으면 spawn skip (port 8080 점유 → 새 JVM 이 BindException
     * 으로 죽으면서 server-logs/ 에 잡음 쌓이는 거 방지)
     tempfile chk
-    capture shell curl -s --max-time 1 http://127.0.0.1:`bridgeport'/status > "`chk'" 2>/dev/null
+    capture shell curl -s --max-time 1 http://127.0.0.1:`bridgeport'/status > "`chk'" 2>`devnul'
     tempname fh
     capture file open `fh' using "`chk'", read text
     if !_rc {

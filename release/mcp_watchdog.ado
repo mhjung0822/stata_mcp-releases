@@ -27,6 +27,8 @@ program mcp_watchdog
         exit 198
     }
     local en = cond(`enabled', "true", "false")
+    * Windows cmd 는 /dev/null 을 경로로 해석해 명령이 깨짐 → OS 분기 (mcp_server 와 동일)
+    local devnul = cond("`c(os)'" == "Windows", "nul", "/dev/null")
 
     * ─── properties 경로 = server jar 옆 (mcp_edit_license 와 동일 규칙) ────
     capture findfile stata-mcp-server.jar
@@ -78,7 +80,7 @@ program mcp_watchdog
     * 캡처 파일을 못 찾아 "(file S_*.n not found)" 잡음을 찍는다 (macOS 실측,
     * mcp_server/mcp_connect 의 status 체크와 동일한 검증된 패턴)
     tempfile resp
-    capture shell curl -s --max-time 2 -X POST "http://127.0.0.1:`bridgeport'/api/watchdog?enabled=`en'&graceSeconds=`grace'" > "`resp'" 2>/dev/null
+    capture shell curl -s --max-time 2 -X POST "http://127.0.0.1:`bridgeport'/api/watchdog?enabled=`en'&graceSeconds=`grace'" > "`resp'" 2>`devnul'
 
     if `enabled' {
         di as text "[Watchdog] Stata 종료 시 자동 정리 ON — 유예 `grace'초 (기록 + 서버 즉시 반영)"

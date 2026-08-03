@@ -21,6 +21,9 @@ program mcp_connect
     version 17.0
     syntax [, RESET SHUTDOWN BRIDGEPORT(integer 8080) DRONEPORT(integer 8001)]
 
+    * Windows cmd 는 /dev/null 을 경로로 해석해 명령이 깨짐 → OS 분기 (mcp_server 와 동일)
+    local devnul = cond("`c(os)'" == "Windows", "nul", "/dev/null")
+
     * ─── shutdown: 드론 + 서버 모두 종료 ──────────────────────────────────
     if "`shutdown'" != "" {
         di as text "[Drone] Shutdown requested..."
@@ -47,7 +50,7 @@ program mcp_connect
 
     * ─── 드론 시작 (이미 떠있으면 skip) ───────────────────────────────────
     tempfile dchk
-    capture shell curl -s --max-time 1 http://127.0.0.1:`droneport'/status > "`dchk'" 2>/dev/null
+    capture shell curl -s --max-time 1 http://127.0.0.1:`droneport'/status > "`dchk'" 2>`devnul'
     local drone_up = 0
     tempname dfh
     capture file open `dfh' using "`dchk'", read text
