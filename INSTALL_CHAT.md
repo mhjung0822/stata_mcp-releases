@@ -81,3 +81,25 @@ Mac:
 - **빠른 우회(보안↓·비권장)**: cmd 에서 `npm config set strict-ssl false`
 
 **④ 저장 후 Claude Desktop 완전 재시작** — 창만 닫지 말고 완전히 종료(Windows: 트레이 아이콘 우클릭 → Quit / Mac: ⌘Q) 후 다시 실행. 그리고 Stata 에서 `mcp_connect` 로 서버가 떠 있어야 도구가 동작합니다.
+
+---
+
+## Claude Code 에서 쓰기 (선택)
+
+위의 등록은 Claude Desktop(채팅·코워크)용입니다. **터미널의 Claude Code 에서도 Stata 를 쓰려면 별도 등록이 필요합니다** — 터미널에서 한 줄:
+
+Windows:
+
+```
+claude mcp add StataMCP --scope user -- cmd /c npx -y mcp-remote http://127.0.0.1:8080/mcp
+```
+
+Mac:
+
+```
+claude mcp add StataMCP --scope user -- npx -y mcp-remote http://127.0.0.1:8080/mcp
+```
+
+`claude mcp list` 로 확인 — Stata 에서 `mcp_connect` 로 서버가 떠 있으면 `✓ Connected` 로 표시됩니다. (`--scope user` 를 빼면 실행한 폴더에서만 보입니다)
+
+> 위 "방법 A"에서 Claude Code 를 설치 도구로 쓰는 것과는 별개입니다 — 방법 A 는 채팅용 설정 파일을 만들어 주는 것이고, 이 절은 Claude Code 자신에게 등록하는 것입니다.
