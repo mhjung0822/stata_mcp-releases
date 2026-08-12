@@ -47,10 +47,14 @@ java -version  # 17+ 필요
 
 ```stata
 net install stata-mcp, from("https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/release") replace
-mcp_setup           // 도움말 DB 다운로드 + 메뉴 등록
-mcp_edit_license    // 라이선스 키 붙여넣고 저장 (키 없으면 mhjung0822@gmail.com 문의)
-mcp_connect         // 서버(:8080) + 드론 기동
+mcp_setup
+mcp_set_license 발급받은키
+mcp_connect
 ```
+
+- `mcp_setup` — 도움말 DB 다운로드 + 메뉴 등록
+- `mcp_set_license` — 발급받은 키를 그대로 붙여 실행 (키 없으면 mhjung0822@gmail.com 문의)
+- `mcp_connect` — 서버(:8080) + 드론 기동
 
 각 단계 결과를 사용자에게 확인하고 진행하세요. **`mcp_connect` 까지 끝나야 서버가 뜹니다.**
 
