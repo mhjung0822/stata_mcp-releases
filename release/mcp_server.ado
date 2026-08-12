@@ -1,4 +1,4 @@
-*! mcp_server  v0.2.4  03aug2026
+*! mcp_server  v0.2.5  12aug2026
 *!
 *! Start / check / stop stata-mcp-server.jar located in the Stata
 *! PERSONAL ado folder (resolved via `findfile`, so no path argument
@@ -110,9 +110,34 @@ program mcp_server
     }
     local jar "`r(fn)'"
 
+    * ─── 스폰 자바 해석: Stata 내장 JDK 우선 → 시스템 java 폴백 ───────────
+    * c(java_home) 은 Stata 가 자기 내장 JDK(또는 사용자가 set java_home 으로
+    * 지정한 JDK)를 가리킨다 — 시스템 Java 미설치 머신도 서버 스폰 가능.
+    local jbin ""
+    capture {
+        local jh = c(java_home)
+        if `"`jh'"' != "" {
+            local last = substr(`"`jh'"', -1, 1)
+            if "`last'" != "/" & "`last'" != "\" local jh `"`jh'/"'
+            if "`c(os)'" == "Windows" {
+                capture confirm file `"`jh'bin\javaw.exe"'
+                if !_rc local jbin `"`jh'bin\javaw.exe"'
+            }
+            else {
+                capture confirm file `"`jh'bin/java"'
+                if !_rc local jbin `"`jh'bin/java"'
+                else {
+                    capture confirm file `"`jh'Contents/Home/bin/java"'
+                    if !_rc local jbin `"`jh'Contents/Home/bin/java"'
+                }
+            }
+        }
+    }
+
     if "`c(os)'" == "Windows" {
         * javaw = 콘솔 창 없는 Java 런처 (java 와 동일 JVM, 같은 bin 폴더).
-        winexec javaw -jar "`jar'"
+        if `"`jbin'"' != "" winexec "`jbin'" -jar "`jar'"
+        else                winexec javaw -jar "`jar'"
     }
     else {
         * bash -c "... & disown" 패턴이 필수.
@@ -126,7 +151,9 @@ program mcp_server
         * (2026-08-03 실사고). 바깥 작은따옴표라 $fd 는 sh 를 그대로 통과,
         * Stata 단계에선 \$ 로 글로벌 매크로 확장 회피 (전달 경로 실기검증됨).
         * quietly — shell 의 잔여 빈 줄 출력 억제.
-        quietly shell bash -c 'for fd in {3..1023}; do eval "exec \$fd>&-"; done 2>/dev/null; java -jar "`jar'" >/dev/null 2>&1 & disown'
+        local jrun "java"
+        if `"`jbin'"' != "" local jrun `""`jbin'""'
+        quietly shell bash -c 'for fd in {3..1023}; do eval "exec \$fd>&-"; done 2>/dev/null; `jrun' -jar "`jar'" >/dev/null 2>&1 & disown'
     }
     di as text "[Server] spawned (detached)"
 end

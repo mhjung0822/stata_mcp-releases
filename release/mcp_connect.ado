@@ -1,4 +1,4 @@
-*! mcp_connect  v0.3.4  25jul2026
+*! mcp_connect  v0.3.5  12aug2026
 *!
 *! Start / stop / reset the full Stata-MCP stack (server jar + drone).
 *! Internally invokes mcp_server for the JVM-detached server spawn and
@@ -23,6 +23,51 @@ program mcp_connect
 
     * Windows cmd 는 /dev/null 을 경로로 해석해 명령이 깨짐 → OS 분기 (mcp_server 와 동일)
     local devnul = cond("`c(os)'" == "Windows", "nul", "/dev/null")
+
+    * ─── javapath: Stata 내장 JDK 바이너리 경로 파일 (mcpb 프록시용) ──────
+    * Claude Desktop 의 launch 스크립트가 plus/jar/javapath 를 읽어 시스템
+    * Java 없이 proxy.jar 를 실행한다. 환경변수는 이미 실행 중인 앱의
+    * 프로세스 경계를 못 넘어 파일 채택. 내용이 달라졌을 때만 기록.
+    * 개행 없이 1줄 — CRLF 가 섞이면 배치의 set /p 가 \r 를 붙여 경로가 깨짐.
+    * 실패는 전부 무해 (프록시가 시스템 java 로 폴백).
+    capture {
+        local jh = c(java_home)
+        if `"`jh'"' != "" {
+            local last = substr(`"`jh'"', -1, 1)
+            if "`last'" != "/" & "`last'" != "\" local jh `"`jh'/"'
+            local jbin ""
+            if "`c(os)'" == "Windows" {
+                capture confirm file `"`jh'bin\javaw.exe"'
+                if !_rc local jbin `"`jh'bin\javaw.exe"'
+            }
+            else {
+                capture confirm file `"`jh'bin/java"'
+                if !_rc local jbin `"`jh'bin/java"'
+                else {
+                    * macOS 번들 레이아웃 (zulu: <home>/Contents/Home/bin/java)
+                    capture confirm file `"`jh'Contents/Home/bin/java"'
+                    if !_rc local jbin `"`jh'Contents/Home/bin/java"'
+                }
+            }
+            if `"`jbin'"' != "" {
+                local jp `"`c(sysdir_plus)'jar/javapath"'
+                local cur ""
+                tempname jfh
+                capture file open `jfh' using `"`jp'"', read text
+                if !_rc {
+                    file read `jfh' cur
+                    capture file close `jfh'
+                }
+                if `"`macval(cur)'"' != `"`jbin'"' {
+                    quietly {
+                        file open `jfh' using `"`jp'"', write text replace
+                        file write `jfh' `"`jbin'"'
+                        file close `jfh'
+                    }
+                }
+            }
+        }
+    }
 
     * ─── shutdown: 드론 + 서버 모두 종료 ──────────────────────────────────
     if "`shutdown'" != "" {
