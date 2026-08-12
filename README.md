@@ -48,13 +48,13 @@ mcp_setup, updatedb
 
 ### 라이선스 키 (필수)
 
-키가 있어야 동작합니다 (발급 문의: mhjung0822@gmail.com). 설치 후 Stata 에서 받은 키를 그대로 붙여 한 줄:
+키가 있어야 동작합니다 (발급 문의: mhjung0822@gmail.com). 설치 후 Stata 에서:
 
 ```stata
-mcp_set_license 발급받은키
+mcp_set_license
 ```
 
-제어판(`db mcp`)의 **License** 칸에 붙여넣고 **Save** 를 눌러도 됩니다. 키 교체도 같은 방법 — 교체 후에는 `mcp_connect, reset` 으로 즉시 적용됩니다 (Stata 재시작 불필요).
+프롬프트가 뜨면 발급받은 키를 붙여넣고 Enter — 끝입니다. (제어판 `db mcp` 의 **License** 칸 + **Save** 로도 가능) 키 교체도 같은 방법이며, 교체 후에는 `mcp_connect, reset` 으로 즉시 적용됩니다 (Stata 재시작 불필요).
 
 - 키가 없거나 만료되면 드론·서버가 기동하지 않고 Results 창에 사유가 출력됩니다
 - 검증에 인터넷 연결 필요 (오프라인은 72시간까지 허용)

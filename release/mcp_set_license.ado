@@ -1,9 +1,10 @@
-*! mcp_set_license  v0.2.0  03aug2026
+*! mcp_set_license  v0.2.1  12aug2026
 *!
 *! Write LICENSE_KEY into stata_mcp.properties (preserving other keys).
 *! 다이얼로그(db mcp)와 커맨드라인 양쪽에서 사용.
 *!
 *! Usage:
+*!   mcp_set_license                        // 프롬프트로 키 입력 (붙여넣기)
 *!   mcp_set_license eyJ2Ijox....Kn_R5Y...
 *!   mcp_set_license eyJ2Ijox....Kn_R5Y... , reset
 *!
@@ -28,9 +29,18 @@ program mcp_set_license
     local key = strtrim(`"`key'"')
     syntax [, RESET]
 
+    * 인수 없이 실행하면 프롬프트로 입력받음 — 사용자는 명령만 치고 키를 붙여넣으면 된다.
+    * 주의: 여러 줄 복붙 스크립트(AGENT_INSTALL 등)에서는 인수형을 쓸 것 — 프롬프트가
+    * 다음 붙여넣은 줄을 키로 삼켜버린다.
     if `"`key'"' == "" {
-        di as error "Usage: mcp_set_license <license-key> [, reset]"
-        exit 198
+        di as text "라이선스 키를 붙여넣고 Enter (취소: 빈 입력):"
+        display _request(_mcp_lic_key)
+        local key = strtrim(`"$_mcp_lic_key"')
+        global _mcp_lic_key
+        if `"`key'"' == "" {
+            di as error "키가 입력되지 않았습니다. Usage: mcp_set_license [<license-key>] [, reset]"
+            exit 198
+        }
     }
 
     * ─── 후보 수집 (t1..tN + 생성 허용 여부 c1..cN) ─────────────────────────
