@@ -2,7 +2,7 @@
 
 > 한국어: [README.md](README.md)
 
-Public **distribution repository** for a tool that connects Stata and Claude via MCP (Model Context Protocol). The primary environment is **Claude Desktop cowork**. The source code is private; this repository provides built artifacts and user documentation only.
+Public **distribution repository** for a tool that connects Stata and Claude via MCP (Model Context Protocol). The primary environment is **Claude Desktop (chat and cowork)**. The source code is private; this repository provides built artifacts and user documentation only.
 
 Installation is four steps: **① Stata-side install → ② License → ③ Start the server → ④ Register in Claude (extension + skills)**.
 
