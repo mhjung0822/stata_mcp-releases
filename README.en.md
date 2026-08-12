@@ -5,13 +5,12 @@
 Public **distribution repository** for a tool that connects Stata and Claude via MCP (Model Context Protocol). The primary environment is **Claude Desktop cowork**. The source code is private; this repository provides built artifacts and user documentation only.
 
 Installation is four steps: **① Stata-side install → ② License → ③ Start the server → ④ Register in Claude (extension + skills)**.
-The primary environment is **Claude Desktop cowork**.
 
 > The single extension in step 4-1 works for **both cowork and chat**. Use the manual
 > registration in [INSTALL_CHAT.md](INSTALL_CHAT.md) (Korean) only if the extension does
 > not appear in your tools list. (The skill upload in 4-2 applies to both.)
 
-For the list of distributed files see [README.en.md](README.en.md); for usage and troubleshooting after install see [USAGE.en.md](USAGE.en.md).
+For usage and troubleshooting after install see [USAGE.en.md](USAGE.en.md).
 
 ---
 
