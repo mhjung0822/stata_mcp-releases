@@ -34,3 +34,25 @@ Enable-WindowsOptionalFeature -Online -FeatureName VirtualMachinePlatform -All -
 1. **Stata 쪽 서버가 떠 있는지 먼저** — Stata 에서 `mcp_connect` 실행 후 다시 시도
 2. 로그인 직후에는 커넥터가 몇 분간 안 보일 수 있습니다 — 잠시 후 새 세션으로 재시도
 3. 그래도 안 보이면 Claude Desktop 을 완전히 종료(트레이 → Quit) 후 재실행
+
+## 확장(mcpb)을 쓸 수 없는 환경 — 설정 파일 수동 등록
+
+Claude Desktop 의 설정 파일(`claude_desktop_config.json`)에 직접 등록하는 방법이
+있습니다. **Claude Code 를 열고 아래를 붙여넣으면** 등록을 대신 처리해 줍니다:
+
+```
+https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/AGENT_INSTALL.md
+이 문서 읽고 Stata MCP 설치해줘.
+```
+
+(이 경로는 Node 22 이상이 필요합니다 — 확장 설치가 되는 환경이면 확장을 쓰세요)
+
+## Claude Code 에서 쓰기
+
+터미널의 Claude Code 에서도 쓰려면 별도 등록이 필요합니다 — 한 줄 (Mac·Windows 동일, Node 불필요):
+
+```
+claude mcp add --transport http StataMCP http://127.0.0.1:8080/mcp --scope user
+```
+
+`claude mcp list` 로 확인 — Stata 에서 `mcp_connect` 로 서버가 떠 있으면 `✓ Connected` 로 표시됩니다.
