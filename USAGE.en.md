@@ -226,9 +226,9 @@ Symptom: on `mcp_connect` the drone does not start and a message like this is pr
 
 | Message | Cause / action |
 |---|---|
-| License key missing | Run `mcp_set_license` and paste the key at the prompt (or use the control panel's License field + Save) |
+| License key missing | `mcp_connect` asks for it automatically — paste the key at the prompt |
 | License key invalid | The key was truncated or altered when copied — paste the full key again |
-| License expired | Request a new key and replace it |
+| License expired | Request a new key → click [ Enter license key ] in the output → paste (reconnects automatically) |
 | Internet connection required | Validation needs network time (offline longer than 72 hours). Reconnect, then `mcp_connect, reset` |
 | Key format is a newer version | Update with `net install stata-mcp, ... replace` |
 
