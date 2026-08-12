@@ -108,7 +108,9 @@ For the skill lineup and usage, see [USAGE.en.md](USAGE.en.md).
 
 ## 5. Connection test
 
-With both Stata and Claude Desktop fully closed, start them in this order:
+Start with both Stata and Claude Desktop **fully quit** — closing the Claude window
+leaves it running in the background, so quit via the tray icon → **Quit** on Windows,
+or **⌘Q** on Mac. Then start them in this order:
 
 ```
 1. Start Stata → run mcp_connect
