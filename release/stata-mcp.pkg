@@ -6,9 +6,9 @@ d into the user's PERSONAL ado folder.
 d
 d Author: mhjung0822
 d Support: https://github.com/mhjung0822/stata_mcp-releases
-d Distribution-Date: 20260803
+d Distribution-Date: 20260812
 d
-d Requires: Stata 17 or higher, Java 17+
+d Requires: Stata 17 or higher (18+ recommended; bundled Java is used)
 d
 d After install, see INSTALL.md for client (Claude Desktop / Code / Cursor)
 d setup and USAGE.md for `mcp_connect` startup.

@@ -5,8 +5,8 @@
 설치는 4단계입니다: **① Stata 측 설치 → ② 라이선스 → ③ 서버 기동 → ④ Claude 등록 (확장 + 스킬)**.
 주 사용 환경은 **Claude Desktop 코워크**입니다.
 
-> ⚠️ **코워크가 활성화되지 않은 환경 주의** — 4-1 확장 프로그램은 코워크 전용입니다.
-> 채팅으로 쓰려면 [INSTALL_CHAT.md](INSTALL_CHAT.md)의 설정 파일 등록을 하세요.
+> 4-1 확장 프로그램 하나로 **코워크와 채팅 모두** 동작합니다. 확장이 도구 목록에
+> 보이지 않는 환경에서만 [INSTALL_CHAT.md](INSTALL_CHAT.md)의 수동 등록을 사용하세요.
 > (스킬 등록 4-2 는 공통)
 
 배포 파일 목록은 [README.md](README.md), 설치 후 사용법·문제 해결은 [USAGE.md](USAGE.md) 참고.
@@ -17,10 +17,10 @@
 
 | 항목 | 버전 |
 |------|------|
-| Java | 17 이상 — [Oracle JDK 17 다운로드](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html) |
+| Java | 별도 설치 불필요 — Stata 에 내장된 Java 를 사용합니다 (Stata 17 은 내장 Java 가 구버전이라 [JDK 17+](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html) 설치 필요) |
 | Stata | 17 이상 (19 권장) |
 | Claude Desktop | 최신 — [다운로드](https://claude.ai/download) |
-| Node.js | v20 이상 — [nodejs.org 다운로드](https://nodejs.org/) |
+| Node.js | 불필요 — 확장(mcpb) 설치 기준. 설정 파일 수동 등록 시에만 필요 ([INSTALL_CHAT.md](INSTALL_CHAT.md)) |
 
 ---
 

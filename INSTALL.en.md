@@ -5,9 +5,9 @@
 Installation is four steps: **① Stata-side install → ② License → ③ Start the server → ④ Register in Claude (extension + skills)**.
 The primary environment is **Claude Desktop cowork**.
 
-> ⚠️ **If cowork is not available in your environment** — the extension in step 4-1 is cowork-only.
-> To use it in plain chat, register the config file as described in [INSTALL_CHAT.md](INSTALL_CHAT.md) (Korean).
-> (The skill upload in 4-2 applies to both.)
+> The single extension in step 4-1 works for **both cowork and chat**. Use the manual
+> registration in [INSTALL_CHAT.md](INSTALL_CHAT.md) (Korean) only if the extension does
+> not appear in your tools list. (The skill upload in 4-2 applies to both.)
 
 For the list of distributed files see [README.en.md](README.en.md); for usage and troubleshooting after install see [USAGE.en.md](USAGE.en.md).
 
@@ -17,10 +17,10 @@ For the list of distributed files see [README.en.md](README.en.md); for usage an
 
 | Item | Version |
 |------|------|
-| Java | 17+ — [Oracle JDK 17 download](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html) |
+| Java | No separate install needed — Stata's bundled Java is used (Stata 17 ships an older bundle, so install [JDK 17+](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html) there) |
 | Stata | 17+ (19 recommended) |
 | Claude Desktop | latest — [download](https://claude.ai/download) |
-| Node.js | v20+ — [nodejs.org download](https://nodejs.org/) |
+| Node.js | Not needed with the extension (mcpb). Only required for manual config registration ([INSTALL_CHAT.md](INSTALL_CHAT.md)) |
 
 ---
 

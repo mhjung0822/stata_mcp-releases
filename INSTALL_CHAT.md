@@ -3,6 +3,11 @@
 코워크 없이 **Claude Desktop 채팅**으로 연결하는 방법입니다.
 Stata 측 설치·라이선스·서버 기동([INSTALL.md](INSTALL.md) 1~3장)은 먼저 마쳐야 합니다.
 
+> **먼저 확인** — [INSTALL.md](INSTALL.md) 4-1 의 확장 프로그램(mcpb)을 설치했다면
+> 채팅에서도 대부분 그대로 동작합니다 (Node 등 추가 설치 불필요). 확장이 도구
+> 목록에 안 보이는 환경에서만 아래의 수동 등록을 사용하세요. 아래 방식은
+> Node 22 이상이 필요합니다.
+
 > 스킬([INSTALL.md](INSTALL.md) 4-2)은 채팅에서도 사용할 수 있습니다. 다만 이 스킬들은
 > StataMCP 도구를 호출하는 스킬이라, 채팅에서 쓰려면 아래 **설정 파일 등록(MCP 연결)이
 > 먼저** 되어 있어야 동작합니다.
@@ -86,18 +91,10 @@ Mac:
 
 ## Claude Code 에서 쓰기 (선택)
 
-위의 등록은 Claude Desktop(채팅·코워크)용입니다. **터미널의 Claude Code 에서도 Stata 를 쓰려면 별도 등록이 필요합니다** — 터미널에서 한 줄:
-
-Windows:
+위의 등록은 Claude Desktop(채팅·코워크)용입니다. **터미널의 Claude Code 에서도 Stata 를 쓰려면 별도 등록이 필요합니다** — 터미널에서 한 줄 (Mac·Windows 동일, Node 불필요):
 
 ```
-claude mcp add StataMCP --scope user -- cmd /c npx -y mcp-remote http://127.0.0.1:8080/mcp
-```
-
-Mac:
-
-```
-claude mcp add StataMCP --scope user -- npx -y mcp-remote http://127.0.0.1:8080/mcp
+claude mcp add --transport http StataMCP http://127.0.0.1:8080/mcp --scope user
 ```
 
 `claude mcp list` 로 확인 — Stata 에서 `mcp_connect` 로 서버가 떠 있으면 `✓ Connected` 로 표시됩니다. (`--scope user` 를 빼면 실행한 폴더에서만 보입니다)
