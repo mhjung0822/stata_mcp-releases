@@ -221,7 +221,7 @@ Symptom: on `mcp_connect` the drone does not start and a message like this is pr
 ```
 [Drone] License expired on YYYY-MM-DD. To renew: ...
 [Drone] Not starting the drone; shutting down the MCP server as well.
-[Drone] [ 1. Enter license key ] (paste at the prompt) → [ 2. Reconnect ]
+[Drone] [ Enter license key ] ← click, paste the key, and it reconnects automatically.
 ```
 
 | Message | Cause / action |
