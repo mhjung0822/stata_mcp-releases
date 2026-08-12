@@ -108,7 +108,7 @@ program mcp_set_license
         _mcp_lic_write using `"`t`i''"', key(`key') create(`c`i'')
         di as text "[License] Saved → " as result `"`t`i''"'
     }
-    di as text "[License] Restart the drone to apply: {stata mcp_connect, reset:mcp_connect, reset}"
+    di as text "[License] Restart the drone to apply: mcp_connect, reset"
 
     if "`reset'" != "" {
         di as text "[License] reset option → running mcp_connect, reset..."
