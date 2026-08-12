@@ -1,4 +1,4 @@
-*! mcp_connect  v0.3.5  12aug2026
+*! mcp_connect  v0.3.6  12aug2026
 *!
 *! Start / stop / reset the full Stata-MCP stack (server jar + drone).
 *! Internally invokes mcp_server for the JVM-detached server spawn and
@@ -85,6 +85,21 @@ program mcp_connect
         capture mcp_server, stop
         sleep 1500
     }
+
+    * ─── 라이선스 키 선체크 — 없으면 그 자리에서 입력받고 이어서 진행 ──────
+    * (실패 후 "mcp_set_license → 재연결" 안내를 거치게 하지 않기 위함.
+    *  키가 있지만 만료/변조인 경우는 드론 검증이 잡아 안내한다.)
+    mcp_get_license
+    if `"$MCP_LICENSE_KEY"' == "" {
+        di as text "[License] 라이선스 키가 없습니다 — 지금 입력하면 바로 연결합니다."
+        capture noisily mcp_set_license, quiet
+        if _rc {
+            global MCP_LICENSE_KEY
+            di as error "[License] 키가 입력되지 않아 연결을 중단합니다."
+            exit 198
+        }
+    }
+    global MCP_LICENSE_KEY
 
     * ─── 서버 먼저 띄움 (mcp_server 가 idempotency 처리) ──────────────────
     di as text "[Server] starting..."

@@ -27,7 +27,7 @@ program mcp_set_license
     version 17.0
     gettoken key 0 : 0, parse(",")
     local key = strtrim(`"`key'"')
-    syntax [, RESET]
+    syntax [, RESET Quiet]
 
     * 인수 없이 실행하면 프롬프트로 입력받음 — 사용자는 명령만 치고 키를 붙여넣으면 된다.
     * 주의: 여러 줄 복붙 스크립트(AGENT_INSTALL 등)에서는 인수형을 쓸 것 — 프롬프트가
@@ -108,7 +108,9 @@ program mcp_set_license
         _mcp_lic_write using `"`t`i''"', key(`key') create(`c`i'')
         di as text "[License] Saved → " as result `"`t`i''"'
     }
-    di as text "[License] Restart the drone to apply: mcp_connect, reset"
+    if "`quiet'" == "" {
+        di as text "[License] Restart the drone to apply: mcp_connect, reset"
+    }
 
     if "`reset'" != "" {
         di as text "[License] reset option → running mcp_connect, reset..."
