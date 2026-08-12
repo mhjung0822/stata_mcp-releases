@@ -129,9 +129,8 @@ If not, check in order:
 
 1. Stata Results window — does the `mcp_connect` output say `License OK`? (if not, see step 2, License)
 2. Claude tools list — is the Stata MCP extension visible? (if not, fully quit and relaunch Claude Desktop)
-3. Still stuck — see [TROUBLESHOOTING.md](TROUBLESHOOTING.md) (Korean)
 
-For everyday usage see [USAGE.en.md](USAGE.en.md) — startup order, control panel, push notifications, help lookup, troubleshooting.
+For everyday usage see [USAGE.en.md](USAGE.en.md) — startup order, control panel, push notifications, help lookup, troubleshooting. Rare environment issues: [TROUBLESHOOTING.md](TROUBLESHOOTING.md) (Korean).
 
 
 ---

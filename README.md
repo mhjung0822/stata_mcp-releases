@@ -127,9 +127,8 @@ Stata 버전 알려줘
 
 1. Stata 결과창 — `mcp_connect` 출력에 `License OK` 가 있는지 (없으면 2장 라이선스)
 2. Claude 도구 목록 — Stata MCP 확장이 보이는지 (안 보이면 Claude Desktop 완전 종료 후 재실행)
-3. 그래도 안 되면 — [TROUBLESHOOTING.md](TROUBLESHOOTING.md)
 
-사용법 전반은 [USAGE.md](USAGE.md) — 시작 순서, 제어판, push 알림, 도움말 조회, 문제 해결.
+사용법 전반은 [USAGE.md](USAGE.md) 참고 — 시작 순서, 제어판, push 알림, 도움말 조회, 문제 해결. 드문 환경 이슈는 [TROUBLESHOOTING.md](TROUBLESHOOTING.md).
 
 
 ---
