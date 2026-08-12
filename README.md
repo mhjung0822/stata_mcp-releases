@@ -24,7 +24,7 @@ net install stata-mcp, from("https://raw.githubusercontent.com/mhjung0822/stata_
 | 파일 | 설명 |
 |---|---|
 | `stata-mcp-server.jar` | MCP 서버 (Spring Boot, Streamable HTTP, 포트 8080) — **Stata PERSONAL ado 에 배치** |
-| `stata-mcp-mac.mcpb` / `stata-mcp-win.mcpb` | **Claude Desktop 확장 프로그램** — 코워크 MCP 연결(`npx mcp-remote`→:8080). OS 에 맞는 것 하나만 설치 (설정 → 확장 프로그램 → 파일로 설치) |
+| `stata-mcp-mac.mcpb` / `stata-mcp-win.mcpb` | **Claude Desktop 확장 프로그램** — 채팅·코워크 MCP 연결. 동봉 프록시를 Stata 내장 Java 로 실행 (Node·시스템 Java 불필요). OS 에 맞는 것 하나만 설치 (설정 → 확장 프로그램 → 파일로 설치) |
 | `stata-skills-all.zip` | **스킬 11종 일괄** — 슬래시 명령 9종 + 작업 지침(stata-instruction, 편집 가능) + 패널 병합(stata-panel-merge). 압축 해제 후 내부 zip 을 설정 → 스킬 → 업로드. 개별 파일은 `claude-plugins/skill-zips/` |
 | `stata-skills-all-en.zip` | **스킬 11종 영어판** — 위와 동일 구성의 영어 버전. 스킬 이름이 같으므로 계정당 한 언어팩만 설치. 개별 파일은 `claude-plugins/skill-zips-en/` |
 | `stata-drone.jar` | Stata 내부 실행 드론 (포트 8001) |
@@ -38,8 +38,6 @@ net install stata-mcp, from("https://raw.githubusercontent.com/mhjung0822/stata_
 | `mcp.dlg` / `mcp.ado` / `mcp_setup.ado` / `mcp_menu.ado` | Stata 제어판 GUI (`db mcp`) + 설정·도움말DB 다운로드 (`mcp_setup`) + User 메뉴 등록 (`mcp_menu, install`) |
 | `mcp_uninstall.ado` | 전체 제거 (`mcp_uninstall` 미리보기 → `, confirm`) |
 
-> Claude Desktop 사용자는 Node 20+ 필요 (확장 프로그램이 `npx mcp-remote` 호출).
-
 ## 가이드
 
 - [INSTALL.md](INSTALL.md) — 설치 가이드 (net install → 라이선스 → 서버 기동 → 클라이언트 등록)
@@ -49,8 +47,8 @@ net install stata-mcp, from("https://raw.githubusercontent.com/mhjung0822/stata_
 
 | 항목 | 버전 |
 |---|---|
-| Java | 17 이상 — [Oracle JDK 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html) |
-| Node.js | 20 이상 — [nodejs.org](https://nodejs.org/) (확장 프로그램의 mcp-remote 용) |
+| Java | 별도 설치 불필요 — Stata 내장 Java 사용 (Stata 17 만 [JDK 17+](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html) 필요) |
+| Node.js | 불필요 — 설정 파일 수동 등록([INSTALL_CHAT.md](INSTALL_CHAT.md)) 시에만 |
 | Stata | 17 이상 (19 권장) |
 | Claude Desktop | 최신 버전 — [다운로드](https://claude.ai/download) |
 

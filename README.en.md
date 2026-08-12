@@ -66,8 +66,8 @@ mcp_connect          // starts the MCP server; stops automatically when Stata ex
 
 | Item | Version |
 |---|---|
-| Java | 17+ — [Oracle JDK 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html) |
-| Node.js | 20+ — [nodejs.org](https://nodejs.org/) (used by the Claude Desktop extension) |
+| Java | No separate install — Stata's bundled Java is used (Stata 17 only: JDK 17+ needed) |
+| Node.js | Not needed — only for manual config registration ([INSTALL_CHAT.md](INSTALL_CHAT.md), Korean) |
 | Stata | 17+ (19 recommended) |
 | Claude Desktop | latest — [download](https://claude.ai/download) |
 
