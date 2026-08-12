@@ -1,4 +1,4 @@
-*! mcp_connect  v0.3.6  12aug2026
+*! mcp_connect  v0.3.7  12aug2026
 *!
 *! Start / stop / reset the full Stata-MCP stack (server jar + drone).
 *! Internally invokes mcp_server for the JVM-detached server spawn and
@@ -136,6 +136,33 @@ program mcp_connect
             args("`bridgeport'" "`droneport'") jars(stata-drone.jar)
     }
 
-    * 기동 엔진 — 사용자 안내/제어판은 mcp_setup 가 담당.
+    * ─── help DB 선체크 — 없으면 1회 제안 (라이선스 선체크와 동일 패턴) ────
+    * 거절하면 마커 파일을 남겨 매 연결마다 묻지 않는다. 나중엔 mcp_setup.
+    * 연결 자체는 이미 끝난 뒤라 다운로드 실패/거절이 연결을 막지 않는다.
+    capture confirm file `"`c(sysdir_plus)'jar/help_index_v2.json"'
+    if _rc {
+        capture confirm file `"`c(sysdir_plus)'jar/helpdb_skip"'
+        if _rc {
+            di as text "[Setup] 도움말 DB가 없습니다 (~32MB, 최초 1회)."
+            di as text "        지금 받으려면 y 입력, 건너뛰려면 그냥 엔터:"
+            display _request(mcpyn)
+            local yn = lower(strtrim(`"$mcpyn"'))
+            capture macro drop mcpyn
+            if "`yn'" == "y" {
+                capture noisily mcp_setup, updatedb
+                capture quietly mcp_menu, install
+            }
+            else {
+                tempname sfh
+                capture quietly {
+                    file open `sfh' using `"`c(sysdir_plus)'jar/helpdb_skip"', write text replace
+                    file write `sfh' "skip"
+                    file close `sfh'
+                }
+                di as text "[Setup] 건너뜀 — 나중에 받으려면: {stata mcp_setup:mcp_setup}"
+            }
+        }
+    }
+
     * (제어판 [연결] 버튼이 이 명령을 호출해 서버+드론을 기동)
 end

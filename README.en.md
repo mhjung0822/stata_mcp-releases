@@ -27,13 +27,7 @@ One line in Stata:
 net install stata-mcp, from("https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/release") replace
 ```
 
-This downloads the two jars plus the ado/dlg files. Then run **`mcp_setup`** once to download the help DB and register the control-panel menu:
-
-```stata
-mcp_setup
-```
-
-> The help DB is large, so it is not bundled with `net install`; `mcp_setup` downloads it on demand (keeps the package light). Internet connection required.
+This downloads the two jars plus the ado/dlg files. That is the whole install — the help DB (~32MB) is offered by `mcp_connect` (next section) on first connect (answer y; internet connection required).
 
 To update later:
 
@@ -65,7 +59,7 @@ To replace a key later, use `mcp_set_license` (paste at the prompt) or the contr
 mcp_connect
 ```
 
-Starts the MCP server and the drone in one go.
+Starts the MCP server and the drone in one go. On first run it asks for the license key and then offers the help-DB download — just follow the prompts.
 
 > The server shuts down automatically when you quit Stata. You can also start it from the GUI control panel (`db mcp`) — see [USAGE.en.md](USAGE.en.md).
 

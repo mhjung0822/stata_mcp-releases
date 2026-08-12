@@ -27,13 +27,7 @@ Stata 에서 한 줄:
 net install stata-mcp, from("https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/release") replace
 ```
 
-jar 2종 + ado/dlg 가 자동 다운로드됩니다. 이어서 **`mcp_setup`** 으로 도움말 DB 를 받고 제어판 메뉴를 등록합니다 (설치 후 1회):
-
-```stata
-mcp_setup
-```
-
-> 도움말 DB 는 용량이 커서 net install 번들 대신 `mcp_setup` 이 온디맨드로 받습니다 (패키지 경량화). 인터넷 연결 필요.
+jar 2종 + ado/dlg 가 자동 다운로드됩니다. 설치는 이게 전부입니다 — 도움말 DB(~32MB)는 다음 장의 `mcp_connect` 가 처음 연결할 때 받을지 물어봅니다 (y 권장, 인터넷 연결 필요).
 
 업데이트는:
 
@@ -65,7 +59,7 @@ mcp_setup, updatedb
 mcp_connect
 ```
 
-MCP 서버와 드론이 한 번에 기동됩니다.
+MCP 서버와 드론이 한 번에 기동됩니다. 첫 실행이면 라이선스 키와 도움말 DB 다운로드를 차례로 물어봅니다 — 안내를 따라 입력하면 끝.
 
 > Stata 를 종료하면 서버도 자동으로 함께 종료됩니다. 명령 대신 GUI 제어판(`db mcp`)으로도 켤 수 있습니다 — [USAGE.md](USAGE.md) 참고.
 
