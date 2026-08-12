@@ -26,6 +26,12 @@ cap program drop _mcp_lic_write
 program mcp_set_license
     version 17.0
     gettoken key 0 : 0, parse(",")
+    * 키 없이 옵션만 온 경우 (예: mcp_set_license, quiet) — gettoken 이 쉼표를
+    * 키 토큰으로 삼키므로 복원해야 syntax 가 옵션으로 인식한다
+    if `"`key'"' == "," {
+        local 0 `", `0'"'
+        local key ""
+    }
     local key = strtrim(`"`key'"')
     syntax [, RESET Quiet]
 
