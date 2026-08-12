@@ -6,9 +6,6 @@ Stata와 Claude를 MCP(Model Context Protocol)로 연결하는 도구의 **공�
 
 설치는 4단계입니다: **① Stata 측 설치 → ② 라이선스 → ③ 서버 기동 → ④ Claude 등록 (확장 + 스킬)**.
 
-> 4-1 확장 프로그램 하나로 **코워크와 채팅 모두** 동작합니다. 확장을 쓸 수 없는
-> 환경은 [TROUBLESHOOTING.md](TROUBLESHOOTING.md)의 수동 등록을 참고하세요.
-
 설치 후 사용법·문제 해결은 [USAGE.md](USAGE.md) 참고.
 
 ---

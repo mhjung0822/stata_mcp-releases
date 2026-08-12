@@ -6,10 +6,6 @@ Public **distribution repository** for a tool that connects Stata and Claude via
 
 Installation is four steps: **① Stata-side install → ② License → ③ Start the server → ④ Register in Claude (extension + skills)**.
 
-> The single extension in step 4-1 works for **both cowork and chat**. If the extension
-> cannot be used in your environment, see the manual registration in
-> [TROUBLESHOOTING.md](TROUBLESHOOTING.md) (Korean).
-
 For usage and troubleshooting after install see [USAGE.en.md](USAGE.en.md).
 
 ---
