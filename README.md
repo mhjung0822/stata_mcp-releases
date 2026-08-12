@@ -106,11 +106,7 @@ MCP 서버와 드론이 한 번에 기동됩니다.
 3. Claude Desktop → **설정 → 스킬** → 업로드 → 압축 푼 **스킬별 zip** 들을 업로드 (묶음 zip 을 그대로 올리지 마세요)
 4. 한 번 올리면 같은 계정의 모든 기기에 자동 적용됩니다
 
-포함 스킬:
-
-- **슬래시 명령 9종** — `/stata-exec` `/stata-async` `/stata-pull` `/stata-help` `/stata-setup` `/stata-graph-get` `/stata-graph-export` `/stata-data-context` `/stata-data-fullcontext`
-- **stata-instruction** (편집해서 쓰는 항목) — 출력형식·분석 규칙·선호를 세션에 적용. 설치 후 옵션에서 내용 편집 (또는 Claude 에게 수정 요청)
-- **stata-panel-merge** — 웨이브(차수)별 .dta 를 long 패널로 합치는 표준 절차. "웨이브 합쳐줘 / 패널 만들어줘" 같은 자연어로 트리거
+스킬 구성과 사용법은 [USAGE.md](USAGE.md) 참고.
 
 ---
 

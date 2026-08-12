@@ -108,11 +108,7 @@ Starts the MCP server and the drone in one go.
 
 > A Korean edition also exists (`stata-skills-all.zip`). The skills share names across the two packs, so install only one language pack per account.
 
-Included skills:
-
-- **9 slash commands** — `/stata-exec` `/stata-async` `/stata-pull` `/stata-help` `/stata-setup` `/stata-graph-get` `/stata-graph-export` `/stata-data-context` `/stata-data-fullcontext`
-- **stata-instruction** (meant to be edited) — applies your output-format / analysis rules / preferences to the session. Edit it in its options after installing (or ask Claude to modify it)
-- **stata-panel-merge** — a standard procedure for combining wave-by-wave .dta files into a long panel. Triggered by natural language like "merge the waves / build the panel"
+For the skill lineup and usage, see [USAGE.en.md](USAGE.en.md).
 
 ---
 
