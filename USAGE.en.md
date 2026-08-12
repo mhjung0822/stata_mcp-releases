@@ -2,7 +2,7 @@
 
 > 한국어 문서: [USAGE.md](USAGE.md)
 
-For installation, see [INSTALL.en.md](INSTALL.en.md).
+For installation, see [README.en.md](README.en.md).
 
 ---
 
@@ -183,7 +183,7 @@ mcp_connect, shutdown        // stops both server and drone (same as the control
 
 #### Automatic shutdown
 
-When you quit Stata, the server shuts itself down **within ~15 seconds** (a watchdog: when the drone disappears, the server stops on its own). No zombie servers left behind.
+When you quit Stata, the server also cleans itself up shortly after (detection ~10 s + grace, 30 s by default). Restart Stata within the grace window and the server carries on — see the Auto-shutdown section above.
 
 > To stop only the server, `mcp_server, stop` also works.
 

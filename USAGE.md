@@ -2,7 +2,7 @@
 
 > English: [USAGE.en.md](USAGE.en.md)
 
-설치는 [INSTALL.md](INSTALL.md) 참고.
+설치는 [README.md](README.md) 참고.
 
 ---
 
@@ -185,7 +185,7 @@ mcp_connect, shutdown        // 서버·드론 모두 정지 (제어판 [Shutdow
 
 #### 자동 종료
 
-Stata 를 종료하면 서버도 **~15초 내 자동 종료**됩니다 (드론이 사라지면 서버가 스스로 정지 — 워치독). 이전처럼 좀비 서버가 남지 않습니다.
+Stata 를 종료하면 서버도 잠시 뒤(감지 ~10초 + 대기시간, 기본 30초) 자동 종료됩니다. 대기시간 안에 Stata 를 다시 켜면 서버는 그대로 이어집니다 — 위 Auto-shutdown 절 참고.
 
 > 서버만 따로 내리려면 `mcp_server, stop` 도 가능합니다.
 
