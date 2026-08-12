@@ -87,27 +87,7 @@ Starts the MCP server and the drone in one go.
 
 ## 4. Register in Claude (cowork)
 
-> **If cowork won't activate on Windows** — the "Virtual Machine Platform" Windows
-> feature is required. In an **administrator PowerShell**, enter the line below,
-> then **reboot**:
->
-> ```powershell
-> Enable-WindowsOptionalFeature -Online -FeatureName VirtualMachinePlatform -All -NoRestart
-> ```
->
-> After rebooting, enable cowork in Claude Desktop. If it still doesn't work,
-> hardware virtualization (Intel VT-x / AMD SVM) is disabled in your BIOS —
-> you can check it under Task Manager → Performance → CPU → "Virtualization".
->
-> **To check the current state** — in cmd:
->
-> ```
-> systeminfo | findstr Hyper
-> ```
->
-> - A single line saying `A hypervisor has been detected` → ready (virtualization is not the problem)
-> - `Virtualization Enabled In Firmware: No` → enable VT-x/SVM in your BIOS
-> - All `Yes` but no "detected" line → you haven't rebooted yet
+> For environment issues such as cowork not activating on Windows, see [TROUBLESHOOTING.md](TROUBLESHOOTING.md) (Korean).
 
 ### 4-1. Install the extension (MCP connection)
 
