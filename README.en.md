@@ -50,8 +50,6 @@ mcp_setup, updatedb
 
 > To apply an update, **restart Stata** and reconnect with `mcp_connect`.
 
-> ⚠️ A trailing `/` on the URL causes an "is not a Stata download site" error — use the form above exactly, no trailing slash.
-
 ### License key (required)
 
 A key is required for the software to run (to request one: mhjung0822@gmail.com). After installing, in Stata:
@@ -112,9 +110,23 @@ For the skill lineup and usage, see [USAGE.en.md](USAGE.en.md).
 
 ---
 
-## 5. Next steps
+## 5. Connection test
 
-[USAGE.en.md](USAGE.en.md) — startup order, control panel, push notifications, help lookup, troubleshooting.
+In a new Claude Desktop chat (or cowork session):
+
+```
+What Stata version am I running?
+```
+
+If the version and edition come back (e.g. StataNow/MP 19.5), the installation is complete.
+
+If not, check in order:
+
+1. Stata Results window — does the `mcp_connect` output say `License OK`? (if not, see step 2, License)
+2. Claude tools list — is the Stata MCP extension visible? (if not, fully quit and relaunch Claude Desktop)
+3. Still stuck — see [TROUBLESHOOTING.md](TROUBLESHOOTING.md) (Korean)
+
+For everyday usage see [USAGE.en.md](USAGE.en.md) — startup order, control panel, push notifications, help lookup, troubleshooting.
 
 
 ---

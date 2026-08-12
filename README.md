@@ -49,8 +49,6 @@ mcp_setup, updatedb
 
 > 업데이트를 적용하려면 **Stata 를 재시작**한 뒤 `mcp_connect` 로 다시 연결하세요.
 
-> ⚠️ URL 끝에 `/` 를 붙이면 "is not a Stata download site" 에러 — 슬래시 없이 위 형태 그대로.
-
 ### 라이선스 키 (필수)
 
 키가 있어야 동작합니다 (발급 문의: mhjung0822@gmail.com). 설치 후 Stata 에서:
@@ -109,9 +107,23 @@ MCP 서버와 드론이 한 번에 기동됩니다.
 
 ---
 
-## 5. 다음 단계
+## 5. 연결 테스트
 
-[USAGE.md](USAGE.md) — 시작 순서, 제어판, push 알림, 도움말 조회, 문제 해결.
+Claude Desktop 새 대화(또는 코워크 세션)에서:
+
+```
+Stata 버전 알려줘
+```
+
+버전·에디션(예: StataNow/MP 19.5)이 답으로 오면 설치 완료입니다.
+
+안 되면 순서대로 확인하세요:
+
+1. Stata 결과창 — `mcp_connect` 출력에 `License OK` 가 있는지 (없으면 2장 라이선스)
+2. Claude 도구 목록 — Stata MCP 확장이 보이는지 (안 보이면 Claude Desktop 완전 종료 후 재실행)
+3. 그래도 안 되면 — [TROUBLESHOOTING.md](TROUBLESHOOTING.md)
+
+사용법 전반은 [USAGE.md](USAGE.md) — 시작 순서, 제어판, push 알림, 도움말 조회, 문제 해결.
 
 
 ---
