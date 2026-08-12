@@ -21,9 +21,12 @@ From there, ask for Stata work in the chat, or send results from Stata to Claude
 Type `mcp` (= `db mcp`) in Stata to open the control-panel dialog — connect / restart / shutdown, server status (including version and license expiry), auto-shutdown settings, license key entry, help-DB update, and uninstall, all as buttons.
 
 ```stata
-mcp          // control-panel dialog
-mcp_setup    // setup menu + help-DB download (links for license / start / uninstall)
+mcp
+mcp_setup
 ```
+
+- `mcp` (= `db mcp`) — control-panel dialog
+- `mcp_setup` — setup menu + help-DB download (links for license / start / uninstall)
 
 > Menu-bar registration (User ▸ Stata-MCP) is handled by `mcp_setup`. If the menu
 > is missing on the next launch, run `mcp_menu, install` and follow the printed instructions.
@@ -35,19 +38,24 @@ Use the control panel's Auto-shutdown group to turn this off (keep the server ru
 or adjust the wait time, or use the command:
 
 ```stata
-mcp_watchdog, grace(120)     // clean up the server 120 s after Stata quits
-mcp_watchdog, enabled(0)     // disable auto-cleanup — server stays after Stata quits
+mcp_watchdog, grace(120)
+mcp_watchdog, enabled(0)
 ```
+
+- `grace(120)` — clean up the server 120 s after Stata quits
+- `enabled(0)` — disable auto-cleanup (server stays after Stata quits)
 
 > If you restart Stata and reconnect within the wait time, the server carries on without dropping the connection.
 
 **Full uninstall**:
 
 ```stata
-mcp_uninstall              // preview (deletes nothing) — lists targets + a confirm link
-mcp_uninstall, confirm     // removes ado/dlg/jar + menu registration (keeps license/instructions)
-mcp_uninstall, confirm all // also removes the license key and instruction data
+mcp_uninstall
 ```
+
+- `mcp_uninstall` — preview (deletes nothing): lists targets + a confirm link
+- `mcp_uninstall, confirm` — removes ado/dlg/jar + menu registration (keeps license/instructions)
+- `mcp_uninstall, confirm all` — also removes the license key and instruction data
 
 > The **Uninstall** button in the control panel (`db mcp`) runs the preview (first line above) as well.
 
@@ -93,12 +101,15 @@ Analyze directly in the Stata GUI, then send the results to Claude:
 ```stata
 sysuse auto, clear
 regress price mpg weight
-llm push                                 // push r()/e() (added to the store + instant notification)
-llm push > regress price mpg weight      // run the command after >, push the output screen + r()/e()
-llm push, note(main spec for slides) > regress price mpg weight, robust
-                                         // attach a note in plain language — easy to find later
-llm push, clear                          // clear unread items and push fresh (cleanup)
+llm push
 ```
+
+Variants:
+
+- `llm push` — pushes r()/e() (added to the store + instant notification)
+- `llm push > regress price mpg weight` — runs the command after `>`, pushes the output screen + r()/e()
+- `llm push, note(main spec for slides) > regress ..., robust` — attaches a note in plain language (easy to find later)
+- `llm push, clear` — clears unread items and pushes fresh (cleanup)
 
 - `llm push` **stores** the result and notifies Claude instantly
 - Claude picks up unread items one by one — push several times in a row and they accumulate in order
@@ -178,8 +189,10 @@ In short: **plain language = your request is interpreted and routed to the right
 #### Full shutdown (server + drone)
 
 ```stata
-mcp_connect, shutdown        // stops both server and drone (same as the control panel's [Shutdown] button)
+mcp_connect, shutdown
 ```
+
+Stops both the server and the drone (same as the control panel's [Shutdown] button).
 
 #### Automatic shutdown
 

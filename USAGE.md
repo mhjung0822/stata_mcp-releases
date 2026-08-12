@@ -21,9 +21,12 @@
 Stata 에서 `mcp` (= `db mcp`) 를 치면 제어판 다이얼로그가 뜹니다 — 연결/재시작/종료, 서버 상태(버전·라이선스 만료일 포함), 자동 종료 설정, 라이선스 키 입력, 도움말 DB 갱신, 제거를 버튼으로.
 
 ```stata
-mcp          // 제어판 다이얼로그
-mcp_setup    // 설정 메뉴 + 도움말 DB 다운로드 (라이선스/기동/제거 링크)
+mcp
+mcp_setup
 ```
+
+- `mcp` (= `db mcp`) — 제어판 다이얼로그
+- `mcp_setup` — 설정 메뉴 + 도움말 DB 다운로드 (라이선스/기동/제거 링크)
 
 > 메뉴바 등록(User ▸ Stata-MCP)은 `mcp_setup` 이 함께 처리합니다. 다음 실행에서
 > 메뉴가 안 보이면 `mcp_menu, install` 을 실행하고 출력 안내를 따르세요.
@@ -37,19 +40,24 @@ mcp_setup    // 설정 메뉴 + 도움말 DB 다운로드 (라이선스/기동/�
 명령으로도 됩니다:
 
 ```stata
-mcp_watchdog, grace(120)     // Stata 종료 후 120초 뒤 서버 정리
-mcp_watchdog, enabled(0)     // 자동 정리 끄기 — Stata 를 꺼도 서버 유지
+mcp_watchdog, grace(120)
+mcp_watchdog, enabled(0)
 ```
+
+- `grace(120)` — Stata 종료 후 120초 뒤 서버 정리
+- `enabled(0)` — 자동 정리 끄기 (Stata 를 꺼도 서버 유지)
 
 > 대기 시간 안에 Stata 를 다시 켜고 연결하면 서버는 끊기지 않고 그대로 이어집니다.
 
 **전체 제거**:
 
 ```stata
-mcp_uninstall              // 미리보기 (삭제 안 함) — 대상 목록 + confirm 링크
-mcp_uninstall, confirm     // ado/dlg/jar + 메뉴 등록 삭제 (라이선스/지침 보존)
-mcp_uninstall, confirm all // 라이선스 키/지침 데이터까지 삭제
+mcp_uninstall
 ```
+
+- `mcp_uninstall` — 미리보기 (삭제 안 함): 대상 목록 + confirm 링크 출력
+- `mcp_uninstall, confirm` — ado/dlg/jar + 메뉴 등록 삭제 (라이선스/지침 보존)
+- `mcp_uninstall, confirm all` — 라이선스 키/지침 데이터까지 삭제
 
 > 제어판(`db mcp`)의 **Uninstall** 버튼으로도 미리보기(위 첫 줄)가 실행됩니다.
 
@@ -95,12 +103,15 @@ Stata GUI에서 직접 분석 후 결과를 Claude로 전송:
 ```stata
 sysuse auto, clear
 regress price mpg weight
-llm push                                 // r()/e() push (저장소에 add + 즉시 알림)
-llm push > regress price mpg weight      // > 뒤의 명령 실행 + 결과화면 + r()/e() push
-llm push, note(발표용 본검정) > regress price mpg weight, robust
-                                         // 자연어 메모 첨부 — 나중에 찾기 쉬움
-llm push, clear                          // 안 읽은 항목 비우고 새로 push (잔재 정리)
+llm push
 ```
+
+변형:
+
+- `llm push` — r()/e() push (저장소에 add + 즉시 알림)
+- `llm push > regress price mpg weight` — `>` 뒤의 명령 실행 + 결과화면 + r()/e() push
+- `llm push, note(발표용 본검정) > regress ..., robust` — 자연어 메모 첨부 (나중에 찾기 쉬움)
+- `llm push, clear` — 안 읽은 항목 비우고 새로 push (잔재 정리)
 
 - `llm push` 하면 결과가 **저장소에 쌓이고** Claude 에 즉시 알림이 갑니다
 - Claude 는 안 읽은 것부터 하나씩 가져옵니다 — 빠르게 여러 번 push 해도 순서대로 누적됩니다
@@ -180,8 +191,10 @@ Claude 가 Stata 명령을 헷갈릴 때 스스로 확인하는 도구들 — �
 #### 완전 종료 (서버 + 드론)
 
 ```stata
-mcp_connect, shutdown        // 서버·드론 모두 정지 (제어판 [Shutdown] 버튼과 동일)
+mcp_connect, shutdown
 ```
+
+서버·드론이 모두 정지됩니다 (제어판 [Shutdown] 버튼과 동일).
 
 #### 자동 종료
 

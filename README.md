@@ -34,7 +34,7 @@ net install stata-mcp, from("https://raw.githubusercontent.com/mhjung0822/stata_
 jar 2종 + ado/dlg 가 자동 다운로드됩니다. 이어서 **`mcp_setup`** 으로 도움말 DB 를 받고 제어판 메뉴를 등록합니다 (설치 후 1회):
 
 ```stata
-mcp_setup            // 도움말 DB(~32MB) 다운로드 + User 메뉴 등록
+mcp_setup
 ```
 
 > 도움말 DB 는 용량이 커서 net install 번들 대신 `mcp_setup` 이 온디맨드로 받습니다 (패키지 경량화). 인터넷 연결 필요.
@@ -43,8 +43,10 @@ mcp_setup            // 도움말 DB(~32MB) 다운로드 + User 메뉴 등록
 
 ```stata
 adoupdate stata-mcp, update
-mcp_setup, updatedb   // 도움말 DB 도 최신으로 (제어판 [Update help DB] 버튼과 동일)
+mcp_setup, updatedb
 ```
+
+- `mcp_setup, updatedb` — 도움말 DB 도 최신으로 (제어판 [Update help DB] 버튼과 동일)
 
 > 업데이트를 적용하려면 **Stata 를 재시작**한 뒤 `mcp_connect` 로 다시 연결하세요.
 
@@ -55,8 +57,10 @@ mcp_setup, updatedb   // 도움말 DB 도 최신으로 (제어판 [Update help D
 키가 있어야 동작합니다 (발급 문의: mhjung0822@gmail.com). 설치 후 Stata 에서:
 
 ```stata
-mcp_edit_license          // jar 옆 stata_mcp.properties 를 에디터로 열어줌
+mcp_edit_license
 ```
+
+jar 옆 `stata_mcp.properties` 가 에디터로 열립니다.
 
 열린 파일의 `LICENSE_KEY=""` 따옴표 사이에 키를 붙여넣고 저장 → `mcp_connect, reset` 으로 즉시 적용 (Stata 재시작 불필요).
 
@@ -70,8 +74,10 @@ mcp_edit_license          // jar 옆 stata_mcp.properties 를 에디터로 열�
 ## 3. 서버 기동
 
 ```stata
-mcp_connect          // MCP 서버 + 드론 기동 (한 번에)
+mcp_connect
 ```
+
+MCP 서버와 드론이 한 번에 기동됩니다.
 
 > Stata 를 종료하면 서버도 자동으로 함께 종료됩니다. 명령 대신 GUI 제어판(`db mcp`)으로도 켤 수 있습니다 — [USAGE.md](USAGE.md) 참고.
 
