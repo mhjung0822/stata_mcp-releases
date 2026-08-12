@@ -18,10 +18,8 @@ Stata와 Claude를 MCP(Model Context Protocol)로 연결하는 도구의 **공�
 
 | 항목 | 버전 |
 |------|------|
-| Java | 별도 설치 불필요 — Stata 에 내장된 Java 를 사용합니다 (Stata 17 은 내장 Java 가 구버전이라 [JDK 17+](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html) 설치 필요) |
 | Stata | 17 이상 (19 권장) |
 | Claude Desktop | 최신 — [다운로드](https://claude.ai/download) |
-| Node.js | 불필요 — 확장(mcpb) 설치 기준. 설정 파일 수동 등록 시에만 필요 ([INSTALL_CHAT.md](INSTALL_CHAT.md)) |
 
 ---
 

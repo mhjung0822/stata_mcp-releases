@@ -18,10 +18,8 @@ For usage and troubleshooting after install see [USAGE.en.md](USAGE.en.md).
 
 | Item | Version |
 |------|------|
-| Java | No separate install needed — Stata's bundled Java is used (Stata 17 ships an older bundle, so install [JDK 17+](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html) there) |
 | Stata | 17+ (19 recommended) |
 | Claude Desktop | latest — [download](https://claude.ai/download) |
-| Node.js | Not needed with the extension (mcpb). Only required for manual config registration ([INSTALL_CHAT.md](INSTALL_CHAT.md)) |
 
 ---
 
