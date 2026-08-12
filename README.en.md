@@ -48,15 +48,13 @@ mcp_setup, updatedb
 
 ### License key (required)
 
-A key is required for the software to run (to request one: mhjung0822@gmail.com). After installing, in Stata:
+A key is required for the software to run (to request one: mhjung0822@gmail.com). After installing, paste the key you received into one line in Stata:
 
 ```stata
-mcp_edit_license
+mcp_set_license YOUR-KEY-HERE
 ```
 
-This opens `stata_mcp.properties` (next to the jar) in an editor.
-
-Paste the key between the quotes of `LICENSE_KEY=""` in the opened file, save, then apply immediately with `mcp_connect, reset` (no Stata restart needed).
+You can also paste it into the **License** field of the control panel (`db mcp`) and click **Save**. Replacing a key works the same way — after replacing, apply immediately with `mcp_connect, reset` (no Stata restart needed).
 
 - If the key is missing or expired, neither the drone nor the server starts, and the reason is printed in the Results window
 - Validation requires an internet connection (offline grace period: up to 72 hours)
