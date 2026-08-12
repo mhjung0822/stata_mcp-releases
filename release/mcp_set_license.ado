@@ -33,7 +33,7 @@ program mcp_set_license
     * 주의: 여러 줄 복붙 스크립트(AGENT_INSTALL 등)에서는 인수형을 쓸 것 — 프롬프트가
     * 다음 붙여넣은 줄을 키로 삼켜버린다.
     if `"`key'"' == "" {
-        di as text "라이선스 키를 붙여넣고 Enter (취소: 빈 입력):"
+        di as text "라이선스 키를 명령어 창에 입력하고 엔터:"
         display _request(_mcp_lic_key)
         local key = strtrim(`"$_mcp_lic_key"')
         global _mcp_lic_key
