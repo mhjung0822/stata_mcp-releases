@@ -106,7 +106,14 @@ MCP 서버와 드론이 한 번에 기동됩니다.
 
 ## 5. 연결 테스트
 
-Claude Desktop 새 대화(또는 코워크 세션)에서:
+Stata 와 Claude Desktop 을 모두 종료한 상태에서, 순서대로:
+
+```
+1. Stata 실행 → mcp_connect
+2. Claude Desktop 실행
+```
+
+이후 새 대화(또는 코워크 세션)에서:
 
 ```
 Stata 버전 알려줘

@@ -108,7 +108,14 @@ For the skill lineup and usage, see [USAGE.en.md](USAGE.en.md).
 
 ## 5. Connection test
 
-In a new Claude Desktop chat (or cowork session):
+With both Stata and Claude Desktop fully closed, start them in this order:
+
+```
+1. Start Stata → run mcp_connect
+2. Start Claude Desktop
+```
+
+Then, in a new chat (or cowork session):
 
 ```
 What Stata version am I running?
