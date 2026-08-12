@@ -40,9 +40,10 @@ program mcp_set_license
     * 다음 붙여넣은 줄을 키로 삼켜버린다.
     if `"`key'"' == "" {
         di as text "라이선스 키를 명령어 창에 입력하고 엔터:"
-        display _request(_mcp_lic_key)
-        local key = strtrim(`"$_mcp_lic_key"')
-        global _mcp_lic_key
+        * _request 매크로 이름은 8자 제한 — 초과 시 display 자체가 invalid syntax
+        display _request(_mcpkey)
+        local key = strtrim(`"$_mcpkey"')
+        global _mcpkey
         if `"`key'"' == "" {
             di as error "키가 입력되지 않았습니다. Usage: mcp_set_license [<license-key>] [, reset]"
             exit 198
