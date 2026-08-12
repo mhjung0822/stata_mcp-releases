@@ -28,9 +28,7 @@ Stata와 Claude를 MCP(Model Context Protocol)로 연결하는 도구의 **공�
 Stata 에서 한 줄:
 
 ```stata
-net install stata-mcp, ///
-    from("https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/release") ///
-    replace
+net install stata-mcp, from("https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/release") replace
 ```
 
 jar 2종 + ado/dlg 가 자동 다운로드됩니다. 이어서 **`mcp_setup`** 으로 도움말 DB 를 받고 제어판 메뉴를 등록합니다 (설치 후 1회):

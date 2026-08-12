@@ -28,9 +28,7 @@ For usage and troubleshooting after install see [USAGE.en.md](USAGE.en.md).
 One line in Stata:
 
 ```stata
-net install stata-mcp, ///
-    from("https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/release") ///
-    replace
+net install stata-mcp, from("https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/release") replace
 ```
 
 This downloads the two jars plus the ado/dlg files. Then run **`mcp_setup`** once to download the help DB and register the control-panel menu:
