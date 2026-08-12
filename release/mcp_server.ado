@@ -78,7 +78,7 @@ program mcp_server
                 di as text "[License] VALID — `dexp' 까지 (`ddays'일 남음)"
             }
             else if "`dlic'" != "" {
-                di as error "[License] `dlic' — {stata mcp_edit_license:키 입력} 후 {stata \"mcp_connect, reset\":재연결}"
+                di as error "[License] `dlic' — {stata mcp_set_license:키 입력} 후 {stata \"mcp_connect, reset\":재연결}"
             }
         }
         exit

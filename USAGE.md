@@ -222,7 +222,8 @@ Stata 에서 `cd` 로 작업폴더를 옮기면 Claude 가 자동으로 알아�
 
 ```
 [Drone] 라이선스가 YYYY-MM-DD 에 만료되었습니다. 연장 문의: ...
-[Drone] 드론을 시작하지 않고 MCP 서버도 종료합니다. 키 입력: mcp_edit_license → 저장 후 mcp_connect, reset
+[Drone] 드론을 시작하지 않고 MCP 서버도 종료합니다.
+[Drone] [ 1. 라이선스 키 입력 ] (프롬프트에 붙여넣기) → [ 2. 재연결 ]
 ```
 
 | 메시지 | 원인 / 조치 |
