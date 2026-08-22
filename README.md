@@ -75,8 +75,8 @@ MCP 서버와 드론이 한 번에 기동됩니다. 첫 실행이면 라이선�
 
 1. 자신의 OS 에 맞는 파일 **하나만** 다운로드:
    - Mac: [`stata-mcp-mac.mcpb`](https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/claude-plugins/stata-mcp-mac.mcpb)
-   - Windows: [`stata-mcp-win-native.mcpb`](https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/claude-plugins/stata-mcp-win-native.mcpb)
-     - 설치가 안 되거나 도구가 나타나지 않으면 [`stata-mcp-win.mcpb`](https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/claude-plugins/stata-mcp-win.mcpb) 를 대신 설치하세요. 두 개를 동시에 설치하지는 마세요.
+   - Windows: [`stata-mcp-win.mcpb`](https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/claude-plugins/stata-mcp-win.mcpb)
+     - 설치가 안 되거나 도구가 나타나지 않으면 [`stata-mcp-win-java.mcpb`](https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/claude-plugins/stata-mcp-win-java.mcpb) 를 대신 설치하세요. 두 개를 동시에 설치하지는 마세요.
 2. Claude Desktop → **설정 → 확장 프로그램** → **파일로 설치** → 받은 `.mcpb` 선택
 3. Claude Desktop 재시작
 
