@@ -75,7 +75,8 @@ Starts the MCP server and the drone in one go. On first run it asks for the lice
 
 1. Download the **one** file matching your OS:
    - Mac: [`stata-mcp-mac.mcpb`](https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/claude-plugins/stata-mcp-mac.mcpb)
-   - Windows: [`stata-mcp-win.mcpb`](https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/claude-plugins/stata-mcp-win.mcpb)
+   - Windows: [`stata-mcp-win-native.mcpb`](https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/claude-plugins/stata-mcp-win-native.mcpb)
+     - If it will not install, or the tools do not appear, install [`stata-mcp-win.mcpb`](https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/claude-plugins/stata-mcp-win.mcpb) instead. Do not install both at the same time.
 2. Claude Desktop → **Settings → Extensions** → **Install from file** → select the downloaded `.mcpb`
 3. Restart Claude Desktop
 
