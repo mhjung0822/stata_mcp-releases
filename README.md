@@ -4,6 +4,8 @@
 
 Stata MCP는 Claude·ChatGPT가 **Stata(결과 창·데이터 브라우저·그래프 등)에서 같은 데이터로 함께 작업**하게 해 주는 도구입니다. **분석 명령과 결과를 서로 주고받는** 방식으로, 대화로 분석을 요청하면 내 Stata에서 바로 실행되고, Stata에서 직접 돌린 결과도 AI에 보내 해석과 다음 작업을 이어 갈 수 있습니다. 연결된 상태에서도 Stata는 평소처럼 직접 사용할 수 있고, 필요할 때만 AI의 도움을 받으면 됩니다.
 
+[![Stata MCP — Stata 와 Claude 가 같은 데이터로 함께 작업하는 화면](images/hero.png)](https://youtu.be/y9C_a-SfCDo)
+
 ▶ [소개 영상 보기 (YouTube)](https://youtu.be/y9C_a-SfCDo)
 
 설치는 3단계입니다: **① Stata 측 설치 → ② 서버 기동 → ③ Claude 등록 (확장 + 스킬)**.
