@@ -1,8 +1,12 @@
-# Stata MCP — Stata × Claude
+# Stata MCP — Stata × Claude · ChatGPT
 
 > 한국어: [README.md](README.md)
 
-Public **distribution repository** for a tool that connects Stata and Claude via MCP (Model Context Protocol). The primary environment is **Claude Desktop (chat and cowork)**. The source code is private; this repository provides built artifacts and user documentation only.
+Stata MCP lets Claude and ChatGPT **work with you in Stata (Results window, Data Browser, graphs, and so on), on the same data**. You **exchange analysis commands and results** back and forth: ask for an analysis in chat and it runs right in your Stata, or send results you ran yourself in Stata to the AI to interpret and carry on from there. While connected, you can still use Stata on your own as usual and bring in the AI only when you need it.
+
+[![Stata MCP intro video](https://img.youtube.com/vi/y9C_a-SfCDo/hqdefault.jpg)](https://youtu.be/y9C_a-SfCDo)
+
+*Video is in Korean.*
 
 Installation is three steps: **① Stata-side install → ② Start the server → ③ Register in Claude (extension + skills)**.
 You can also connect from the ChatGPT desktop app — see section 6.
