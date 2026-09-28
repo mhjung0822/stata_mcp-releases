@@ -1,7 +1,7 @@
-*! mcp_setup  v0.2.0  12jul2026
+*! mcp_setup  v0.2.1  28sep2026
 *!
 *! Stata-MCP 설정 진입점 (구 mcp_set 흡수) — help DB 를 GitHub 에서 받아
-*! 드론 jar 옆에 배치하고, 제어판 메뉴 등록 + 설정 링크(라이선스/기동/제거)를
+*! 드론 jar 옆에 배치하고, 제어판 메뉴 등록 + 설정 링크(기동/제거)를
 *! 출력한다. net install 직후 1회 실행, 이후 설정 허브로도 사용.
 *!
 *! Usage:
@@ -17,7 +17,7 @@ program mcp_setup
     version 17.0
     syntax [, UPDATEDB]
 
-    * ─── 드론 jar 위치 = help DB 배치 대상 (mcp_get_license 와 동일 패턴) ──
+    * ─── 드론 jar 위치 = help DB 배치 대상 ────────────────────────────────
     capture findfile stata-drone.jar
     if _rc {
         di as error "[Setup] stata-drone.jar 를 찾을 수 없습니다."
@@ -67,6 +67,16 @@ program mcp_setup
         exit
     }
 
+    * ─── 레거시 정리 — 라이선스 체계 폐기(v0.12.22)로 남은 ado 제거 ────────
+    * net install 은 pkg 에서 빠진 옛 파일을 지우지 않으므로 여기서 정리.
+    foreach f in mcp_set_license.ado mcp_get_license.ado mcp_edit_license.ado {
+        capture confirm file `"`c(sysdir_plus)'m/`f'"'
+        if !_rc {
+            capture erase `"`c(sysdir_plus)'m/`f'"'
+            if !_rc di as text "[Setup] 레거시 제거: `f'"
+        }
+    }
+
     * ─── 제어판 메뉴 등록 (profile.do) ───────────────────────────────────
     di as text "[Setup] 제어판 메뉴 등록..."
     capture mcp_menu, install
@@ -77,7 +87,6 @@ program mcp_setup
     * ─── 설정 허브 (구 mcp_set 흡수 — 클릭 링크, 서버·드론 기동 안 함) ────
     di as text ""
     di as text "{bf:[Stata-MCP] Setup}"
-    di as text "  라이선스 키 편집:   {stata mcp_edit_license:mcp_edit_license}"
     di as text "  help DB 갱신:        {stata mcp_setup, updatedb:mcp_setup, updatedb}"
     di as text "  서버·드론 기동:      {stata mcp_connect:mcp_connect}"
     di as text "  제거:               {stata mcp_uninstall:mcp_uninstall}"

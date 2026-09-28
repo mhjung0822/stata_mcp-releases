@@ -1,4 +1,4 @@
-*! mcp_server  v0.2.5  12aug2026
+*! mcp_server  v0.2.6  28sep2026
 *!
 *! Start / check / stop stata-mcp-server.jar located in the Stata
 *! PERSONAL ado folder (resolved via `findfile`, so no path argument
@@ -66,20 +66,8 @@ program mcp_server
         }
         else {
             local dver ""
-            local dlic ""
-            local dexp ""
-            local ddays ""
             if regexm(`"`dline'"', `""version":"([^"]+)""')          local dver = regexs(1)
-            if regexm(`"`dline'"', `""license":"([^"]+)""')          local dlic = regexs(1)
-            if regexm(`"`dline'"', `""licenseExp":"([0-9-]+)""')     local dexp = regexs(1)
-            if regexm(`"`dline'"', `""licenseDaysLeft":([0-9]+)"')   local ddays = regexs(1)
             di as text "[Drone]  v`dver' running (port `droneport')"
-            if "`dlic'" == "VALID" {
-                di as text "[License] VALID — `dexp' 까지 (`ddays'일 남음)"
-            }
-            else if "`dlic'" != "" {
-                di as error "[License] `dlic' — mcp_set_license 로 키 입력 후 mcp_connect, reset"
-            }
         }
         exit
     }

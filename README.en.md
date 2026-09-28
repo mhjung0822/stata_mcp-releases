@@ -4,7 +4,7 @@
 
 Public **distribution repository** for a tool that connects Stata and Claude via MCP (Model Context Protocol). The primary environment is **Claude Desktop (chat and cowork)**. The source code is private; this repository provides built artifacts and user documentation only.
 
-Installation is four steps: **① Stata-side install → ② License → ③ Start the server → ④ Register in Claude (extension + skills)**.
+Installation is three steps: **① Stata-side install → ② Start the server → ③ Register in Claude (extension + skills)**.
 
 For usage and troubleshooting after install see [USAGE.en.md](USAGE.en.md).
 
@@ -40,15 +40,6 @@ mcp_setup, updatedb
 
 > To apply an update, **restart Stata** and reconnect with `mcp_connect`.
 
-### License key (required)
-
-A key is required for the software to run (to request one: mhjung0822@gmail.com). **There is no separate entry step** — `mcp_connect` in the next section asks for the key if none is set; just paste the key you received at the prompt.
-
-To replace a key later, use `mcp_set_license` (paste at the prompt) or the control panel's (`db mcp`) **License** field + **Save**, then apply immediately with `mcp_connect, reset` (no Stata restart needed). If the key has expired, click **[ Enter license key ]** in the connection output, paste, and it reconnects automatically.
-
-- If the key is missing or expired, neither the drone nor the server starts, and the reason is printed in the Results window
-- Validation requires an internet connection (offline grace period: up to 72 hours)
-
 > To change the ports (default 8080/8001), edit `BRIDGE_PORT`/`DRONE_PORT` in `stata_mcp.properties` next to the jar — the file is created automatically on first start.
 
 ---
@@ -59,11 +50,11 @@ To replace a key later, use `mcp_set_license` (paste at the prompt) or the contr
 mcp_connect
 ```
 
-Starts the MCP server and the drone in one go. On first run it asks for the license key and then offers the help-DB download — just follow the prompts.
+Starts the MCP server and the drone in one go. On first run it offers the help-DB download — type `y` (recommended).
 
 > The server shuts down automatically when you quit Stata. You can also start it from the GUI control panel (`db mcp`) — see [USAGE.en.md](USAGE.en.md).
 
-> ⚠️ **If a red `java.lang.UnsupportedClassVersionError` appears and the drone won't start** — Stata's bundled Java is outdated. Run `update all` in Stata, **restart Stata**, then run `mcp_connect` again. Details in the troubleshooting section of [USAGE.en.md](USAGE.en.md).
+> ⚠️ **If `mcp_connect` says Java 17 or later is required, or a red `java.lang.UnsupportedClassVersionError` appears and the drone won't start** — Stata's bundled Java is outdated. Run `update all` in Stata, **restart Stata**, then run `mcp_connect` again. Details in the troubleshooting section of [USAGE.en.md](USAGE.en.md).
 
 ---
 
@@ -116,7 +107,7 @@ If the version and edition come back (e.g. StataNow/MP 19.5), the installation i
 
 If not, check in order:
 
-1. Stata Results window — does the `mcp_connect` output say `License OK`? (if not, see step 2, License)
+1. Stata Results window — does the `mcp_connect` output say `Ready for commands`? (if not, see step 3, Start the server)
 2. Claude tools list — is the Stata MCP extension visible? (if not, fully quit and relaunch Claude Desktop)
 
 For everyday usage see [USAGE.en.md](USAGE.en.md) — startup order, control panel, push notifications, help lookup, troubleshooting. Rare environment issues: [TROUBLESHOOTING.md](TROUBLESHOOTING.md) (Korean).

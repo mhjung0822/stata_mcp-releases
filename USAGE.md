@@ -18,7 +18,7 @@
 
 ### 제어판 (GUI) — 명령 대신 버튼으로
 
-Stata 에서 `mcp` (= `db mcp`) 를 치면 제어판 다이얼로그가 뜹니다 — 연결/재시작/종료, 서버 상태(버전·라이선스 만료일 포함), 자동 종료 설정, 라이선스 키 입력, 도움말 DB 갱신, 제거를 버튼으로.
+Stata 에서 `mcp` (= `db mcp`) 를 치면 제어판 다이얼로그가 뜹니다 — 연결/재시작/종료, 서버 상태(버전 포함), 자동 종료 설정, 도움말 DB 갱신, 제거를 버튼으로.
 
 ```stata
 mcp
@@ -26,14 +26,10 @@ mcp_setup
 ```
 
 - `mcp` (= `db mcp`) — 제어판 다이얼로그
-- `mcp_setup` — 설정 메뉴 + 도움말 DB 다운로드 (라이선스/기동/제거 링크)
+- `mcp_setup` — 설정 메뉴 + 도움말 DB 다운로드 (기동/제거 링크)
 
 > 메뉴바 등록(User ▸ Stata-MCP)은 `mcp_setup` 이 함께 처리합니다. 다음 실행에서
 > 메뉴가 안 보이면 `mcp_menu, install` 을 실행하고 출력 안내를 따르세요.
-
-> 라이선스 키는 제어판 **License** 칸에 붙여넣고 **Save** → 안내에 따라 재연결하면
-> 적용됩니다. **Edit license / properties** 버튼(설정 파일 직접 편집)이나 `mcp_setup`
-> 으로도 가능합니다.
 
 **자동 종료 (Auto-shutdown)** — Stata 를 종료하면 서버도 잠시 뒤 스스로 정리됩니다.
 제어판의 Auto-shutdown 그룹에서 끄거나(서버 상주) 대기 시간을 조절할 수 있고,
@@ -56,8 +52,8 @@ mcp_uninstall
 ```
 
 - `mcp_uninstall` — 미리보기 (삭제 안 함): 대상 목록 + confirm 링크 출력
-- `mcp_uninstall, confirm` — ado/dlg/jar + 메뉴 등록 삭제 (라이선스/지침 보존)
-- `mcp_uninstall, confirm all` — 라이선스 키/지침 데이터까지 삭제
+- `mcp_uninstall, confirm` — ado/dlg/jar + 메뉴 등록 삭제 (설정/지침 보존)
+- `mcp_uninstall, confirm all` — 설정/지침 데이터까지 삭제
 
 > 제어판(`db mcp`)의 **Uninstall** 버튼으로도 미리보기(위 첫 줄)가 실행됩니다.
 
@@ -216,29 +212,15 @@ Stata 에서 `cd` 로 작업폴더를 옮기면 Claude 가 자동으로 알아�
 
 새 MCP 서버를 처음 사용할 때 **승인 프롬프트**가 뜹니다 (`Trust this MCP server?` / `Approve` 계열). 승인해야 도구 호출이 되며, 한 번 승인하면 이후 자동입니다.
 
-### 라이선스 키 문제
+### mcp_connect 시 Java 버전 오류 (드론이 시작 안 됨)
 
-증상: `mcp_connect` 시 드론이 시작되지 않고 아래 같은 메시지가 출력됨.
+증상: `mcp_connect` 가 아래처럼 안내하고 멈춤.
 
 ```
-[Drone] 라이선스가 YYYY-MM-DD 에 만료되었습니다. 연장 문의: ...
-[Drone] 드론을 시작하지 않고 MCP 서버도 종료합니다.
-[Drone] [ 라이선스 키 입력 ] ← 클릭해서 키를 붙여넣으면 자동으로 재연결됩니다.
+[Stata-MCP] Stata 의 Java 가 11.0.x 입니다 — Java 17 이상이 필요합니다.
 ```
 
-| 메시지 | 원인 / 조치 |
-|---|---|
-| 라이선스 키가 없습니다 | `mcp_connect` 가 자동으로 입력을 요청합니다 — 프롬프트에 키 붙여넣기 |
-| 라이선스 키가 유효하지 않습니다 | 키 복사가 잘렸거나 변조됨 — 받은 키 전체를 다시 붙여넣기 |
-| 라이선스가 만료되었습니다 | 새 키 발급 문의 → 출력의 [ 라이선스 키 입력 ] 클릭 → 붙여넣기 (자동 재연결) |
-| 인터넷 연결이 필요합니다 | 검증에 네트워크 시간이 필요 (오프라인 72시간 초과). 연결 후 `mcp_connect, reset` |
-| 키 형식이 새 버전입니다 | `net install stata-mcp, ... replace` 로 업데이트 |
-
-키 교체 후에는 `mcp_connect, reset` 만으로 적용됨 (Stata 재시작 불필요). 만료 7일 전부터 `mcp_connect` 시 남은 일수가 표시됨.
-
-### mcp_connect 시 UnsupportedClassVersionError (드론이 시작 안 됨)
-
-증상: `mcp_connect` 시 붉은 글씨로 아래 에러가 출력됨.
+또는 붉은 글씨로 아래 에러가 출력됨.
 
 ```
 java.lang.UnsupportedClassVersionError: ... has been compiled by a more recent

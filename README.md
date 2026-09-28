@@ -4,7 +4,7 @@
 
 Stata와 Claude를 MCP(Model Context Protocol)로 연결하는 도구의 **공개 배포 저장소**입니다. 주 사용 환경은 **Claude Desktop(채팅, 코워크)**입니다. 소스 코드는 비공개이며, 이 저장소는 빌드된 배포 파일과 사용자 문서만 제공합니다.
 
-설치는 4단계입니다: **① Stata 측 설치 → ② 라이선스 → ③ 서버 기동 → ④ Claude 등록 (확장 + 스킬)**.
+설치는 3단계입니다: **① Stata 측 설치 → ② 서버 기동 → ③ Claude 등록 (확장 + 스킬)**.
 
 설치 후 사용법·문제 해결은 [USAGE.md](USAGE.md) 참고.
 
@@ -40,15 +40,6 @@ mcp_setup, updatedb
 
 > 업데이트를 적용하려면 **Stata 를 재시작**한 뒤 `mcp_connect` 로 다시 연결하세요.
 
-### 라이선스 키 (필수)
-
-키가 있어야 동작합니다 (발급 문의: mhjung0822@gmail.com). **따로 입력하는 단계는 없습니다** — 다음 장의 `mcp_connect` 가 키가 없으면 물어보므로, 그때 발급받은 키를 붙여넣으면 됩니다.
-
-나중에 키를 교체할 때는 `mcp_set_license` (프롬프트에 붙여넣기) 또는 제어판(`db mcp`)의 **License** 칸 + **Save** → `mcp_connect, reset` 으로 즉시 적용 (Stata 재시작 불필요). 만료된 경우에는 연결 시 출력되는 **[ 라이선스 키 입력 ]** 을 클릭해 붙여넣으면 자동으로 재연결됩니다.
-
-- 키가 없거나 만료되면 드론·서버가 기동하지 않고 Results 창에 사유가 출력됩니다
-- 검증에 인터넷 연결 필요 (오프라인은 72시간까지 허용)
-
 > 포트를 바꾸려면 (기본 8080/8001) jar 옆 `stata_mcp.properties` 의 `BRIDGE_PORT`/`DRONE_PORT` 수정 — 파일은 첫 기동 시 자동 생성.
 
 ---
@@ -59,11 +50,11 @@ mcp_setup, updatedb
 mcp_connect
 ```
 
-MCP 서버와 드론이 한 번에 기동됩니다. 첫 실행이면 라이선스 키와 도움말 DB 다운로드를 차례로 물어봅니다 — 안내를 따라 입력하면 끝.
+MCP 서버와 드론이 한 번에 기동됩니다. 첫 실행이면 도움말 DB 다운로드를 물어봅니다 — `y` 입력(권장).
 
 > Stata 를 종료하면 서버도 자동으로 함께 종료됩니다. 명령 대신 GUI 제어판(`db mcp`)으로도 켤 수 있습니다 — [USAGE.md](USAGE.md) 참고.
 
-> ⚠️ **`java.lang.UnsupportedClassVersionError` 가 붉게 출력되며 드론이 시작되지 않으면** — Stata 내장 Java 가 구버전인 경우입니다. Stata 에서 `update all` 로 최신 업데이트 후 **Stata 재시작** → `mcp_connect` 재실행. 상세는 [USAGE.md](USAGE.md) 문제 해결 참고.
+> ⚠️ **`Java 17 이상이 필요합니다` 안내가 나오거나, `java.lang.UnsupportedClassVersionError` 가 붉게 출력되며 드론이 시작되지 않으면** — Stata 내장 Java 가 구버전인 경우입니다. Stata 에서 `update all` 로 최신 업데이트 후 **Stata 재시작** → `mcp_connect` 재실행. 상세는 [USAGE.md](USAGE.md) 문제 해결 참고.
 
 ---
 
@@ -114,7 +105,7 @@ Stata 버전 알려줘
 
 안 되면 순서대로 확인하세요:
 
-1. Stata 결과창 — `mcp_connect` 출력에 `License OK` 가 있는지 (없으면 2장 라이선스)
+1. Stata 결과창 — `mcp_connect` 출력에 `Ready for commands` 가 있는지 (없으면 3장 서버 기동)
 2. Claude 도구 목록 — Stata MCP 확장이 보이는지 (안 보이면 Claude Desktop 완전 종료 후 재실행)
 
 사용법 전반은 [USAGE.md](USAGE.md) 참고 — 시작 순서, 제어판, push 알림, 도움말 조회, 문제 해결. 드문 환경 이슈는 [TROUBLESHOOTING.md](TROUBLESHOOTING.md).

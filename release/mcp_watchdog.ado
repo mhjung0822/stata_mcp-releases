@@ -1,7 +1,7 @@
 *! mcp_watchdog  v0.1.0  03aug2026
 *!
 *! PID 워치독(Stata 종료 시 서버 자동 정리) 설정.
-*!   1) stata_mcp.properties (server jar 옆, mcp_edit_license 와 동일 경로) 에
+*!   1) stata_mcp.properties (server jar 옆) 에
 *!      enabled / grace-seconds 를 기록 → 서버 재시작 후에도 유지
 *!   2) 떠 있는 브릿지에 POST /api/watchdog → 재시작 없이 즉시 반영
 *!
@@ -30,7 +30,7 @@ program mcp_watchdog
     * Windows cmd 는 /dev/null 을 경로로 해석해 명령이 깨짐 → OS 분기 (mcp_server 와 동일)
     local devnul = cond("`c(os)'" == "Windows", "nul", "/dev/null")
 
-    * ─── properties 경로 = server jar 옆 (mcp_edit_license 와 동일 규칙) ────
+    * ─── properties 경로 = server jar 옆 ─────────────────────────────────
     capture findfile stata-mcp-server.jar
     if _rc {
         di as error "mcp_watchdog: stata-mcp-server.jar not found in adopath"

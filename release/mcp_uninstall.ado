@@ -1,4 +1,4 @@
-*! mcp_uninstall  v0.6.0  24jun2026
+*! mcp_uninstall  v0.6.1  28sep2026
 *!
 *! Stata-MCP 제거 — `net install` 한 PLUS 레이아웃만. 개발/수동 위치
 *! (c(sysdir_personal), ~/Documents/StataMCP/)는 건드리지 않는다.
@@ -7,7 +7,7 @@
 *! Usage:
 *!   mcp_uninstall              // 미리보기 (삭제 안 함)
 *!   mcp_uninstall, confirm     // PLUS 의 ado/dlg/jar + 메뉴 등록 + net 추적 제거
-*!   mcp_uninstall, confirm all // + 라이선스/지침 데이터까지
+*!   mcp_uninstall, confirm all // + 설정/지침 데이터까지
 *!
 *! 제거 방식 (confirm):
 *!   1) ado uninstall stata-mcp  — 단일 설치면 파일 + stata.trk 추적 정리.
@@ -23,6 +23,7 @@ program mcp_uninstall
     syntax [, CONFIRM ALL]
 
     local plus `"`c(sysdir_plus)'"'
+    * mcp_*_license.ado / mcp_edit_instructions.ado = 폐기된 레거시 (구 설치본 정리용)
     local ados                                                   ///
         mcp_connect.ado mcp_server.ado mcp_edit_license.ado      ///
         mcp_edit_instructions.ado mcp_load_serset.ado llm.ado    ///
@@ -63,7 +64,7 @@ program mcp_uninstall
             if !_rc di as text "  - " as result `"`P`i''"'
         }
         di as text ""
-        di as text "  Delete now:            {stata mcp_uninstall, confirm:mcp_uninstall, confirm}  (keeps license/instructions)"
+        di as text "  Delete now:            {stata mcp_uninstall, confirm:mcp_uninstall, confirm}  (keeps settings/instructions)"
         di as text "  Delete all incl. data: {stata mcp_uninstall, confirm all:mcp_uninstall, confirm all}"
         di as text ""
         exit
@@ -92,7 +93,7 @@ program mcp_uninstall
 
     di as text "[Uninstall] Done. Restart Stata to clear the menu/commands from memory."
     if "`all'" == "" {
-        di as text "  (license/instructions kept — use {stata mcp_uninstall, confirm all:mcp_uninstall, confirm all} to remove them)"
+        di as text "  (settings/instructions kept — use {stata mcp_uninstall, confirm all:mcp_uninstall, confirm all} to remove them)"
     }
 end
 

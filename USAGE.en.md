@@ -18,7 +18,7 @@ From there, ask for Stata work in the chat, or send results from Stata to Claude
 
 ### Control panel (GUI) — buttons instead of commands
 
-Type `mcp` (= `db mcp`) in Stata to open the control-panel dialog — connect / restart / shutdown, server status (including version and license expiry), auto-shutdown settings, license key entry, help-DB update, and uninstall, all as buttons.
+Type `mcp` (= `db mcp`) in Stata to open the control-panel dialog — connect / restart / shutdown, server status (including version), auto-shutdown settings, help-DB update, and uninstall, all as buttons.
 
 ```stata
 mcp
@@ -26,12 +26,10 @@ mcp_setup
 ```
 
 - `mcp` (= `db mcp`) — control-panel dialog
-- `mcp_setup` — setup menu + help-DB download (links for license / start / uninstall)
+- `mcp_setup` — setup menu + help-DB download (links for start / uninstall)
 
 > Menu-bar registration (User ▸ Stata-MCP) is handled by `mcp_setup`. If the menu
 > is missing on the next launch, run `mcp_menu, install` and follow the printed instructions.
-
-> To enter or replace the license key, paste it into the control panel's **License** field and click **Save**, then reconnect as prompted. The **Edit license / properties** button (direct file editing) and `mcp_setup` work too.
 
 **Auto-shutdown** — when you quit Stata, the server cleans itself up shortly after.
 Use the control panel's Auto-shutdown group to turn this off (keep the server running)
@@ -54,8 +52,8 @@ mcp_uninstall
 ```
 
 - `mcp_uninstall` — preview (deletes nothing): lists targets + a confirm link
-- `mcp_uninstall, confirm` — removes ado/dlg/jar + menu registration (keeps license/instructions)
-- `mcp_uninstall, confirm all` — also removes the license key and instruction data
+- `mcp_uninstall, confirm` — removes ado/dlg/jar + menu registration (keeps settings/instructions)
+- `mcp_uninstall, confirm all` — also removes settings and instruction data
 
 > The **Uninstall** button in the control panel (`db mcp`) runs the preview (first line above) as well.
 
@@ -214,29 +212,15 @@ If you move the working folder with `cd` in Stata, Claude notices automatically 
 
 The first time you use a new MCP server, an **approval prompt** appears (`Trust this MCP server?` / `Approve` and the like). Tools only work after you approve; once approved, it's automatic afterwards.
 
-### License key problems
+### Java version error on mcp_connect (drone won't start)
 
-Symptom: on `mcp_connect` the drone does not start and a message like this is printed:
+Symptom: `mcp_connect` stops with a message saying Stata's Java is too old and Java 17 or later is required:
 
 ```
-[Drone] License expired on YYYY-MM-DD. To renew: ...
-[Drone] Not starting the drone; shutting down the MCP server as well.
-[Drone] [ Enter license key ] ← click, paste the key, and it reconnects automatically.
+[Stata-MCP] Stata 의 Java 가 11.0.x 입니다 — Java 17 이상이 필요합니다.
 ```
 
-| Message | Cause / action |
-|---|---|
-| License key missing | `mcp_connect` asks for it automatically — paste the key at the prompt |
-| License key invalid | The key was truncated or altered when copied — paste the full key again |
-| License expired | Request a new key → click [ Enter license key ] in the output → paste (reconnects automatically) |
-| Internet connection required | Validation needs network time (offline longer than 72 hours). Reconnect, then `mcp_connect, reset` |
-| Key format is a newer version | Update with `net install stata-mcp, ... replace` |
-
-After replacing the key, `mcp_connect, reset` alone applies it (no Stata restart). Starting 7 days before expiry, `mcp_connect` shows the days remaining.
-
-### UnsupportedClassVersionError on mcp_connect (drone won't start)
-
-Symptom: `mcp_connect` prints this error in red:
+Or it prints this error in red:
 
 ```
 java.lang.UnsupportedClassVersionError: ... has been compiled by a more recent

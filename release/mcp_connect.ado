@@ -1,4 +1,4 @@
-*! mcp_connect  v0.3.7  12aug2026
+*! mcp_connect  v0.3.8  28sep2026
 *!
 *! Start / stop / reset the full Stata-MCP stack (server jar + drone).
 *! Internally invokes mcp_server for the JVM-detached server spawn and
@@ -78,6 +78,28 @@ program mcp_connect
         exit
     }
 
+    * ─── Java 버전 체크 — 드론(javacall)·서버(Spring Boot 3) 모두 17+ 필요 ──
+    * Stata 번들 JDK 가 17 미만(업데이트 안 된 구버전 설치본)이면 기동 전에 중단.
+    * 드론은 Stata JVM 에서만 돌 수 있어 별도 JDK 설치로는 해결 불가 → Stata 업데이트 안내.
+    * c(java_version) 이 비어 있으면(JVM 미초기화 등) 판정 없이 통과.
+    local jv `"`c(java_version)'"'
+    if `"`jv'"' != "" {
+        gettoken jmaj jrest : jv, parse(".")
+        if "`jmaj'" == "1" {
+            * 1.8.0_x 형식
+            gettoken dot jrest : jrest, parse(".")
+            gettoken jmaj : jrest, parse(".")
+        }
+        capture confirm integer number `jmaj'
+        if !_rc {
+            if `jmaj' < 17 {
+                di as error "[Stata-MCP] Stata 의 Java 가 `jv' 입니다 — Java 17 이상이 필요합니다."
+                di as text  "  Stata 를 업데이트한 뒤 재시작하세요: {stata update all:update all}"
+                exit 198
+            }
+        }
+    }
+
     * ─── reset: 둘 다 끄고 다시 시작 ──────────────────────────────────────
     if "`reset'" != "" {
         di as text "[Reset] Stopping drone + server, then restarting..."
@@ -85,21 +107,6 @@ program mcp_connect
         capture mcp_server, stop
         sleep 1500
     }
-
-    * ─── 라이선스 키 선체크 — 없으면 그 자리에서 입력받고 이어서 진행 ──────
-    * (실패 후 "mcp_set_license → 재연결" 안내를 거치게 하지 않기 위함.
-    *  키가 있지만 만료/변조인 경우는 드론 검증이 잡아 안내한다.)
-    mcp_get_license
-    if `"$MCP_LICENSE_KEY"' == "" {
-        di as text "[License] 라이선스 키가 없습니다 — 지금 입력하면 바로 연결합니다."
-        capture noisily mcp_set_license, quiet
-        if _rc {
-            global MCP_LICENSE_KEY
-            di as error "[License] 키가 입력되지 않아 연결을 중단합니다."
-            exit 198
-        }
-    }
-    global MCP_LICENSE_KEY
 
     * ─── 서버 먼저 띄움 (mcp_server 가 idempotency 처리) ──────────────────
     di as text "[Server] starting..."
@@ -122,12 +129,9 @@ program mcp_connect
 
     if `drone_up' {
         di as text "[Drone] already running on port `droneport' — skip spawn"
-        * /status 응답에서 버전·라이선스 만료일 추출해 표시 (fresh 기동 시엔 드론이 직접 출력)
+        * /status 응답에서 버전 추출해 표시 (fresh 기동 시엔 드론이 직접 출력)
         if regexm(`"`dline'"', `""version":"([^"]+)""') {
             di as text "[Drone] Stata-MCP v" regexs(1)
-        }
-        if regexm(`"`dline'"', `""licenseExp":"([0-9-]+)""') {
-            di as text "[Drone] License OK (until " regexs(1) ")"
         }
     }
     else {
@@ -136,7 +140,7 @@ program mcp_connect
             args("`bridgeport'" "`droneport'") jars(stata-drone.jar)
     }
 
-    * ─── help DB 선체크 — 없으면 1회 제안 (라이선스 선체크와 동일 패턴) ────
+    * ─── help DB 선체크 — 없으면 1회 제안 ──────────────────────────────────
     * 거절하면 마커 파일을 남겨 매 연결마다 묻지 않는다. 나중엔 mcp_setup.
     * 연결 자체는 이미 끝난 뒤라 다운로드 실패/거절이 연결을 막지 않는다.
     capture confirm file `"`c(sysdir_plus)'jar/help_index_v2.json"'

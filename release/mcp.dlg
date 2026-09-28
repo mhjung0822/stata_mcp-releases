@@ -3,19 +3,17 @@
 
     호출:  db mcp
 
-    서버·드론 기동(연결/재시작/종료/상태) + properties 편집을 한 화면에서.
-    라이선스 키는 [라이선스/프로퍼티 편집] 버튼으로 properties 파일에서 직접 수정
-    (파일 편집이라 키가 길어도 잘리지 않음).
+    서버·드론 기동(연결/재시작/종료/상태) + help DB 갱신·제거·자동 종료 설정을 한 화면에서.
 
     각 버튼은 onpush(program ...) 으로 아래 PROGRAM 블록을 실행하고,
     PROGRAM 은 put 으로 명령을 조립한 뒤 stata directive 로 실행한다.
 
-    의존 ado:  mcp_connect, mcp_server, mcp_edit_license, mcp_watchdog, mcp_set_license
+    의존 ado:  mcp_connect, mcp_server, mcp_setup, mcp_uninstall, mcp_watchdog
 */
 
 VERSION 17.0
 
-POSITION . . 380 395
+POSITION . . 380 306
 
 DIALOG main, label("Stata-MCP Control Panel") tabtitle("Stata-MCP")
 BEGIN
@@ -31,28 +29,20 @@ BEGIN
   BUTTON   bt_down   240   49  105   24,   label("Shutdown")        ///
              onpush(program do_shutdown)
 
-  GROUPBOX gb_tools  10    92  360   140, label("Status / Edit")
+  GROUPBOX gb_tools  10    92  360   114, label("Status / Setup")
   BUTTON   bt_stat   20    112 335   22,   label("Server status")        ///
              onpush(program do_status)
-  BUTTON   bt_edit   20    138 335   22,   label("Edit license / properties") ///
-             onpush(program do_editlic)
-  BUTTON   bt_setup  20    164 335   22,   label("Update help DB (mcp_setup, updatedb)") ///
+  BUTTON   bt_setup  20    138 335   22,   label("Update help DB (mcp_setup, updatedb)") ///
              onpush(program do_setup)
-  BUTTON   bt_uninst 20    190 335   22,   label("Uninstall (mcp_uninstall)") ///
+  BUTTON   bt_uninst 20    164 335   22,   label("Uninstall (mcp_uninstall)") ///
              onpush(program do_uninstall)
 
-  GROUPBOX gb_wd     10    237 360   58,  label("Auto-shutdown (Stata quit -> server cleanup)")
-  CHECKBOX ck_wd     20    259 175    .,  label("Auto-stop when Stata quits") default(1)
-  TEXT     tx_gr     200   261 55     .,  label("Grace(s):")
-  SPINNER  sp_gr     255   259 50     .,  default(30) min(5) max(3600)
-  BUTTON   bt_wd     310   258 50    24,  label("Apply")   ///
+  GROUPBOX gb_wd     10    211 360   58,  label("Auto-shutdown (Stata quit -> server cleanup)")
+  CHECKBOX ck_wd     20    233 175    .,  label("Auto-stop when Stata quits") default(1)
+  TEXT     tx_gr     200   235 55     .,  label("Grace(s):")
+  SPINNER  sp_gr     255   233 50     .,  default(30) min(5) max(3600)
+  BUTTON   bt_wd     310   232 50    24,  label("Apply")   ///
              onpush(program do_watchdog)
-
-  GROUPBOX gb_lic    10    300 360   58,  label("License")
-  TEXT     tx_key    20    322 35     .,  label("Key:")
-  EDIT     ed_key    55    320 245    .,  label("License key")
-  BUTTON   bt_savek  310   319 50    24,  label("Save")    ///
-             onpush(program do_savekey)
 END
 
 /* 하단은 닫기만 — 연결/재시작/종료는 위 버튼이 담당 */
@@ -91,12 +81,6 @@ BEGIN
   stata
 END
 
-PROGRAM do_editlic
-BEGIN
-  put "mcp_edit_license"
-  stata
-END
-
 PROGRAM do_setup
 BEGIN
   put "mcp_setup, updatedb"
@@ -116,12 +100,5 @@ BEGIN
   put ") enabled("
   put main.ck_wd
   put ")"
-  stata
-END
-
-PROGRAM do_savekey
-BEGIN
-  put "mcp_set_license "
-  put main.ed_key
   stata
 END
