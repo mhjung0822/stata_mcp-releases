@@ -161,4 +161,4 @@ Claude 대신 ChatGPT 데스크톱 앱에서도 같은 Stata 에 연결할 수 �
 
 ## 라이선스
 
-Copyright (c) 2026 mhjung0822.
+Copyright (c) 2026 [JasonTG, Inc.](https://www.jat.co.kr/) and mhjung0822

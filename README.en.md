@@ -163,4 +163,4 @@ Instead of Claude, you can connect the ChatGPT desktop app to the same Stata. No
 
 ## License
 
-Copyright (c) 2026 mhjung0822.
+Copyright (c) 2026 [JasonTG, Inc.](https://www.jat.co.kr/) and mhjung0822
