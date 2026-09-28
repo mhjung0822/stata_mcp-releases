@@ -40,6 +40,8 @@ mcp_setup, updatedb
 
 > 업데이트를 적용하려면 **Stata 를 재시작**한 뒤 `mcp_connect` 로 다시 연결하세요.
 
+> Claude 확장 프로그램(`.mcpb`)은 위 업데이트와 별개입니다. 새 버전이 나오면 4-1장의 파일을 다시 받아 같은 방법으로 설치하세요.
+
 > 포트를 바꾸려면 (기본 8080/8001) jar 옆 `stata_mcp.properties` 의 `BRIDGE_PORT`/`DRONE_PORT` 수정 — 파일은 첫 기동 시 자동 생성.
 
 ---

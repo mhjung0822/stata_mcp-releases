@@ -40,6 +40,8 @@ mcp_setup, updatedb
 
 > To apply an update, **restart Stata** and reconnect with `mcp_connect`.
 
+> The Claude extension (`.mcpb`) is updated separately. When a new version is out, download the file again from section 4-1 and install it the same way.
+
 > To change the ports (default 8080/8001), edit `BRIDGE_PORT`/`DRONE_PORT` in `stata_mcp.properties` next to the jar — the file is created automatically on first start.
 
 ---
