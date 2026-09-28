@@ -27,6 +27,8 @@ mcp_setup
 
 - `mcp` (= `db mcp`) — 제어판 다이얼로그
 - `mcp_setup` — 설정 메뉴 + 도움말 DB 다운로드 (기동/제거 링크)
+- `mcp_setup, update` — 최신 버전으로 재설치 (이후 Stata 재시작)
+- `mcp_setup, updatecheck(off)` — 연결 시 새 버전 확인·연결 횟수 집계 끄기 (`on` 으로 다시 켜기)
 
 > 메뉴바 등록(User ▸ Stata-MCP)은 `mcp_setup` 이 함께 처리합니다. 다음 실행에서
 > 메뉴가 안 보이면 `mcp_menu, install` 을 실행하고 출력 안내를 따르세요.

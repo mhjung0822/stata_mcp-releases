@@ -27,6 +27,8 @@ mcp_setup
 
 - `mcp` (= `db mcp`) — control-panel dialog
 - `mcp_setup` — setup menu + help-DB download (links for start / uninstall)
+- `mcp_setup, update` — reinstall the latest version (then restart Stata)
+- `mcp_setup, updatecheck(off)` — turn off the new-version check and anonymous connection count on connect (`on` to turn it back on)
 
 > Menu-bar registration (User ▸ Stata-MCP) is handled by `mcp_setup`. If the menu
 > is missing on the next launch, run `mcp_menu, install` and follow the printed instructions.
