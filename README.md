@@ -6,7 +6,7 @@ Stata MCP는 Claude·ChatGPT가 **Stata(결과 창·데이터 브라우저·그�
 
 [![Stata MCP — Stata 와 Claude 가 같은 데이터로 함께 작업하는 화면](images/hero.png)](https://youtu.be/y9C_a-SfCDo)
 
-▶ [소개 영상 보기 (YouTube)](https://youtu.be/y9C_a-SfCDo)
+▶ [구동 영상 보기 (YouTube)](https://youtu.be/y9C_a-SfCDo)
 
 설치는 3단계입니다: **① Stata 측 설치 → ② 서버 기동 → ③ Claude 등록 (확장 + 스킬)**.
 ChatGPT 데스크톱 앱에서도 연결할 수 있습니다 — 6장 참고.
