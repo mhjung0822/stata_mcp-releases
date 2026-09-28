@@ -5,6 +5,7 @@
 Public **distribution repository** for a tool that connects Stata and Claude via MCP (Model Context Protocol). The primary environment is **Claude Desktop (chat and cowork)**. The source code is private; this repository provides built artifacts and user documentation only.
 
 Installation is three steps: **① Stata-side install → ② Start the server → ③ Register in Claude (extension + skills)**.
+You can also connect from the ChatGPT desktop app — see section 6.
 
 For usage and troubleshooting after install see [USAGE.en.md](USAGE.en.md).
 
@@ -70,10 +71,23 @@ Starts the MCP server and the drone in one go. On first run it offers the help-D
    - Mac: [`stata-mcp-mac.mcpb`](https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/claude-plugins/stata-mcp-mac.mcpb)
    - Windows: [`stata-mcp-win.mcpb`](https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/claude-plugins/stata-mcp-win.mcpb)
      - If it will not install, or the tools do not appear, install [`stata-mcp-win-java.mcpb`](https://raw.githubusercontent.com/mhjung0822/stata_mcp-releases/main/claude-plugins/stata-mcp-win-java.mcpb) instead. Do not install both at the same time.
-2. Claude Desktop → **Settings → Extensions** → **Install from file** → select the downloaded `.mcpb`
-3. Restart Claude Desktop
+2. In Claude Desktop, click your **name** at the bottom left → **Settings** → open **Desktop app → Extensions** in the left list.
 
-> The server from step 3 (`mcp_connect`) must be running for the tools to work. To update, install the new `.mcpb` file from the same screen.
+   <img src="images/claude-ext-1.png" alt="Claude Settings - Extensions" width="640">
+
+3. **Drag** the downloaded `.mcpb` file onto this screen. If drag-and-drop does not work, click **Advanced settings** at the bottom → **Install Extension**, select the downloaded file, and confirm (on Mac the button may read **Preview**).
+
+   <img src="images/claude-ext-2.png" alt="Advanced settings - Install Extension button" width="640">
+
+   <img src="images/claude-ext-3.png" alt="Select the downloaded .mcpb file" width="640">
+
+4. In the confirmation dialog, check that the name is **Stata MCP (Mac)** (Windows: **Stata MCP (Windows)**) and click **Install** at the top right.
+
+   <img src="images/claude-ext-4.png" alt="Install confirmation dialog" width="640">
+
+5. Restart Claude Desktop
+
+> Screenshots are from the Korean UI on Mac; button positions are the same. The server from step 3 (`mcp_connect`) must be running for the tools to work. To update, install the new `.mcpb` file the same way.
 
 ### 4-2. Register the skills (slash commands)
 
@@ -113,6 +127,32 @@ If not, check in order:
 2. Claude tools list — is the Stata MCP extension visible? (if not, fully quit and relaunch Claude Desktop)
 
 For everyday usage see [USAGE.en.md](USAGE.en.md) — startup order, control panel, push notifications, help lookup, troubleshooting. Rare environment issues: [TROUBLESHOOTING.md](TROUBLESHOOTING.md) (Korean).
+
+---
+
+## 6. Connect from the ChatGPT desktop app (optional)
+
+Instead of Claude, you can connect the ChatGPT desktop app to the same Stata. No extension file is needed — you only register an address.
+
+1. In the ChatGPT desktop app, click your **profile** at the bottom left → **Settings** → open **Integrations → Plugins** in the left list.
+
+   <img src="images/chatgpt-mcp-1.png" alt="ChatGPT Settings - Plugins" width="640">
+
+2. Open the **MCP** tab at the top, then click **Add** (top right) → **Add MCP server**.
+
+   <img src="images/chatgpt-mcp-2.png" alt="MCP tab - Add - Add MCP server" width="640">
+
+3. Fill in the form as below and click **Save** at the bottom right.
+   - **Name**: `Stata-mcp` (any name is fine)
+   - **Type**: select **Streamable HTTP**
+   - **URL**: `http://127.0.0.1:8080/mcp`
+   - Leave the bearer token, headers, and env-var headers fields **empty**
+
+   <img src="images/chatgpt-mcp-3.png" alt="Connect to a custom MCP - example" width="640">
+
+4. In a new chat, type `What Stata version am I running?` — if the version comes back, you are connected.
+
+> Screenshots are from the Korean UI on Mac; button positions are the same. The server from step 3 (`mcp_connect`) must be running for the tools to work. If you changed the port (see section 2), use that port instead of `8080` in the URL. The skill pack in 4-2 is for Claude.
 
 
 ---
