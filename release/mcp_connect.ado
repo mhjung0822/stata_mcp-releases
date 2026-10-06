@@ -1,4 +1,4 @@
-*! mcp_connect  v0.3.9  06oct2026
+*! mcp_connect  v0.3.10  06oct2026
 *!
 *! Start / stop / reset the full Stata-MCP stack (server jar + drone).
 *! Internally invokes mcp_server for the JVM-detached server spawn and
@@ -136,6 +136,9 @@ program mcp_connect
     }
     else {
         di as text "[Drone] Starting Java Stata-MCP-Drone..."
+        * 이 세션에 드론 jar 가 로드됨 — 이후 mcp_setup, update 가 jar 교체를 거부하는 근거
+        * (Windows 는 파일 잠금, Mac 은 실행 중 JVM 의 jar 를 덮어쓰면 깨짐). 정책 차단돼도 로드는 됨
+        global MCP_DRONE_LOADED 1
         capture noisily javacall com.stata_mcp.drone.StataDrone start, ///
             args("`bridgeport'" "`droneport'") jars(stata-drone.jar)
         if _rc == 690 {

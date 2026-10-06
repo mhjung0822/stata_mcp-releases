@@ -61,7 +61,7 @@ MCP 서버와 드론이 한 번에 기동됩니다. 첫 실행이면 도움말 D
 
 > Stata 를 종료하면 서버도 자동으로 함께 종료됩니다. 명령 대신 GUI 제어판(`db mcp`)으로도 켤 수 있습니다 — [USAGE.md](USAGE.md) 참고.
 
-> 연결할 때 새 버전이 있는지 한 번 확인하고, 있으면 결과 창에 안내가 나옵니다 (**[ 지금 업데이트 ]** 클릭 → 재설치 후 Stata 재시작). 이때 연결 횟수만 익명으로 집계됩니다. 끄려면 `mcp_setup, updatecheck(off)`. 지원이 끝난 버전은 연결되지 않고 안내가 나옵니다.
+> 연결할 때 새 버전이 있는지 한 번 확인하고, 있으면 결과 창에 안내가 나옵니다 (Stata 를 재시작한 뒤 연결하기 전에 `mcp_setup, update` 실행). 이때 연결 횟수만 익명으로 집계됩니다. 끄려면 `mcp_setup, updatecheck(off)`. 지원이 끝난 버전은 연결되지 않고 안내가 나옵니다.
 
 > ⚠️ **`Java 17 이상이 필요합니다` 안내가 나오거나, `java.lang.UnsupportedClassVersionError` 가 붉게 출력되며 드론이 시작되지 않으면** — Stata 내장 Java 가 구버전인 경우입니다. Stata 에서 `update all` 로 최신 업데이트 후 **Stata 재시작** → `mcp_connect` 재실행. 상세는 [USAGE.md](USAGE.md) 문제 해결 참고.
 

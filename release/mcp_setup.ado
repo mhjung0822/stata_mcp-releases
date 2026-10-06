@@ -1,4 +1,4 @@
-*! mcp_setup  v0.3.0  28sep2026
+*! mcp_setup  v0.3.1  06oct2026
 *!
 *! Stata-MCP 설정 진입점 (구 mcp_set 흡수) — help DB 를 GitHub 에서 받아
 *! 드론 jar 옆에 배치하고, 제어판 메뉴 등록 + 설정 링크(기동/제거)를
@@ -7,7 +7,7 @@
 *! Usage:
 *!   mcp_setup             // help DB 다운로드(없으면) + mcp_menu,install + 설정 메뉴
 *!   mcp_setup, updatedb   // help DB 갱신만 (다이얼로그 [Update help DB] 버튼용) — 메뉴/허브 생략
-*!   mcp_setup, update     // 최신 버전으로 재설치 (net install ..., replace) — 드론의 새 버전 안내 링크가 호출
+*!   mcp_setup, update     // 최신 버전으로 재설치 (net install ..., replace) — 드론 로드 전에만 (재시작 후 연결 전)
 *!   mcp_setup, updatecheck(off|on)  // 연결 시 새 버전 확인 + 연결 횟수 집계 끄기/켜기
 *!
 *! help DB (~32MB) 는 pkg 에 번들하지 않고 여기서 온디맨드로 받는다 —
@@ -23,6 +23,12 @@ program mcp_setup
 
     * ─── update: 최신 버전 재설치 (net install 과 같은 경로 — 외부 도구 불필요) ──
     if "`update'" != "" {
+        * 드론 jar 가 이 세션에 로드돼 있으면 교체 불가 (mcp_connect 가 javacall 전에 표시)
+        if "$MCP_DRONE_LOADED" == "1" {
+            di as error "[Setup] 드론이 실행 중이라 업데이트할 수 없습니다."
+            di as error "        Stata 를 재시작한 뒤, {bf:mcp_connect 로 연결하기 전에} mcp_setup, update 를 실행하세요."
+            exit 608
+        }
         di as text "[Setup] 최신 버전으로 재설치합니다..."
         net install stata-mcp, from("`base'") replace
         di as text "[Setup] 설치 완료 — {bf:Stata 를 재시작}한 뒤 mcp_connect 로 다시 연결하세요."
