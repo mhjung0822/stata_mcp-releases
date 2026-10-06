@@ -34,16 +34,17 @@ net install stata-mcp, from("https://raw.githubusercontent.com/mhjung0822/stata_
 
 jar 2종 + ado/dlg 가 자동 다운로드됩니다. 설치는 이게 전부입니다 — 도움말 DB(~32MB)는 다음 장의 `mcp_connect` 가 처음 연결할 때 받을지 물어봅니다 (y 권장, 인터넷 연결 필요).
 
-업데이트는:
+업데이트는 **Stata 를 새로 켠 뒤, `mcp_connect` 로 연결하기 전에**:
 
 ```stata
-adoupdate stata-mcp, update
+mcp_setup, update
 mcp_setup, updatedb
 ```
 
+- `mcp_setup, update` — 최신 버전으로 재설치. 오류가 나면 위의 설치 명령(`net install ...`)을 다시 실행하세요
 - `mcp_setup, updatedb` — 도움말 DB 도 최신으로 (제어판 [Update help DB] 버튼과 동일)
 
-> 업데이트를 적용하려면 **Stata 를 재시작**한 뒤 `mcp_connect` 로 다시 연결하세요.
+> 업데이트를 적용하려면 **Stata 를 다시 재시작**한 뒤 `mcp_connect` 로 연결하세요.
 
 > Claude 확장 프로그램(`.mcpb`)은 위 업데이트와 별개입니다. 새 버전이 나오면 4-1장의 파일을 다시 받아 같은 방법으로 설치하세요.
 

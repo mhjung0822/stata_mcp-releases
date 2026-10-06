@@ -34,16 +34,17 @@ net install stata-mcp, from("https://raw.githubusercontent.com/mhjung0822/stata_
 
 This downloads the two jars plus the ado/dlg files. That is the whole install — the help DB (~32MB) is offered by `mcp_connect` (next section) on first connect (answer y; internet connection required).
 
-To update later:
+To update later, **start Stata fresh and run these before connecting with `mcp_connect`**:
 
 ```stata
-adoupdate stata-mcp, update
+mcp_setup, update
 mcp_setup, updatedb
 ```
 
+- `mcp_setup, update` — reinstalls the latest version. If it gives an error, run the install command above (`net install ...`) again
 - `mcp_setup, updatedb` — refreshes the help DB too (same as the control panel's [Update help DB] button)
 
-> To apply an update, **restart Stata** and reconnect with `mcp_connect`.
+> To apply an update, **restart Stata again** and connect with `mcp_connect`.
 
 > The Claude extension (`.mcpb`) is updated separately. When a new version is out, download the file again from section 4-1 and install it the same way.
 
