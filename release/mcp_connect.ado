@@ -1,4 +1,4 @@
-*! mcp_connect  v0.3.8  28sep2026
+*! mcp_connect  v0.3.9  06oct2026
 *!
 *! Start / stop / reset the full Stata-MCP stack (server jar + drone).
 *! Internally invokes mcp_server for the JVM-detached server spawn and
@@ -136,8 +136,15 @@ program mcp_connect
     }
     else {
         di as text "[Drone] Starting Java Stata-MCP-Drone..."
-        javacall com.stata_mcp.drone.StataDrone start, ///
+        capture noisily javacall com.stata_mcp.drone.StataDrone start, ///
             args("`bridgeport'" "`droneport'") jars(stata-drone.jar)
+        if _rc == 690 {
+            * 원격 정책 차단 (StataDrone.RC_BLOCKED — 제공 종료·강제 업데이트).
+            * 안내는 드론이 출력했다. 먼저 띄운 서버까지 내리고 오류 없이 끝낸다.
+            capture mcp_server, stop
+            exit
+        }
+        if _rc exit _rc
     }
 
     * ─── help DB 선체크 — 없으면 1회 제안 ──────────────────────────────────
