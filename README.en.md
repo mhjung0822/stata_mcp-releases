@@ -163,6 +163,15 @@ Instead of Claude, you can connect the ChatGPT desktop app to the same Stata. No
 
 ---
 
+## Notice
+
+- Each connection is counted anonymously. To turn this off: `mcp_setup, updatecheck(off)`.
+- This service may be discontinued or changed depending on circumstances.
+
+---
+
 ## License
 
 Copyright (c) 2026 [JasonTG, Inc.](https://www.jat.co.kr/) and mhjung0822
+
+Free for personal use and for non-commercial research and education, including non-profit institutions. Any other use, and redistribution, modification or resale without permission, is not permitted. The software is provided "as is", with no warranty or liability for its use or for any results of analyses. Terms may change in a new version. See [LICENSE](LICENSE) for the full text.
