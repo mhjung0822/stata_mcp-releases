@@ -1,4 +1,4 @@
-*! mcp_server  v0.2.6  28sep2026
+*! mcp_server  v0.2.7  06oct2026
 *!
 *! Start / check / stop stata-mcp-server.jar located in the Stata
 *! PERSONAL ado folder (resolved via `findfile`, so no path argument
@@ -53,7 +53,7 @@ program mcp_server
         di ""
         * 드론 상태 + 버전 + 라이선스 만료를 한 화면에 (제어판 Status 버튼용)
         tempfile dchk
-        capture shell curl -s --max-time 2 http://127.0.0.1:`droneport'/status > "`dchk'" 2>`devnul'
+        capture shell curl -s --max-time 2 -H "X-Stata-MCP: 1" http://127.0.0.1:`droneport'/status > "`dchk'" 2>`devnul'
         local dline ""
         tempname dfh
         capture file open `dfh' using "`dchk'", read text

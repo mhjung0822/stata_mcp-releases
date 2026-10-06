@@ -1,4 +1,4 @@
-*! mcp_connect  v0.3.10  06oct2026
+*! mcp_connect  v0.3.11  06oct2026
 *!
 *! Start / stop / reset the full Stata-MCP stack (server jar + drone).
 *! Internally invokes mcp_server for the JVM-detached server spawn and
@@ -117,7 +117,7 @@ program mcp_connect
 
     * ─── 드론 시작 (이미 떠있으면 skip) ───────────────────────────────────
     tempfile dchk
-    capture shell curl -s --max-time 1 http://127.0.0.1:`droneport'/status > "`dchk'" 2>`devnul'
+    capture shell curl -s --max-time 1 -H "X-Stata-MCP: 1" http://127.0.0.1:`droneport'/status > "`dchk'" 2>`devnul'
     local drone_up = 0
     tempname dfh
     capture file open `dfh' using "`dchk'", read text
