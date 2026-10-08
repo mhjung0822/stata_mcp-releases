@@ -155,6 +155,34 @@ Tools Claude uses to check Stata syntax on its own — you rarely call them your
 - Help for community packages (SSC etc.) works too, if installed — use the full command name
 - Refresh the help DB with `mcp_setup, updatedb` (or the control panel's [Update help DB]) — it is regenerated on the distribution side to track Stata updates
 
+### 2-4b. The variable page — pick variables while seeing names and labels
+
+Instead of switching to the Stata window to check variable names, keep a variable list next to Claude and use what you pick there directly in your analysis.
+
+<img src="images/vars-page-cowork.png" alt="Cowork screen — the Claude chat in the middle, the variable page in the browser panel on the right" width="900">
+
+**How to open it** (any of these)
+
+- Run `/stata-setup`; it asks "Open the variable page?" → Yes
+- Later: `/stata-vars`, or just "open the variable page"
+- Type the address: `http://127.0.0.1:8080/vars` (in the Cowork browser panel or any browser; it opens only on the same PC)
+
+**What you can do there**
+
+- See every variable's name, storage type, display format and label at a glance; variables with value labels have a ▶ to expand them
+- Search (name, label, value labels) and filter by type (all / numeric / string / selected)
+- Pick variables with the **checkboxes**, or type a Stata varlist in the box (`price mpg`, `rep78-foreign`, `wt*` — ranges and wildcards work). The header checkbox selects every variable currently shown
+- **Y / X tags**: tick variables and press `[Y]` or `[X]`, or click a row's `–` chip to cycle `Y → X → –`. Tags appear in the column next to the name
+- Drag the right edge of the `Variable` header to resize the columns; `Refresh` re-reads anything you changed directly in the Stata window
+
+**How Claude uses it**
+
+- "Summary statistics for the selected variables" → `summarize` on the ticked variables
+- "Run a regression with the selected variables" → `regress` with the Y tag as the outcome and the X tags as regressors. If nothing is tagged Y, Claude asks which variable it is
+- If nothing is selected, Claude does not guess — it asks you to pick variables in the page or name them
+
+Commands run through Claude (creating, dropping, renaming or labelling variables) show up in the page immediately. Commands typed directly in the Stata window appear after you press `Refresh` or after the next command through Claude. Selections and tags are cleared when Stata reconnects.
+
 ### 2-5. Slash-command skills
 
 Start your session with `/stata-setup` — it checks the environment and working folder and loads your working instructions (output format etc.).
