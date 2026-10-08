@@ -167,6 +167,7 @@ The rest, as needed:
 - `/stata-help command` — check syntax. When Claude misuses an option, this corrects it (`xtreg` → `xtreg fe` → `xtreg fe.vce`, cascading)
 - `/stata-data-context` — resynchronize when Claude's picture of the data is stale (you changed the data in the Stata window). For a full profile use `/stata-data-fullcontext` (+ codebook)
 - `/stata-graph-export` — save the current graph as a PNG in the working folder / `/stata-graph-get` — inspect the graph spec
+- `/stata-vars` — open the variable page. Browse names, labels and value labels, tick variables or tag them Y/X, then just say "with the selected variables …" and Claude uses them (`/stata-setup` offers to open it)
 
 The working instructions (`stata-instruction`) can be edited to change output formats and analysis rules. Panel merging responds to plain language like "merge the waves".
 

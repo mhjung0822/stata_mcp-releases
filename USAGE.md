@@ -167,6 +167,7 @@ Claude 가 Stata 명령을 헷갈릴 때 스스로 확인하는 도구들 — �
 - `/stata-help 명령` — 문법 확인. Claude 가 옵션을 잘못 쓰면 이걸로 교정 (`xtreg` → `xtreg fe` → `xtreg fe.vce` 계단식)
 - `/stata-data-context` — Claude 가 데이터를 잘못 알고 있을 때 (Stata 창에서 데이터를 바꾼 경우) 재동기화. 상세 파악은 `/stata-data-fullcontext` (+ codebook)
 - `/stata-graph-export` — 그래프를 PNG 파일로 작업폴더에 저장 / `/stata-graph-get` — 그래프 spec 조회
+- `/stata-vars` — 변수 창 열기. 변수 이름·라벨·값라벨을 보면서 체크하거나 Y/X 태그를 붙이면, "선택한 변수로 …" 라고만 해도 Claude 가 그 변수를 씁니다 (`/stata-setup` 이 열지 물어봄)
 
 작업 지침(`stata-instruction`)은 직접 편집해 출력형식·분석 규칙을 바꿀 수 있습니다. 패널 병합은 "웨이브 합쳐줘" 같은 자연어로.
 

@@ -1,4 +1,4 @@
-*! mcp_connect  v0.3.11  06oct2026
+*! mcp_connect  v0.3.12  08oct2026
 *!
 *! Start / stop / reset the full Stata-MCP stack (server jar + drone).
 *! Internally invokes mcp_server for the JVM-detached server spawn and
@@ -149,6 +149,9 @@ program mcp_connect
         }
         if _rc exit _rc
     }
+
+    * ─── 변수 창 안내 — 서버 로컬 페이지 (브라우저·Claude 앱 브라우저 패널 어디서나) ────
+    di as text `"[Vars] {browse "http://127.0.0.1:`bridgeport'/vars":변수 창 열기}  http://127.0.0.1:`bridgeport'/vars"'
 
     * ─── help DB 선체크 — 없으면 1회 제안 ──────────────────────────────────
     * 거절하면 마커 파일을 남겨 매 연결마다 묻지 않는다. 나중엔 mcp_setup.
